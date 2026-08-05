@@ -1,5 +1,6 @@
 import { Section } from "@/components/ui/Section";
 import { ErrorState } from "@/components/ui/ErrorState";
+import { GradientButton } from "@/components/ui/gradient-button";
 import { ProjectExplorer } from "@/components/ui/ProjectExplorer";
 import { RepoSkeletonGrid } from "@/components/ui/RepoSkeleton";
 import { siteConfig } from "@/config/site";
@@ -49,10 +50,34 @@ export async function Projects() {
           </a>
         </p>
       ) : (
-        <ProjectExplorer
-          repos={repos.data}
-          languages={collectLanguages(repos.data)}
-        />
+        <>
+          <ProjectExplorer
+            repos={repos.data}
+            languages={collectLanguages(repos.data)}
+          />
+
+          <div className="mt-14 flex justify-center">
+            <GradientButton asChild variant="brand">
+              <a
+                href={`https://github.com/${siteConfig.githubUser}?tab=repositories`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Ver todos no GitHub
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  className="size-4"
+                  aria-hidden="true"
+                >
+                  <path d="M7 17 17 7M9 7h8v8" />
+                </svg>
+              </a>
+            </GradientButton>
+          </div>
+        </>
       )}
     </Section>
   );

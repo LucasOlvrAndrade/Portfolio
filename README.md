@@ -233,8 +233,18 @@ src/
 
 ## Acessibilidade
 
-- Contraste WCAG AA nos dois temas
+- Contraste WCAG AA nos dois temas. Inclui o texto branco sobre o gradiente
+  do botão "Ver todos no GitHub": todas as paradas do gradiente ficam em
+  **5,36:1 ou mais**, tanto em repouso quanto no hover
 - Navegação completa por teclado, com foco sempre visível
 - Link "pular para o conteúdo"
 - HTML semântico, `aria-label` nos controles, `alt` nas imagens
-- Animações desligadas sob `prefers-reduced-motion`
+- Animações desligadas sob `prefers-reduced-motion` — inclui o spotlight dos
+  cards de projeto, que também não roda em telas sem cursor
+
+> [!WARNING]
+> As variantes `default` e `variant` do `GradientButton` vieram do componente
+> de origem e **reprovam em AA** com o texto branco — 3,22:1 e 1,07:1 nas
+> piores paradas. Ficam no `globals.css` comentadas como referência; o site
+> usa apenas `variant="brand"`. Se for reutilizar as outras, troque a cor do
+> texto antes.
