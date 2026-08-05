@@ -18,7 +18,7 @@ const geistMono = Geist_Mono({
   display: "swap",
 });
 
-const title = "Lucas Andrade — Desenvolvedor em formação";
+const title = `Lucas Andrade — ${siteConfig.role}`;
 const description =
   "Portfólio de Lucas Andrade, estudante de Engenharia de Software no UniCEUB. Projetos, tecnologias e contato.";
 

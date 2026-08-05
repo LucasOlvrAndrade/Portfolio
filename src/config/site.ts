@@ -13,8 +13,29 @@ export const siteConfig = {
   /** Usado em metadata/SEO. Ajuste após definir o domínio final. */
   url: "https://lucasolvrandrade.vercel.app",
 
-  /** Exibido no Hero, abaixo do nome. */
-  role: "Desenvolvedor em formação",
+  /** Exibido no Hero, no <title> da aba e na imagem de compartilhamento. */
+  role: "Estagiário de desenvolvimento · Grupo RAM",
+
+  /**
+   * Trabalho atual — vira um card com logo na seção "Contato".
+   * Para remover, apague este bloco e o card some sozinho.
+   * O logo mora em `public/`, servido pelo próprio site: não depende
+   * do servidor da empresa continuar no ar nem do caminho do arquivo lá.
+   */
+  work: {
+    company: "Grupo RAM",
+    position: "Estagiário de desenvolvimento",
+    url: "https://memoriaram.com.br",
+    logo: "/grupo-ram.png",
+    logoWidth: 540,
+    logoHeight: 150,
+    /** Cores amostradas do próprio arquivo do logo, para o realce combinar. */
+    brand: {
+      green: "#0F7433",
+      amber: "#F8AA14",
+      ink: "#0D1522",
+    },
+  },
 
   contact: {
     email: "lucasolvrandrade@gmail.com",

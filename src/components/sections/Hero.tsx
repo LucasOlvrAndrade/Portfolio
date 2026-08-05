@@ -5,6 +5,7 @@ import type { GitHubUser } from "@/lib/types";
 
 /** `profile` pode ser null se a API falhar — o Hero continua renderizando. */
 export function Hero({ profile }: { profile: GitHubUser | null }) {
+  const work = siteConfig.work;
   const name = profile?.name ?? "Lucas Andrade";
   const location = profile?.location;
   const company = profile?.company;
@@ -13,9 +14,51 @@ export function Hero({ profile }: { profile: GitHubUser | null }) {
     <section className="mx-auto max-w-5xl px-6 pb-20 pt-20 sm:pb-28 sm:pt-28">
       <div className="flex flex-col-reverse items-start gap-10 sm:flex-row sm:items-center sm:justify-between">
         <div className="max-w-2xl">
-          <p className="animate-fade-up font-mono text-xs uppercase tracking-[0.2em] text-accent">
-            {siteConfig.role}
-          </p>
+          {/*
+            Cargo + empregador. O logo vai sobre uma placa branca: em tema
+            claro ela se apoia na borda; em tema escuro salta do fundo e
+            sustenta o contraste do cinza da marca, sem alterar as cores
+            originais do logotipo.
+          */}
+          <div className="animate-fade-up flex flex-wrap items-center gap-x-3 gap-y-3">
+            <p className="font-mono text-xs uppercase tracking-[0.2em] text-accent">
+              {work.position}
+            </p>
+
+            <span aria-hidden className="text-border">
+              /
+            </span>
+
+            <a
+              href={work.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`${work.company} — abrir site em nova aba`}
+              className="group inline-flex items-center gap-2.5 rounded-full border border-border bg-white py-1.5 pl-3 pr-2.5 shadow-sm transition-all hover:-translate-y-0.5 hover:border-[var(--brand-green)] hover:shadow-md"
+              style={
+                {
+                  "--brand-green": work.brand.green,
+                } as React.CSSProperties
+              }
+            >
+              <Image
+                src={work.logo}
+                alt={`Logotipo do ${work.company}`}
+                width={work.logoWidth}
+                height={work.logoHeight}
+                priority
+                className="h-5 w-auto"
+              />
+              {/* Barra tricolor da marca, ecoando o logo e marcando o link. */}
+              <span
+                aria-hidden
+                className="h-5 w-1 shrink-0 rounded-full"
+                style={{
+                  background: `linear-gradient(180deg, ${work.brand.green} 0 33%, ${work.brand.ink} 33% 66%, ${work.brand.amber} 66% 100%)`,
+                }}
+              />
+            </a>
+          </div>
 
           <h1 className="animate-fade-up delay-75 mt-4 text-balance text-4xl font-semibold leading-[1.1] tracking-tight text-text sm:text-6xl">
             {name}

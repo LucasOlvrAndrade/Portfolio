@@ -71,7 +71,7 @@ export function Contact() {
       id="contato"
       eyebrow="Contato"
       title="Vamos conversar"
-      description="Aberto a oportunidades de estágio, projetos e trocas sobre tecnologia."
+      description="Aberto a projetos e trocas sobre tecnologia."
     >
       <ul className="grid gap-3 sm:grid-cols-2">
         {links.map((link) => {

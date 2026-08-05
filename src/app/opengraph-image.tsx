@@ -4,7 +4,7 @@ import { siteConfig } from "@/config/site";
 
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
-export const alt = "Lucas Andrade — Desenvolvedor em formação";
+export const alt = `Lucas Andrade — ${siteConfig.role}`;
 
 /**
  * Imagem de compartilhamento (WhatsApp, LinkedIn, X).
