@@ -120,7 +120,10 @@ export function ProjectExplorer({
           {visible.map((repo, index) => (
             <Reveal
               key={repo.id}
-              className={`h-full ${repo.featured ? "sm:col-span-2" : ""}`}
+              // Todos os cards com a mesma largura. O destaque continua
+              // marcado pela borda de acento e pelo selo, e pela posição:
+              // destacados vêm sempre primeiro na ordenação.
+              className="h-full"
               // Escalonamento sutil, limitado para não atrasar demais
               // os últimos cards em listas grandes.
               delay={Math.min(index, 6) * 60}
