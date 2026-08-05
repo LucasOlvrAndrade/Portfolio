@@ -152,6 +152,46 @@ export async function getRepos(): Promise<Result<Repo[]>> {
   return { ok: true, data: repos };
 }
 
+/**
+ * Um repositório específico, já normalizado. Usado pela página de
+ * detalhe; devolve `not_found` para repositórios ocultos, forks e
+ * arquivados, para que a rota não exponha o que a listagem esconde.
+ */
+export async function getRepo(name: string): Promise<Result<Repo>> {
+  const repos = await getRepos();
+  if (!repos.ok) return repos;
+
+  const repo = repos.data.find(
+    (item) => item.name.toLowerCase() === name.toLowerCase(),
+  );
+
+  if (!repo) {
+    return {
+      ok: false,
+      error: { kind: "not_found", message: "Projeto não encontrado." },
+    };
+  }
+
+  return { ok: true, data: repo };
+}
+
+/** README de um repositório, em Markdown cru. */
+export async function getRepoReadme(name: string): Promise<Result<string>> {
+  return request<string>(
+    `/repos/${siteConfig.githubUser}/${name}/readme`,
+    "application/vnd.github.raw",
+  );
+}
+
+/** Bytes por linguagem — alimenta a barra de composição do projeto. */
+export async function getRepoLanguages(
+  name: string,
+): Promise<Result<Record<string, number>>> {
+  return request<Record<string, number>>(
+    `/repos/${siteConfig.githubUser}/${name}/languages`,
+  );
+}
+
 /** Lista de linguagens presentes, para alimentar o filtro. */
 export function collectLanguages(repos: Repo[]): string[] {
   const languages = new Set<string>();

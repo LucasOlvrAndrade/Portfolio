@@ -1,4 +1,4 @@
-import { Suspense } from "react";
+import { Suspense, ViewTransition } from "react";
 
 import { About } from "@/components/sections/About";
 import { Contact } from "@/components/sections/Contact";
@@ -29,18 +29,38 @@ export default async function Home() {
     : [];
 
   return (
-    <>
-      <Hero profile={profile} />
-      <About sections={sections} bio={profile?.bio ?? null} />
+    /*
+      O envelope direcional fica na página, não no layout: layouts
+      persistem entre navegações, então `enter` e `exit` nunca disparam
+      lá. `default: "none"` evita que a navegação do navegador (botão
+      voltar) e as revelações de Suspense produzam deslize lateral.
+    */
+    <ViewTransition
+      enter={{
+        "nav-forward": "nav-forward",
+        "nav-back": "nav-back",
+        default: "none",
+      }}
+      exit={{
+        "nav-forward": "nav-forward",
+        "nav-back": "nav-back",
+        default: "none",
+      }}
+      default="none"
+    >
+      <div>
+        <Hero profile={profile} />
+        <About sections={sections} bio={profile?.bio ?? null} />
 
-      {/* Os repositórios são buscados à parte para que o restante da
-          página apareça na hora e o skeleton cubra só esta seção. */}
-      <Suspense fallback={<ProjectsFallback />}>
-        <Projects />
-      </Suspense>
+        {/* Os repositórios são buscados à parte para que o restante da
+            página apareça na hora e o skeleton cubra só esta seção. */}
+        <Suspense fallback={<ProjectsFallback />}>
+          <Projects />
+        </Suspense>
 
-      <Skills />
-      <Contact />
-    </>
+        <Skills />
+        <Contact />
+      </div>
+    </ViewTransition>
   );
 }

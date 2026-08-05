@@ -167,6 +167,102 @@
 }
 
 /* ───────────────────────────────────────────────────────────
+   Transições de visualização entre a listagem e a página do projeto.
+
+   Duas mensagens distintas: o card que vira cabeçalho diz "mesma
+   coisa, indo mais fundo"; o deslize lateral diz "avançando" ou
+   "voltando". Sem browser compatível, a navegação apenas não anima.
+   ─────────────────────────────────────────────────────────── */
+::view-transition-group(.morph) {
+  animation-duration: 380ms;
+}
+
+/* O blur esconde os artefatos de interpolação durante o morph. */
+::view-transition-image-pair(.morph) {
+  animation-name: via-blur;
+}
+
+@keyframes via-blur {
+  30% {
+    filter: blur(3px);
+  }
+}
+
+::view-transition-old(.nav-forward) {
+  --slide-offset: -60px;
+  animation:
+    150ms ease-in both vt-fade reverse,
+    400ms ease-in-out both vt-slide reverse;
+}
+::view-transition-new(.nav-forward) {
+  --slide-offset: 60px;
+  animation:
+    210ms ease-out 150ms both vt-fade,
+    400ms ease-in-out both vt-slide;
+}
+
+::view-transition-old(.nav-back) {
+  --slide-offset: 60px;
+  animation:
+    150ms ease-in both vt-fade reverse,
+    400ms ease-in-out both vt-slide reverse;
+}
+::view-transition-new(.nav-back) {
+  --slide-offset: -60px;
+  animation:
+    210ms ease-out 150ms both vt-fade,
+    400ms ease-in-out both vt-slide;
+}
+
+@keyframes vt-fade {
+  from {
+    opacity: 0;
+    filter: blur(3px);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+  }
+}
+
+@keyframes vt-slide {
+  from {
+    translate: var(--slide-offset);
+  }
+  to {
+    translate: 0;
+  }
+}
+
+/* O cabeçalho é a âncora espacial: se ele desliza junto, o usuário
+   perde a referência de que só o CONTEÚDO mudou. */
+::view-transition-group(site-header) {
+  animation: none;
+  z-index: 100;
+}
+::view-transition-old(site-header) {
+  display: none;
+}
+::view-transition-new(site-header) {
+  animation: none;
+}
+
+/* A camada de transição captura cliques; sem isso, o que for clicado
+   durante a animação se perde. */
+::view-transition {
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(*),
+  ::view-transition-new(*),
+  ::view-transition-group(*) {
+    animation-duration: 0s !important;
+    animation-delay: 0s !important;
+  }
+}
+
+/* ───────────────────────────────────────────────────────────
    Revelação ao rolar.
 
    O estado inicial invisível depende da classe `.js`, escrita no

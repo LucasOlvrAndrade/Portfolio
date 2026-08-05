@@ -1,3 +1,6 @@
+import { ViewTransition } from "react";
+import Link from "next/link";
+
 import { LanguageDot } from "./LanguageDot";
 import type { Repo } from "@/lib/types";
 
@@ -18,26 +21,37 @@ export function RepoCard({ repo }: { repo: Repo }) {
   const fallbackTag = repo.language ? null : repo.topics[0];
 
   return (
-    <article
-      className={`group relative flex h-full flex-col rounded-xl border bg-surface p-6 transition-colors hover:border-accent/60 ${
-        repo.featured ? "border-accent/40" : "border-border"
-      }`}
-    >
+    /*
+      Mesmo `name` do cabeçalho em /projetos/[nome]: o navegador
+      reconhece o card e o cabeçalho como o MESMO objeto e anima de um
+      para o outro. É o que comunica "mesma coisa, indo mais fundo" em
+      vez de "uma tela sumiu, outra apareceu".
+    */
+    <ViewTransition name={`repo-${repo.id}`} share="morph" default="none">
+      <article
+        className={`group relative flex h-full flex-col rounded-xl border bg-surface p-6 transition-colors hover:border-accent/60 ${
+          repo.featured ? "border-accent/40" : "border-border"
+        }`}
+      >
       {repo.featured && (
         <span className="mb-3 w-fit rounded-full bg-accent-subtle px-2.5 py-0.5 font-mono text-[10px] uppercase tracking-[0.15em] text-accent">
           Destaque
         </span>
       )}
 
+      {/*
+        O card inteiro leva para a página do projeto — não mais direto ao
+        GitHub. Os links externos vivem lá, o que também elimina o
+        aninhamento de elementos interativos que existia aqui.
+      */}
       <h3 className="text-base font-medium tracking-tight text-text">
-        <a
-          href={repo.url}
-          target="_blank"
-          rel="noopener noreferrer"
+        <Link
+          href={`/projetos/${repo.name}`}
+          transitionTypes={["nav-forward"]}
           className="after:absolute after:inset-0 after:content-[''] group-hover:text-accent"
         >
           {humanize(repo.name)}
-        </a>
+        </Link>
       </h3>
 
       {repo.description && (
@@ -104,28 +118,16 @@ export function RepoCard({ repo }: { repo: Repo }) {
         </div>
 
         {repo.homepage && (
-          // z-10 mantém este link clicável por cima da área do card.
-          <a
-            href={repo.homepage}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="relative z-10 mt-4 inline-flex items-center gap-1.5 text-xs font-medium text-accent underline-offset-4 hover:underline"
-          >
-            Ver projeto no ar
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              className="size-3.5"
+          <span className="mt-4 inline-flex items-center gap-1.5 text-xs font-medium text-accent">
+            <span
               aria-hidden="true"
-            >
-              <path d="M7 17 17 7M9 7h8v8" />
-            </svg>
-            <span className="sr-only">({humanize(repo.name)})</span>
-          </a>
+              className="size-1.5 rounded-full bg-accent"
+            />
+            Publicado
+          </span>
         )}
-      </div>
-    </article>
+        </div>
+      </article>
+    </ViewTransition>
   );
 }
