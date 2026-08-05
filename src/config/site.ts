@@ -47,13 +47,15 @@ export const siteConfig = {
    * Repositórios destacados — aparecem primeiro, com card maior.
    * Basta adicionar o nome exato do repo. Ex.: ["Calculadora-java"]
    */
-  featured: [] as string[],
+  featured: ["portfolio", "Calculadora-java"] as string[],
 
   /**
    * Repositórios ocultos, além dos forks e arquivados (escondidos por padrão).
-   * O repo de perfil entra aqui porque é o README do GitHub, não um projeto.
+   * - `lucasolvrandrade`: é o README do perfil, não um projeto
+   * - `seminario-introc`: repositório vazio (0 KB). Vitrine mostra o melhor,
+   *   não o inventário — repo sem conteúdo comunica descuido.
    */
-  hidden: ["lucasolvrandrade"] as string[],
+  hidden: ["lucasolvrandrade", "seminario-introc"] as string[],
 
   /**
    * Skills exibidas na seção "Tecnologias".
