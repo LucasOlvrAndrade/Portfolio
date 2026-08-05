@@ -1,18 +1,7 @@
 import Link from "next/link";
 
+import { NavPill } from "./NavPill";
 import { ThemeToggle } from "./ThemeToggle";
-
-/*
-  Caminhos absolutos (`/#sobre`, não `#sobre`): agora existem rotas
-  além da home, e uma âncora relativa apontaria para uma seção que não
-  existe em /projetos/[nome].
-*/
-const NAV = [
-  { href: "/#sobre", label: "Sobre" },
-  { href: "/#projetos", label: "Projetos" },
-  { href: "/#tecnologias", label: "Tecnologias" },
-  { href: "/#contato", label: "Contato" },
-];
 
 export function Header() {
   return (
@@ -34,24 +23,9 @@ export function Header() {
           lucas<span className="text-accent">.</span>andrade
         </Link>
 
-        <div className="flex items-center gap-1">
-          <nav aria-label="Navegação principal" className="hidden sm:block">
-            <ul className="flex items-center gap-1">
-              {NAV.map((item) => (
-                <li key={item.href}>
-                  <a
-                    href={item.href}
-                    className="rounded-lg px-3 py-2 text-sm text-muted transition-colors hover:bg-surface-2 hover:text-text"
-                  >
-                    {item.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </nav>
-          <div className="ml-1">
-            <ThemeToggle />
-          </div>
+        <div className="flex items-center gap-2">
+          <NavPill />
+          <ThemeToggle />
         </div>
       </div>
     </header>

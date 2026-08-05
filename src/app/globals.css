@@ -167,6 +167,42 @@
 }
 
 /* ───────────────────────────────────────────────────────────
+   Navegação do header — trilha rebaixada com pílula elevada.
+
+   O volume vem do PAR: sombra `inset` na trilha (afunda) contra
+   sombra externa mais realce de 1px no topo da pílula (levanta).
+   Uma sozinha não convence; é o contraste entre as duas que lê como
+   relevo. Nenhuma variável de cor nova — só os tokens existentes.
+   ─────────────────────────────────────────────────────────── */
+.nav-track {
+  box-shadow: inset 0 1px 2px rgb(0 0 0 / 0.06);
+}
+
+.dark .nav-track {
+  box-shadow: inset 0 1px 2px rgb(0 0 0 / 0.35);
+}
+
+.nav-pill {
+  box-shadow:
+    0 1px 2px rgb(0 0 0 / 0.08),
+    0 2px 6px rgb(0 0 0 / 0.05),
+    inset 0 1px 0 var(--border);
+}
+
+.dark .nav-pill {
+  box-shadow:
+    0 1px 2px rgb(0 0 0 / 0.45),
+    0 2px 8px rgb(0 0 0 / 0.3),
+    inset 0 1px 0 rgb(255 255 255 / 0.06);
+}
+
+/* Mais curta que a mola de propósito: a cor chega antes da pílula, e
+   não parece que o texto ficou esperando o fundo alcançá-lo. */
+.nav-item {
+  transition: color 180ms ease;
+}
+
+/* ───────────────────────────────────────────────────────────
    Transições de visualização entre a listagem e a página do projeto.
 
    Duas mensagens distintas: o card que vira cabeçalho diz "mesma
