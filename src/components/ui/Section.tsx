@@ -1,5 +1,7 @@
 import type { ReactNode } from "react";
 
+import { Reveal } from "./Reveal";
+
 type SectionProps = {
   id: string;
   /** Rótulo pequeno acima do título, em monoespaçada. */
@@ -25,7 +27,7 @@ export function Section({
       className="border-t border-border/60 py-20 sm:py-28"
     >
       <div className="mx-auto max-w-5xl px-6">
-        <div className="max-w-2xl">
+        <Reveal className="max-w-2xl">
           <p className="font-mono text-xs uppercase tracking-[0.2em] text-accent">
             {eyebrow}
           </p>
@@ -40,7 +42,7 @@ export function Section({
               {description}
             </p>
           )}
-        </div>
+        </Reveal>
         <div className="mt-12">{children}</div>
       </div>
     </section>

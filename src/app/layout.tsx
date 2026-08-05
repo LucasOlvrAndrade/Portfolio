@@ -67,9 +67,14 @@ export const viewport: Viewport = {
 /**
  * Roda antes da primeira pintura: aplica o tema salvo (ou o do sistema)
  * para não haver flash de tema errado ao carregar a página.
+ *
+ * Marca também a classe `js`, de que depende a revelação ao rolar. Sem
+ * ela o CSS nunca esconde nada — se este script falhar, a página
+ * continua legível em vez de ficar em branco à espera do observador.
  */
 const themeScript = `
 (function () {
+  document.documentElement.classList.add('js');
   try {
     var stored = localStorage.getItem('theme');
     var isDark = stored

@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 
 import { RepoCard } from "./RepoCard";
 import { GlowCard } from "./spotlight-card";
+import { Reveal } from "./Reveal";
 import { languageColor } from "@/lib/languages";
 import type { Repo } from "@/lib/types";
 
@@ -117,21 +118,17 @@ export function ProjectExplorer({
       ) : (
         <div className="grid gap-5 sm:grid-cols-2">
           {visible.map((repo, index) => (
-            <div
+            <Reveal
               key={repo.id}
-              className={`animate-fade-up h-full ${
-                repo.featured ? "sm:col-span-2" : ""
-              }`}
-              style={{
-                // Escalonamento sutil, limitado para não atrasar demais
-                // os últimos cards em listas grandes.
-                animationDelay: `${Math.min(index, 6) * 60}ms`,
-              }}
+              className={`h-full ${repo.featured ? "sm:col-span-2" : ""}`}
+              // Escalonamento sutil, limitado para não atrasar demais
+              // os últimos cards em listas grandes.
+              delay={Math.min(index, 6) * 60}
             >
               <GlowCard customSize className="h-full" glowColor="brand">
                 <RepoCard repo={repo} />
               </GlowCard>
-            </div>
+            </Reveal>
           ))}
         </div>
       )}

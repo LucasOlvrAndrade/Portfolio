@@ -1,3 +1,4 @@
+import { Reveal } from "@/components/ui/Reveal";
 import { Section } from "@/components/ui/Section";
 import type { ReadmeSection } from "@/lib/readme";
 
@@ -30,7 +31,7 @@ export function About({ sections, bio }: AboutProps) {
         </p>
       ) : (
         <div className="grid gap-12 lg:grid-cols-3">
-          <div className="space-y-8 lg:col-span-2">
+          <Reveal className="space-y-8 lg:col-span-2">
             {prose.map((section, index) => (
               <div key={section.heading}>
                 {/* O primeiro bloco é a introdução: o título dele é o
@@ -64,10 +65,10 @@ export function About({ sections, bio }: AboutProps) {
                 )}
               </div>
             ))}
-          </div>
+          </Reveal>
 
           {lists.length > 0 && (
-            <aside className="space-y-8">
+            <Reveal as="aside" className="space-y-8" delay={120}>
               {lists.map((section) => (
                 <div
                   key={section.heading}
@@ -92,7 +93,7 @@ export function About({ sections, bio }: AboutProps) {
                   </ul>
                 </div>
               ))}
-            </aside>
+            </Reveal>
           )}
         </div>
       )}

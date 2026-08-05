@@ -418,6 +418,27 @@
 }
 
 /* ───────────────────────────────────────────────────────────
+   Revelação ao rolar.
+
+   O estado inicial invisível depende da classe `.js`, escrita no
+   <html> pelo script inline do layout. Sem JavaScript a regra nunca
+   se aplica e a página aparece inteira — esconder conteúdo à espera
+   de um script que pode falhar deixaria o site em branco.
+   ─────────────────────────────────────────────────────────── */
+.js .reveal {
+  opacity: 0;
+  transform: translateY(16px);
+  transition:
+    opacity 600ms cubic-bezier(0.22, 1, 0.36, 1) var(--reveal-delay, 0ms),
+    transform 600ms cubic-bezier(0.22, 1, 0.36, 1) var(--reveal-delay, 0ms);
+}
+
+.js .reveal[data-visible="true"] {
+  opacity: 1;
+  transform: none;
+}
+
+/* ───────────────────────────────────────────────────────────
    Animações de entrada — sutis, e desligadas por completo
    para quem pede menos movimento no sistema.
    ─────────────────────────────────────────────────────────── */
@@ -495,5 +516,14 @@
   [data-glow]::before,
   [data-glow]::after {
     display: none;
+  }
+
+  /* Sem revelação: o conteúdo já nasce visível. A regra acima zera a
+     duração da transição, mas isso deixaria o bloco parado em
+     `opacity: 0` até o observador disparar. */
+  .js .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
   }
 }

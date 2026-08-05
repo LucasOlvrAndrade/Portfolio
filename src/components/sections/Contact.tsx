@@ -1,3 +1,4 @@
+import { Reveal } from "@/components/ui/Reveal";
 import { Section } from "@/components/ui/Section";
 import { siteConfig } from "@/config/site";
 
@@ -74,11 +75,11 @@ export function Contact() {
       description="Aberto a projetos e trocas sobre tecnologia."
     >
       <ul className="grid gap-3 sm:grid-cols-2">
-        {links.map((link) => {
+        {links.map((link, index) => {
           const isExternal = !link.href.startsWith("mailto:");
 
           return (
-            <li key={link.label}>
+            <Reveal as="li" key={link.label} delay={index * 70}>
               <a
                 href={link.href}
                 {...(isExternal
@@ -98,7 +99,7 @@ export function Contact() {
                   </span>
                 </span>
               </a>
-            </li>
+            </Reveal>
           );
         })}
       </ul>
