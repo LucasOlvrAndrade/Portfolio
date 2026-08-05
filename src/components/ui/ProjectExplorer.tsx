@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 
 import { RepoCard } from "./RepoCard";
+import { GlowCard } from "./spotlight-card";
 import { languageColor } from "@/lib/languages";
 import type { Repo } from "@/lib/types";
 
@@ -127,7 +128,9 @@ export function ProjectExplorer({
                 animationDelay: `${Math.min(index, 6) * 60}ms`,
               }}
             >
-              <RepoCard repo={repo} />
+              <GlowCard customSize className="h-full" glowColor="brand">
+                <RepoCard repo={repo} />
+              </GlowCard>
             </div>
           ))}
         </div>
