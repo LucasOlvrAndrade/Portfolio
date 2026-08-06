@@ -132,7 +132,7 @@ export default async function RootLayout({
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
-      <body className="flex min-h-full flex-col bg-bg text-text">
+      <body className="app-shell flex min-h-full flex-col bg-bg text-text">
         <a
           href="#conteudo"
           className="sr-only rounded-lg bg-accent px-4 py-2 text-bg focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50"
@@ -140,7 +140,7 @@ export default async function RootLayout({
           {copy.a11y.skipToContent}
         </a>
         <Header />
-        <main id="conteudo" className="flex-1">
+        <main id="conteudo" className="app-main flex-1">
           {children}
         </main>
         <Footer />

@@ -21,10 +21,15 @@ export function Section({
   const headingId = `${id}-titulo`;
 
   return (
+    /*
+      A borda superior separava seções empilhadas na página única. Com
+      uma seção por rota não há o que separar, e ela virava um traço
+      solto no topo do conteúdo.
+    */
     <section
       id={id}
       aria-labelledby={headingId}
-      className="border-t border-border/60 py-20 sm:py-28"
+      className="page-section py-20 sm:py-28"
     >
       <div className="mx-auto max-w-5xl px-6">
         <Reveal className="max-w-2xl">

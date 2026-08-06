@@ -51,8 +51,6 @@
 @layer base {
   html {
     scroll-behavior: smooth;
-    /* Compensa o header fixo ao navegar por âncoras. */
-    scroll-padding-top: 5rem;
   }
 
   body {
@@ -72,6 +70,69 @@
   ::selection {
     background-color: var(--accent);
     color: var(--bg);
+  }
+}
+
+/* ───────────────────────────────────────────────────────────
+   Tela cheia.
+
+   A regra é escrita ao contrário do que parece natural: o padrão é a
+   página rolar, e só uma viewport comprovadamente grande entra no modo
+   sem rolagem. Se a media query falhar, ou se o navegador não a
+   entender, o resultado é uma página que rola — nunca conteúdo preso
+   atrás de um `overflow: hidden`.
+
+   O limiar vem das exceções pedidas — liberar rolagem em ≤768px de
+   largura OU ≤900px de altura — e é o complemento exato delas. Vale
+   dizer que 900px de altura é mais alto do que parece: um monitor 1080p
+   com barra de tarefas e chrome do navegador entrega perto disso, então
+   muitos laptops caem, corretamente, no modo que rola.
+   ─────────────────────────────────────────────────────────── */
+@media (min-width: 769px) and (min-height: 901px) {
+  html,
+  body {
+    height: 100%;
+  }
+
+  .app-shell {
+    height: 100dvh;
+    overflow: hidden;
+  }
+
+  /*
+    O quadro fica parado — cabeçalho e rodapé sempre à vista — e o
+    conteúdo rola por dentro quando não couber. `min-height: 0` é o que
+    permite ao filho de um flex encolher abaixo do próprio conteúdo;
+    sem isso o container cresce e a barra volta para a página.
+  */
+  .app-main {
+    position: relative;
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  /*
+    Véu no rodapé da área rolável: sinaliza que há mais abaixo. Fica
+    sobre o fundo da página, então some contra ela quando o conteúdo
+    cabe inteiro — não precisa saber se há transbordo.
+  */
+  .app-main::after {
+    content: "";
+    position: sticky;
+    bottom: 0;
+    display: block;
+    height: 2rem;
+    margin-top: -2rem;
+    pointer-events: none;
+    background: linear-gradient(to top, var(--bg), transparent);
+  }
+
+  /* O respiro vertical das seções encolhe: aqui o espaço é finito. */
+  .page-section {
+    padding-top: 3.5rem;
+    padding-bottom: 3.5rem;
   }
 }
 

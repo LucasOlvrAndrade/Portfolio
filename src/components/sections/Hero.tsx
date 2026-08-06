@@ -17,7 +17,7 @@ export async function Hero({ profile }: { profile: GitHubUser | null }) {
   const company = profile?.company;
 
   return (
-    <section className="mx-auto max-w-5xl px-6 pb-20 pt-20 sm:pb-28 sm:pt-28">
+    <section className="page-section mx-auto max-w-5xl px-6 pb-20 pt-20 sm:pb-28 sm:pt-28">
       <div className="flex flex-col-reverse items-start gap-10 sm:flex-row sm:items-center sm:justify-between">
         <div className="max-w-2xl">
           {/*
