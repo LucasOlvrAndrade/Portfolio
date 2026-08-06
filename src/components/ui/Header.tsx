@@ -2,8 +2,22 @@ import Link from "next/link";
 
 import { NavPill } from "./NavPill";
 import { ThemeToggle } from "./ThemeToggle";
+import { getI18n } from "@/i18n";
 
-export function Header() {
+export async function Header() {
+  const { locale, copy } = await getI18n();
+  const { about, projects, skills, contact } = copy.sections;
+
+  /*
+    Os `id` vêm do dicionário porque as âncoras mudam de idioma:
+    `/pt#sobre` e `/en#about`. Uma lista só, aqui, mantém a navegação e
+    as seções falando do mesmo lugar.
+  */
+  const items = [about, projects, skills, contact].map((section) => ({
+    id: section.id,
+    label: section.nav,
+  }));
+
   return (
     /*
       `viewTransitionName` mantém o cabeçalho imóvel durante o deslize
@@ -16,7 +30,7 @@ export function Header() {
     >
       <div className="mx-auto flex h-16 max-w-5xl items-center justify-between px-6">
         <Link
-          href="/"
+          href={`/${locale}`}
           transitionTypes={["nav-back"]}
           className="font-mono text-sm font-medium tracking-tight text-text transition-colors hover:text-accent"
         >
@@ -24,8 +38,19 @@ export function Header() {
         </Link>
 
         <div className="flex items-center gap-2">
-          <NavPill />
-          <ThemeToggle />
+          <NavPill
+            items={items}
+            basePath={`/${locale}`}
+            label={copy.a11y.mainNav}
+          />
+          <ThemeToggle
+            labels={{
+              toLight: copy.a11y.themeToLight,
+              toDark: copy.a11y.themeToDark,
+              light: copy.a11y.themeLight,
+              dark: copy.a11y.themeDark,
+            }}
+          />
         </div>
       </div>
     </header>

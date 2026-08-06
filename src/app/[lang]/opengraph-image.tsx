@@ -1,17 +1,35 @@
 import { ImageResponse } from "next/og";
 
 import { siteConfig } from "@/config/site";
+import { getCopyFor } from "@/i18n";
+import { defaultLocale, isLocale, locales } from "@/i18n/config";
 
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
-export const alt = `Lucas Andrade — ${siteConfig.role}`;
+export const alt = "Lucas Andrade";
+
+/** Sem isto a imagem seria gerada a cada pedido, e não no build. */
+export function generateStaticParams() {
+  return locales.map((lang) => ({ lang }));
+}
 
 /**
  * Imagem de compartilhamento (WhatsApp, LinkedIn, X).
  * Sem fontes externas: usa a fonte padrão do renderizador para não
  * depender de rede em build time.
+ *
+ * Uma por idioma: o link que um recrutador compartilha é o da versão que
+ * ele leu, e a prévia precisa bater com a página.
  */
-export default function OpenGraphImage() {
+export default async function OpenGraphImage({
+  params,
+}: {
+  params: Promise<{ lang: string }>;
+}) {
+  const { lang } = await params;
+  const locale = isLocale(lang) ? lang : defaultLocale;
+  const copy = getCopyFor(locale);
+
   return new ImageResponse(
     (
       <div
@@ -34,7 +52,7 @@ export default function OpenGraphImage() {
               textTransform: "uppercase",
             }}
           >
-            {siteConfig.role}
+            {siteConfig.role[locale]}
           </div>
           <div
             style={{
@@ -55,7 +73,7 @@ export default function OpenGraphImage() {
               maxWidth: 800,
             }}
           >
-            Engenharia de Software · UniCEUB · Distrito Federal
+            {copy.og.subtitle}
           </div>
         </div>
 

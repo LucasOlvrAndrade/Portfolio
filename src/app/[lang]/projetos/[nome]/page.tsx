@@ -4,7 +4,10 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 
 import { LanguageBar } from "@/components/ui/LanguageBar";
+import { TranslationNotice } from "@/components/ui/TranslationNotice";
 import { siteConfig } from "@/config/site";
+import { getCopyFor, getI18n } from "@/i18n";
+import { fill, isLocale, locales, localeMeta } from "@/i18n/config";
 import {
   getRepo,
   getRepoLanguages,
@@ -15,18 +18,18 @@ import { parseProfileReadme } from "@/lib/readme";
 
 export const revalidate = 3600;
 
-/** Só existem rotas para os repositórios que a listagem mostra. */
+/**
+ * Só existem rotas para os repositórios que a listagem mostra.
+ *
+ * `lang` não aparece aqui: quem o enumera é o `generateStaticParams` do
+ * layout raiz, e o Next combina os dois — cada repositório ganha uma
+ * rota por idioma.
+ */
 export async function generateStaticParams() {
   const repos = await getRepos();
   if (!repos.ok) return [];
   return repos.data.map((repo) => ({ nome: repo.name }));
 }
-
-const dateFormatter = new Intl.DateTimeFormat("pt-BR", {
-  day: "numeric",
-  month: "long",
-  year: "numeric",
-});
 
 function humanize(name: string): string {
   return name.replace(/[-_]/g, " ");
@@ -34,47 +37,68 @@ function humanize(name: string): string {
 
 export async function generateMetadata({
   params,
-}: PageProps<"/projetos/[nome]">): Promise<Metadata> {
-  const { nome } = await params;
-  const result = await getRepo(nome);
+}: PageProps<"/[lang]/projetos/[nome]">): Promise<Metadata> {
+  const { lang, nome } = await params;
+  if (!isLocale(lang)) notFound();
 
-  if (!result.ok) return { title: "Projeto não encontrado" };
+  const copy = getCopyFor(lang);
+  const result = await getRepo(nome, lang);
+
+  if (!result.ok) return { title: copy.project.notFound };
 
   const repo = result.data;
   const title = humanize(repo.name);
   const description =
-    repo.description ?? `Projeto ${title} de ${siteConfig.githubUser}.`;
+    repo.description ??
+    fill(copy.project.fallbackDescription, {
+      name: title,
+      user: siteConfig.githubUser,
+    });
 
   return {
     title,
     description,
-    alternates: { canonical: `${siteConfig.url}/projetos/${repo.name}` },
+    alternates: {
+      canonical: `${siteConfig.url}/${lang}/projetos/${repo.name}`,
+      languages: Object.fromEntries(
+        locales.map((locale) => [
+          localeMeta[locale].html,
+          `${siteConfig.url}/${locale}/projetos/${repo.name}`,
+        ]),
+      ),
+    },
     openGraph: { title, description, type: "article" },
   };
 }
 
 export default async function ProjectPage({
   params,
-}: PageProps<"/projetos/[nome]">) {
+}: PageProps<"/[lang]/projetos/[nome]">) {
   const { nome } = await params;
+  const { locale, copy, intl } = await getI18n();
 
-  const repoResult = await getRepo(nome);
+  const repoResult = await getRepo(nome, locale);
   if (!repoResult.ok) notFound();
 
   const repo = repoResult.data;
 
   // README e linguagens são independentes — buscados em paralelo.
   const [readmeResult, languagesResult] = await Promise.all([
-    getRepoReadme(repo.name),
+    getRepoReadme(repo.name, locale),
     getRepoLanguages(repo.name),
   ]);
 
-  const sections = readmeResult.ok
-    ? parseProfileReadme(readmeResult.data)
-    : [];
+  const readme = readmeResult.ok ? readmeResult.data : null;
+  const sections = readme ? parseProfileReadme(readme.markdown) : [];
 
   const languages = languagesResult.ok ? languagesResult.data : {};
   const updatedAt = new Date(repo.pushedAt);
+
+  const dateFormatter = new Intl.DateTimeFormat(intl, {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
 
   return (
     <ViewTransition
@@ -92,7 +116,7 @@ export default async function ProjectPage({
     >
       <article className="mx-auto max-w-3xl px-6 pb-24 pt-14 sm:pt-20">
         <Link
-          href="/#projetos"
+          href={`/${locale}#${copy.sections.projects.id}`}
           transitionTypes={["nav-back"]}
           className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.15em] text-muted transition-colors hover:text-accent"
         >
@@ -106,7 +130,7 @@ export default async function ProjectPage({
           >
             <path d="M19 12H5m7-7-7 7 7 7" />
           </svg>
-          Projetos
+          {copy.project.back}
         </Link>
 
         {/*
@@ -118,7 +142,7 @@ export default async function ProjectPage({
           <header className="mt-8 rounded-xl border border-border bg-surface p-7 sm:p-8">
             {repo.featured && (
               <span className="mb-4 inline-block rounded-full bg-accent-subtle px-2.5 py-0.5 font-mono text-[10px] uppercase tracking-[0.15em] text-accent">
-                Destaque
+                {copy.card.featured}
               </span>
             )}
 
@@ -139,7 +163,7 @@ export default async function ProjectPage({
                 rel="noopener noreferrer"
                 className="rounded-lg bg-accent px-4 py-2 text-sm font-medium text-bg transition-colors hover:bg-accent-hover"
               >
-                Código no GitHub
+                {copy.project.codeOnGitHub}
               </a>
 
               {repo.homepage && (
@@ -149,7 +173,7 @@ export default async function ProjectPage({
                   rel="noopener noreferrer"
                   className="rounded-lg border border-border bg-surface px-4 py-2 text-sm font-medium text-text transition-colors hover:border-accent hover:text-accent"
                 >
-                  Ver no ar
+                  {copy.project.viewLive}
                 </a>
               )}
             </div>
@@ -157,88 +181,105 @@ export default async function ProjectPage({
         </ViewTransition>
 
         <dl className="mt-10 grid grid-cols-2 gap-x-6 gap-y-6 border-y border-border py-7 sm:grid-cols-4">
-          <Fact label="Último commit">
+          <Fact label={copy.project.lastCommit}>
             <time dateTime={repo.pushedAt}>
               {dateFormatter.format(updatedAt)}
             </time>
           </Fact>
-          <Fact label="Linguagem">{repo.language ?? "—"}</Fact>
-          <Fact label="Estrelas">{repo.stars}</Fact>
-          <Fact label="Forks">{repo.forks}</Fact>
+          <Fact label={copy.project.language}>{repo.language ?? "—"}</Fact>
+          <Fact label={copy.project.stars}>{repo.stars}</Fact>
+          <Fact label={copy.project.forks}>{repo.forks}</Fact>
         </dl>
 
         {Object.keys(languages).length > 0 && (
           <section className="mt-12">
             <h2 className="font-mono text-xs uppercase tracking-[0.2em] text-accent">
-              Composição
+              {copy.project.composition}
             </h2>
             <div className="mt-5">
-              <LanguageBar bytes={languages} />
+              <LanguageBar
+                bytes={languages}
+                label={copy.project.composition}
+              />
             </div>
           </section>
         )}
 
         <section className="mt-14">
           <h2 className="font-mono text-xs uppercase tracking-[0.2em] text-accent">
-            Sobre o projeto
+            {copy.project.about}
           </h2>
 
           {sections.length === 0 ? (
             <p className="mt-5 rounded-xl border border-dashed border-border p-7 text-sm text-muted">
-              Este repositório ainda não tem README com conteúdo.{" "}
+              {copy.project.noReadme}{" "}
               <a
                 href={repo.url}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-accent underline underline-offset-4"
               >
-                Ver o código no GitHub
+                {copy.project.seeCode}
               </a>
             </p>
           ) : (
-            <div className="mt-6 space-y-9">
-              {sections.map((section, index) => (
-                <div key={section.heading}>
-                  {/* O primeiro título costuma repetir o nome do projeto,
-                      que já está no cabeçalho acima. */}
-                  {index > 0 && (
-                    <h3 className="mb-3 text-base font-medium tracking-tight text-text">
-                      {section.heading}
-                    </h3>
-                  )}
+            <>
+              {readme && !readme.localized && (
+                <TranslationNotice className="mt-6">
+                  {copy.project.readmeNotTranslated}
+                </TranslationNotice>
+              )}
 
-                  {section.paragraphs.length > 0 && (
-                    <div className="space-y-4">
-                      {section.paragraphs.map((paragraph) => (
-                        <p
-                          key={paragraph}
-                          className="text-pretty text-base leading-relaxed text-muted"
-                        >
-                          {paragraph}
-                        </p>
-                      ))}
-                    </div>
-                  )}
+              {/* `lang` marca o bloco que ficou no idioma de origem, para
+                  o leitor de tela trocar de voz. O aviso acima fica fora
+                  dele, para ser lido na voz da página. */}
+              <div
+                lang={readme?.localized === false ? "pt-BR" : undefined}
+                className="mt-6 space-y-9"
+              >
+                {sections.map((section, index) => (
+                  <div key={section.heading}>
+                    {/* O primeiro título costuma repetir o nome do projeto,
+                        que já está no cabeçalho acima. */}
+                    {index > 0 && (
+                      <h3 className="mb-3 text-base font-medium tracking-tight text-text">
+                        {section.heading}
+                      </h3>
+                    )}
 
-                  {section.bullets.length > 0 && (
-                    <ul className="mt-4 space-y-2.5">
-                      {section.bullets.map((bullet) => (
-                        <li
-                          key={bullet}
-                          className="flex gap-3 text-sm leading-snug text-muted"
-                        >
-                          <span
-                            aria-hidden="true"
-                            className="mt-1.5 size-1 shrink-0 rounded-full bg-accent"
-                          />
-                          {bullet}
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                </div>
-              ))}
-            </div>
+                    {section.paragraphs.length > 0 && (
+                      <div className="space-y-4">
+                        {section.paragraphs.map((paragraph) => (
+                          <p
+                            key={paragraph}
+                            className="text-pretty text-base leading-relaxed text-muted"
+                          >
+                            {paragraph}
+                          </p>
+                        ))}
+                      </div>
+                    )}
+
+                    {section.bullets.length > 0 && (
+                      <ul className="mt-4 space-y-2.5">
+                        {section.bullets.map((bullet) => (
+                          <li
+                            key={bullet}
+                            className="flex gap-3 text-sm leading-snug text-muted"
+                          >
+                            <span
+                              aria-hidden="true"
+                              className="mt-1.5 size-1 shrink-0 rounded-full bg-accent"
+                            />
+                            {bullet}
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </>
           )}
         </section>
       </article>

@@ -4,6 +4,10 @@
  * Este é o ÚNICO arquivo que precisa ser editado no dia a dia — e só
  * quando você quiser destacar ou esconder algo específico. Repositórios
  * novos aparecem automaticamente via API, sem tocar em código.
+ *
+ * Campos com as chaves `pt` e `en` são texto exibido, e precisam dos dois.
+ * O texto que não é configuração — títulos de seção, rótulos, botões —
+ * mora em `src/i18n/dictionaries/`.
  */
 
 export const siteConfig = {
@@ -14,7 +18,10 @@ export const siteConfig = {
   url: "https://lucasolvrandrade.vercel.app",
 
   /** Exibido no Hero, no <title> da aba e na imagem de compartilhamento. */
-  role: "Estagiário de desenvolvimento · Grupo RAM",
+  role: {
+    pt: "Estagiário de desenvolvimento · Grupo RAM",
+    en: "Development intern · Grupo RAM",
+  },
 
   /**
    * Trabalho atual — vira um card com logo na seção "Contato".
@@ -24,7 +31,10 @@ export const siteConfig = {
    */
   work: {
     company: "Grupo RAM",
-    position: "Estagiário de desenvolvimento",
+    position: {
+      pt: "Estagiário de desenvolvimento",
+      en: "Development intern",
+    },
     url: "https://memoriaram.com.br",
     logo: "/grupo-ram.png",
     logoWidth: 540,
@@ -58,33 +68,91 @@ export const siteConfig = {
   hidden: ["lucasolvrandrade", "seminario-introc"] as string[],
 
   /**
+   * Bio em inglês.
+   *
+   * A do GitHub é um campo só, e está em português. Sem isto, o subtítulo
+   * da seção "Sobre" em /en viria em português.
+   */
+  bio: {
+    en: "Second-semester Software Engineering student at Centro Universitário de Brasília (CEUB).",
+  } as Record<string, string>,
+
+  /**
+   * Descrição em inglês por repositório.
+   *
+   * O GitHub guarda UMA descrição por repositório, e a sua está em
+   * português. Sem esta tabela, `/en` mostraria cards em português.
+   * A chave é o nome exato do repositório; o que não estiver aqui cai
+   * na descrição do GitHub, em português mesmo.
+   */
+  descriptions: {
+    en: {
+      portfolio:
+        "Personal portfolio site that lists GitHub repositories automatically through the API. Next.js 16 + TypeScript + Tailwind v4.",
+      "Calculadora-java":
+        "Console calculator in Java: addition, subtraction, multiplication, division and exponentiation, reading input with Scanner.",
+      "github-page":
+        "Portfolio site in HTML, CSS and JavaScript, built during the intermediate stage of Bootcamp I.",
+      EngenhariaDeRequisitos_2026_2:
+        "Practical coursework for the Requirements Engineering course.",
+      "Introducao-Computacao-Hardware":
+        "Coursework for the Introduction to Computing course.",
+    } as Record<string, string>,
+  },
+
+  /**
    * Skills exibidas na seção "Tecnologias".
    * Vêm do seu README de perfil — não das linguagens dos repositórios,
    * que hoje estão majoritariamente nulas na API.
    */
-  skills: [
-    {
-      group: "Linguagens",
-      items: ["Java", "HTML", "CSS", "JavaScript", "SQL"],
-    },
-    {
-      group: "Banco de Dados",
-      items: ["MySQL", "Modelagem de Dados"],
-    },
-    {
-      group: "Ferramentas",
-      items: ["Git", "GitHub", "VS Code", "Windows"],
-    },
-    {
-      group: "Estudando",
-      items: [
-        "Estruturas de Dados",
-        "Engenharia de Requisitos",
-        "Desenvolvimento Web",
-        "Boas Práticas",
-      ],
-    },
-  ],
+  skills: {
+    pt: [
+      {
+        group: "Linguagens",
+        items: ["Java", "HTML", "CSS", "JavaScript", "SQL"],
+      },
+      {
+        group: "Banco de Dados",
+        items: ["MySQL", "Modelagem de Dados"],
+      },
+      {
+        group: "Ferramentas",
+        items: ["Git", "GitHub", "VS Code", "Windows"],
+      },
+      {
+        group: "Estudando",
+        items: [
+          "Estruturas de Dados",
+          "Engenharia de Requisitos",
+          "Desenvolvimento Web",
+          "Boas Práticas",
+        ],
+      },
+    ],
+    en: [
+      {
+        group: "Languages",
+        items: ["Java", "HTML", "CSS", "JavaScript", "SQL"],
+      },
+      {
+        group: "Databases",
+        items: ["MySQL", "Data Modeling"],
+      },
+      {
+        group: "Tools",
+        items: ["Git", "GitHub", "VS Code", "Windows"],
+      },
+      {
+        group: "Studying",
+        items: [
+          "Data Structures",
+          "Requirements Engineering",
+          "Web Development",
+          "Best Practices",
+        ],
+      },
+    ],
+  },
 } as const;
 
 export type SiteConfig = typeof siteConfig;

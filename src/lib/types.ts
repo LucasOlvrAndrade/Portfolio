@@ -44,14 +44,31 @@ export type Repo = {
 };
 
 /**
+ * README já resolvido para um idioma.
+ *
+ * `localized` distingue "este é o README em inglês" de "não existe um, e
+ * isto aqui é o português". A página usa a diferença para avisar o
+ * leitor, em vez de servir outro idioma sem explicação.
+ */
+export type Readme = {
+  markdown: string;
+  localized: boolean;
+};
+
+/**
  * Erros são valores, não exceções — assim a página sempre renderiza
  * um estado, nunca uma tela quebrada.
+ *
+ * O erro carrega o que aconteceu, não como contá-lo: a frase é montada
+ * na camada de UI, a partir do dicionário do idioma da rota. Guardar a
+ * mensagem aqui obrigaria a camada de dados a conhecer o idioma.
  */
 export type FetchErrorKind = "rate_limit" | "not_found" | "network" | "unknown";
 
 export type FetchError = {
   kind: FetchErrorKind;
-  message: string;
+  /** Código HTTP, quando houve resposta. Só usado em `unknown`. */
+  status?: number;
   /** Epoch em segundos em que o rate limit é restaurado. */
   resetAt?: number;
 };

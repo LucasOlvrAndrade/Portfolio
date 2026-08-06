@@ -1,10 +1,12 @@
 import "server-only";
 
 import { siteConfig } from "@/config/site";
+import { defaultLocale, type Locale } from "@/i18n/config";
 import type {
   FetchError,
   GitHubRepo,
   GitHubUser,
+  Readme,
   Repo,
   Result,
 } from "./types";
@@ -46,29 +48,18 @@ function classifyResponse(response: Response): FetchError {
   ) {
     return {
       kind: "rate_limit",
-      message:
-        "Limite de requisições da API do GitHub atingido. Os projetos voltam a aparecer em instantes.",
       resetAt: reset ? Number(reset) : undefined,
     };
   }
 
   if (response.status === 404) {
-    return {
-      kind: "not_found",
-      message: "Recurso não encontrado na API do GitHub.",
-    };
+    return { kind: "not_found" };
   }
 
-  return {
-    kind: "unknown",
-    message: `A API do GitHub respondeu ${response.status}.`,
-  };
+  return { kind: "unknown", status: response.status };
 }
 
-async function request<T>(
-  path: string,
-  accept?: string,
-): Promise<Result<T>> {
+async function request<T>(path: string, accept?: string): Promise<Result<T>> {
   try {
     const headers = buildHeaders() as Record<string, string>;
     if (accept) headers.Accept = accept;
@@ -89,14 +80,45 @@ async function request<T>(
     return { ok: true, data };
   } catch {
     // Falha de rede/DNS: a página ainda renderiza, apenas sem os dados.
-    return {
-      ok: false,
-      error: {
-        kind: "network",
-        message: "Não foi possível alcançar a API do GitHub.",
-      },
-    };
+    return { ok: false, error: { kind: "network" } };
   }
+}
+
+const RAW = "application/vnd.github.raw";
+
+/**
+ * README de um repositório no idioma pedido.
+ *
+ * A convenção é `README.<locale>.md` ao lado do `README.md`. O idioma
+ * padrão usa o endpoint `/readme`, que acha o arquivo seja qual for o
+ * nome e a pasta. Quando o traduzido não existe — o caso comum hoje —
+ * devolve o original com `localized: false`, e a página avisa o leitor.
+ */
+async function fetchReadme(
+  repo: string,
+  locale: Locale,
+): Promise<Result<Readme>> {
+  const user = siteConfig.githubUser;
+
+  if (locale !== defaultLocale) {
+    const translated = await request<string>(
+      `/repos/${user}/${repo}/contents/README.${locale}.md`,
+      RAW,
+    );
+
+    if (translated.ok) {
+      return { ok: true, data: { markdown: translated.data, localized: true } };
+    }
+    // 404 aqui é o esperado, não um problema: segue para o original.
+  }
+
+  const original = await request<string>(`/repos/${user}/${repo}/readme`, RAW);
+  if (!original.ok) return original;
+
+  return {
+    ok: true,
+    data: { markdown: original.data, localized: locale === defaultLocale },
+  };
 }
 
 export async function getProfile(): Promise<Result<GitHubUser>> {
@@ -104,14 +126,25 @@ export async function getProfile(): Promise<Result<GitHubUser>> {
 }
 
 /** README do repositório de perfil (`user/user`), se existir. */
-export async function getProfileReadme(): Promise<Result<string>> {
-  const user = siteConfig.githubUser;
-  return request<string>(
-    `/repos/${user}/${user}/readme`,
-    "application/vnd.github.raw",
-  );
+export async function getProfileReadme(
+  locale: Locale,
+): Promise<Result<Readme>> {
+  return fetchReadme(siteConfig.githubUser, locale);
 }
 
+/** README de um repositório, em Markdown cru. */
+export async function getRepoReadme(
+  name: string,
+  locale: Locale,
+): Promise<Result<Readme>> {
+  return fetchReadme(name, locale);
+}
+
+/**
+ * A listagem NÃO recebe idioma de propósito: é a mesma resposta da API
+ * para os dois, e uma busca só serve as duas rotas estáticas. Quem troca
+ * a descrição é `localize`, depois, sem custo de rede.
+ */
 export async function getRepos(): Promise<Result<Repo[]>> {
   const result = await request<GitHubRepo[]>(
     `/users/${siteConfig.githubUser}/repos?per_page=100&sort=updated`,
@@ -153,34 +186,49 @@ export async function getRepos(): Promise<Result<Repo[]>> {
 }
 
 /**
+ * Troca a descrição pela versão do idioma, quando existe uma em
+ * `siteConfig.descriptions`.
+ *
+ * O GitHub guarda uma única descrição por repositório. Esta é a única
+ * forma de a vitrine em inglês não exibir texto em português — e o
+ * motivo de a substituição acontecer aqui, e não no card: `RepoCard` é
+ * renderizado dentro de um componente cliente e não pode importar este
+ * módulo, que é `server-only`.
+ */
+export function localize(repos: Repo[], locale: Locale): Repo[] {
+  const overrides: Record<string, string> | undefined =
+    locale === defaultLocale ? undefined : siteConfig.descriptions[locale];
+
+  if (!overrides) return repos;
+
+  return repos.map((repo) =>
+    overrides[repo.name]
+      ? { ...repo, description: overrides[repo.name] }
+      : repo,
+  );
+}
+
+/**
  * Um repositório específico, já normalizado. Usado pela página de
  * detalhe; devolve `not_found` para repositórios ocultos, forks e
  * arquivados, para que a rota não exponha o que a listagem esconde.
  */
-export async function getRepo(name: string): Promise<Result<Repo>> {
+export async function getRepo(
+  name: string,
+  locale: Locale,
+): Promise<Result<Repo>> {
   const repos = await getRepos();
   if (!repos.ok) return repos;
 
-  const repo = repos.data.find(
+  const repo = localize(repos.data, locale).find(
     (item) => item.name.toLowerCase() === name.toLowerCase(),
   );
 
   if (!repo) {
-    return {
-      ok: false,
-      error: { kind: "not_found", message: "Projeto não encontrado." },
-    };
+    return { ok: false, error: { kind: "not_found" } };
   }
 
   return { ok: true, data: repo };
-}
-
-/** README de um repositório, em Markdown cru. */
-export async function getRepoReadme(name: string): Promise<Result<string>> {
-  return request<string>(
-    `/repos/${siteConfig.githubUser}/${name}/readme`,
-    "application/vnd.github.raw",
-  );
 }
 
 /** Bytes por linguagem — alimenta a barra de composição do projeto. */

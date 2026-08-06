@@ -1,6 +1,7 @@
 import { Reveal } from "@/components/ui/Reveal";
 import { Section } from "@/components/ui/Section";
 import { siteConfig } from "@/config/site";
+import { getI18n } from "@/i18n";
 
 type Link = {
   label: string;
@@ -20,7 +21,10 @@ const iconProps = {
   "aria-hidden": true,
 };
 
-export function Contact() {
+export async function Contact() {
+  const { copy } = await getI18n();
+
+  // Os rótulos são nomes próprios de serviços — não se traduzem.
   const links: Link[] = [
     {
       label: "Email",
@@ -69,10 +73,10 @@ export function Contact() {
 
   return (
     <Section
-      id="contato"
-      eyebrow="Contato"
-      title="Vamos conversar"
-      description="Aberto a projetos e trocas sobre tecnologia."
+      id={copy.sections.contact.id}
+      eyebrow={copy.sections.contact.eyebrow}
+      title={copy.sections.contact.title}
+      description={copy.sections.contact.description}
     >
       <ul className="grid gap-3 sm:grid-cols-2">
         {links.map((link, index) => {

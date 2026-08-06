@@ -11,12 +11,15 @@ import {
   stepSpring,
 } from "@/lib/spring";
 
-const NAV = [
-  { id: "sobre", label: "Sobre" },
-  { id: "projetos", label: "Projetos" },
-  { id: "tecnologias", label: "Tecnologias" },
-  { id: "contato", label: "Contato" },
-];
+type NavItem = { id: string; label: string };
+
+type NavPillProps = {
+  /** Seções na ordem da página. Os `id` mudam de idioma — vêm do dicionário. */
+  items: NavItem[];
+  /** Prefixo de idioma da home, para as âncoras: `/pt` → `/pt#sobre`. */
+  basePath: string;
+  label: string;
+};
 
 const DAMPING = 26;
 const STIFF_LEAD = 260;
@@ -33,7 +36,7 @@ const CLICK_SUPPRESSION_MS = 600;
 /** Arredonda para meio pixel: valores fracionários borram o texto. */
 const half = (value: number) => Math.round(value * 2) / 2;
 
-export function NavPill() {
+export function NavPill({ items, basePath, label }: NavPillProps) {
   const listRef = useRef<HTMLUListElement>(null);
   const pillRef = useRef<HTMLSpanElement>(null);
   const itemRefs = useRef<(HTMLAnchorElement | null)[]>([]);
@@ -72,9 +75,9 @@ export function NavPill() {
 
   /* ── Qual seção está à vista ─────────────────────────────────── */
   useEffect(() => {
-    const sections = NAV.map(({ id }) => document.getElementById(id)).filter(
-      (element): element is HTMLElement => element !== null,
-    );
+    const sections = items
+      .map(({ id }) => document.getElementById(id))
+      .filter((element): element is HTMLElement => element !== null);
     if (sections.length === 0) return;
 
     const ratios = new Map<string, number>();
@@ -103,7 +106,7 @@ export function NavPill() {
           }
         }
 
-        const index = NAV.findIndex((item) => item.id === bestId);
+        const index = items.findIndex((item) => item.id === bestId);
         if (index >= 0) setActive(index);
       },
       {
@@ -120,11 +123,12 @@ export function NavPill() {
 
     for (const section of sections) observer.observe(section);
     return () => observer.disconnect();
-  }, []);
+  }, [items]);
 
   /* ── Fim da página ativa a última seção ──────────────────────── */
   useEffect(() => {
-    if (!document.getElementById(NAV[NAV.length - 1].id)) return;
+    if (items.length === 0) return;
+    if (!document.getElementById(items[items.length - 1].id)) return;
 
     /*
       "Contato" é curta: pode nunca conquistar a maior fatia da tela e,
@@ -137,19 +141,19 @@ export function NavPill() {
         window.innerHeight + window.scrollY >=
         document.documentElement.scrollHeight - 2;
 
-      if (atBottom) setActive(NAV.length - 1);
+      if (atBottom) setActive(items.length - 1);
     };
 
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+  }, [items]);
 
   /* ── Âncora vinda de fora (link externo, voltar do navegador) ─── */
   useEffect(() => {
     const sync = () => {
       const id = window.location.hash.replace("#", "");
       if (!id) return;
-      const index = NAV.findIndex((item) => item.id === id);
+      const index = items.findIndex((item) => item.id === id);
       if (index < 0) return;
       suppressUntil.current = performance.now() + CLICK_SUPPRESSION_MS;
       setActive(index);
@@ -158,7 +162,7 @@ export function NavPill() {
     sync();
     window.addEventListener("hashchange", sync);
     return () => window.removeEventListener("hashchange", sync);
-  }, []);
+  }, [items]);
 
   /* ── Molas ───────────────────────────────────────────────────── */
   useEffect(() => {
@@ -279,7 +283,7 @@ export function NavPill() {
   }, []);
 
   return (
-    <nav aria-label="Navegação principal" className="hidden sm:block">
+    <nav aria-label={label} className="hidden sm:block">
       <ul
         ref={listRef}
         className="nav-track relative flex items-center rounded-full border border-border bg-surface-2 p-1"
@@ -295,10 +299,10 @@ export function NavPill() {
           className="nav-pill pointer-events-none absolute left-0 top-1 h-[calc(100%-0.5rem)] rounded-full bg-surface"
         />
 
-        {NAV.map((item, index) => (
+        {items.map((item, index) => (
           <li key={item.id}>
             <Link
-              href={`/#${item.id}`}
+              href={`${basePath}#${item.id}`}
               ref={(node) => {
                 itemRefs.current[index] = node;
               }}

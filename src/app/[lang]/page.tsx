@@ -5,6 +5,7 @@ import { Contact } from "@/components/sections/Contact";
 import { Hero } from "@/components/sections/Hero";
 import { Projects, ProjectsFallback } from "@/components/sections/Projects";
 import { Skills } from "@/components/sections/Skills";
+import { getI18n } from "@/i18n";
 import { getProfile, getProfileReadme } from "@/lib/github";
 import { parseProfileReadme } from "@/lib/readme";
 
@@ -15,18 +16,19 @@ import { parseProfileReadme } from "@/lib/readme";
 export const revalidate = 3600;
 
 export default async function Home() {
+  const { locale, copy } = await getI18n();
+
   // Perfil e README são independentes — buscados em paralelo.
   const [profileResult, readmeResult] = await Promise.all([
     getProfile(),
-    getProfileReadme(),
+    getProfileReadme(locale),
   ]);
 
   const profile = profileResult.ok ? profileResult.data : null;
 
   // Sem repositório de perfil (404), a seção "Sobre" cai na bio.
-  const sections = readmeResult.ok
-    ? parseProfileReadme(readmeResult.data)
-    : [];
+  const readme = readmeResult.ok ? readmeResult.data : null;
+  const sections = readme ? parseProfileReadme(readme.markdown) : [];
 
   return (
     /*
@@ -50,11 +52,24 @@ export default async function Home() {
     >
       <div>
         <Hero profile={profile} />
-        <About sections={sections} bio={profile?.bio ?? null} />
+        <About
+          sections={sections}
+          bio={profile?.bio ?? null}
+          // Sem README nenhum não há o que avisar: o aviso é sobre
+          // idioma, não sobre ausência de conteúdo.
+          localized={readme?.localized ?? true}
+        />
 
         {/* Os repositórios são buscados à parte para que o restante da
             página apareça na hora e o skeleton cubra só esta seção. */}
-        <Suspense fallback={<ProjectsFallback />}>
+        <Suspense
+          fallback={
+            <ProjectsFallback
+              section={copy.sections.projects}
+              loading={copy.explorer.loading}
+            />
+          }
+        >
           <Projects />
         </Suspense>
 

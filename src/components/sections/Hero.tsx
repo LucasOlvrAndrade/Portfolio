@@ -1,10 +1,14 @@
 import Image from "next/image";
 
 import { siteConfig } from "@/config/site";
+import { getI18n } from "@/i18n";
+import { fill } from "@/i18n/config";
 import type { GitHubUser } from "@/lib/types";
 
 /** `profile` pode ser null se a API falhar — o Hero continua renderizando. */
-export function Hero({ profile }: { profile: GitHubUser | null }) {
+export async function Hero({ profile }: { profile: GitHubUser | null }) {
+  const { locale, copy } = await getI18n();
+
   const work = siteConfig.work;
   const name = profile?.name ?? "Lucas Andrade";
   const location = profile?.location;
@@ -22,7 +26,7 @@ export function Hero({ profile }: { profile: GitHubUser | null }) {
           */}
           <div className="animate-fade-up flex flex-wrap items-center gap-x-3 gap-y-3">
             <p className="font-mono text-xs uppercase tracking-[0.2em] text-accent">
-              {work.position}
+              {work.position[locale]}
             </p>
 
             <span aria-hidden className="text-border">
@@ -33,7 +37,9 @@ export function Hero({ profile }: { profile: GitHubUser | null }) {
               href={work.url}
               target="_blank"
               rel="noopener noreferrer"
-              aria-label={`${work.company} — abrir site em nova aba`}
+              aria-label={fill(copy.hero.companyLink, {
+                company: work.company,
+              })}
               className="group inline-flex items-center gap-2.5 rounded-full border border-border bg-white py-1.5 pl-3 pr-2.5 shadow-sm transition-all hover:-translate-y-0.5 hover:border-[var(--brand-green)] hover:shadow-md"
               style={
                 {
@@ -43,7 +49,7 @@ export function Hero({ profile }: { profile: GitHubUser | null }) {
             >
               <Image
                 src={work.logo}
-                alt={`Logotipo do ${work.company}`}
+                alt={fill(copy.hero.companyLogoAlt, { company: work.company })}
                 width={work.logoWidth}
                 height={work.logoHeight}
                 priority
@@ -65,9 +71,7 @@ export function Hero({ profile }: { profile: GitHubUser | null }) {
           </h1>
 
           <p className="animate-fade-up delay-150 mt-6 max-w-xl text-pretty text-lg leading-relaxed text-muted">
-            Estudante de Engenharia de Software com experiência em suporte
-            técnico. Construindo base sólida em programação, banco de dados e
-            infraestrutura — um projeto de cada vez.
+            {copy.hero.tagline}
           </p>
 
           {(location || company) && (
@@ -108,16 +112,16 @@ export function Hero({ profile }: { profile: GitHubUser | null }) {
 
           <div className="animate-fade-up delay-225 mt-9 flex flex-wrap items-center gap-3">
             <a
-              href="#projetos"
+              href={`#${copy.sections.projects.id}`}
               className="rounded-lg bg-accent px-5 py-2.5 text-sm font-medium text-bg transition-colors hover:bg-accent-hover"
             >
-              Ver projetos
+              {copy.hero.viewProjects}
             </a>
             <a
-              href="#contato"
+              href={`#${copy.sections.contact.id}`}
               className="rounded-lg border border-border bg-surface px-5 py-2.5 text-sm font-medium text-text transition-colors hover:border-accent hover:text-accent"
             >
-              Entrar em contato
+              {copy.hero.getInTouch}
             </a>
           </div>
         </div>
@@ -126,7 +130,7 @@ export function Hero({ profile }: { profile: GitHubUser | null }) {
           <div className="animate-fade-in shrink-0">
             <Image
               src={profile.avatar_url}
-              alt={`Foto de perfil de ${name}`}
+              alt={fill(copy.hero.avatarAlt, { name })}
               width={132}
               height={132}
               priority

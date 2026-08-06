@@ -18,14 +18,20 @@ export function RepoSkeleton() {
   );
 }
 
-export function RepoSkeletonGrid({ count = 4 }: { count?: number }) {
+export function RepoSkeletonGrid({
+  count = 4,
+  label,
+}: {
+  count?: number;
+  label: string;
+}) {
   return (
     <div
       role="status"
       aria-live="polite"
       className="grid gap-5 sm:grid-cols-2"
     >
-      <span className="sr-only">Carregando projetos do GitHub…</span>
+      <span className="sr-only">{label}</span>
       {Array.from({ length: count }, (_, index) => (
         <RepoSkeleton key={index} />
       ))}

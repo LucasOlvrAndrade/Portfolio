@@ -1,17 +1,21 @@
 import { Reveal } from "@/components/ui/Reveal";
 import { Section } from "@/components/ui/Section";
 import { siteConfig } from "@/config/site";
+import { getI18n } from "@/i18n";
 
-export function Skills() {
+export async function Skills() {
+  const { locale, copy } = await getI18n();
+  const groups = siteConfig.skills[locale];
+
   return (
     <Section
-      id="tecnologias"
-      eyebrow="Tecnologias"
-      title="Ferramentas do dia a dia"
-      description="O que já uso com confiança e o que estou estudando agora."
+      id={copy.sections.skills.id}
+      eyebrow={copy.sections.skills.eyebrow}
+      title={copy.sections.skills.title}
+      description={copy.sections.skills.description}
     >
       <div className="grid gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
-        {siteConfig.skills.map((group, index) => (
+        {groups.map((group, index) => (
           <Reveal key={group.group} delay={index * 80}>
             <h3 className="font-mono text-xs uppercase tracking-[0.15em] text-accent">
               {group.group}

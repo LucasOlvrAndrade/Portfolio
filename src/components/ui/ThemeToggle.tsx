@@ -48,7 +48,16 @@ function applyTheme(theme: Theme) {
   }
 }
 
-export function ThemeToggle() {
+type ThemeToggleProps = {
+  labels: {
+    toLight: string;
+    toDark: string;
+    light: string;
+    dark: string;
+  };
+};
+
+export function ThemeToggle({ labels }: ThemeToggleProps) {
   const theme = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
 
   // Enquanto o usuário não escolher manualmente, acompanha o sistema.
@@ -74,8 +83,8 @@ export function ThemeToggle() {
     <button
       type="button"
       onClick={() => applyTheme(isDark ? "light" : "dark")}
-      aria-label={isDark ? "Ativar tema claro" : "Ativar tema escuro"}
-      title={isDark ? "Tema claro" : "Tema escuro"}
+      aria-label={isDark ? labels.toLight : labels.toDark}
+      title={isDark ? labels.light : labels.dark}
       className="grid size-9 place-items-center rounded-lg border border-border bg-surface text-muted transition-colors hover:border-accent hover:text-accent"
     >
       {/* `theme` é null até hidratar, evitando divergência servidor/cliente. */}

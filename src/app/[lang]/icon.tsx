@@ -1,7 +1,14 @@
 import { ImageResponse } from "next/og";
 
+import { locales } from "@/i18n/config";
+
 export const size = { width: 32, height: 32 };
 export const contentType = "image/png";
+
+/** O ícone é o mesmo nos dois idiomas, mas a rota vive sob `[lang]`. */
+export function generateStaticParams() {
+  return locales.map((lang) => ({ lang }));
+}
 
 /** Favicon gerado: iniciais sobre o acento da paleta. */
 export default function Icon() {

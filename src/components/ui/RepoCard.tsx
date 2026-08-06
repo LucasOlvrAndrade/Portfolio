@@ -2,20 +2,55 @@ import { ViewTransition } from "react";
 import Link from "next/link";
 
 import { LanguageDot } from "./LanguageDot";
+import { fill } from "@/i18n/config";
 import type { Repo } from "@/lib/types";
 
-const dateFormatter = new Intl.DateTimeFormat("pt-BR", {
-  day: "numeric",
-  month: "short",
-  year: "numeric",
-});
+export type CardCopy = {
+  featured: string;
+  published: string;
+  stars: string;
+  forks: string;
+  lastCommitOn: string;
+};
+
+/**
+ * Um formatador por idioma, criado uma vez.
+ *
+ * `Intl.DateTimeFormat` é caro de construir e este componente é
+ * renderizado uma vez por card — instanciar dentro do corpo custaria
+ * caro numa lista.
+ */
+const formatters = new Map<string, Intl.DateTimeFormat>();
+
+function formatDate(date: Date, intl: string): string {
+  let formatter = formatters.get(intl);
+  if (!formatter) {
+    formatter = new Intl.DateTimeFormat(intl, {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+    });
+    formatters.set(intl, formatter);
+  }
+  return formatter.format(date);
+}
 
 /** Transforma "Calculadora-java" em "Calculadora java" para leitura. */
 function humanize(name: string): string {
   return name.replace(/[-_]/g, " ");
 }
 
-export function RepoCard({ repo }: { repo: Repo }) {
+export function RepoCard({
+  repo,
+  copy,
+  intl,
+  projectPath,
+}: {
+  repo: Repo;
+  copy: CardCopy;
+  intl: string;
+  projectPath: string;
+}) {
   const updatedAt = new Date(repo.pushedAt);
   // Quando a API não detecta linguagem, o primeiro topic serve de rótulo.
   const fallbackTag = repo.language ? null : repo.topics[0];
@@ -35,7 +70,7 @@ export function RepoCard({ repo }: { repo: Repo }) {
       >
       {repo.featured && (
         <span className="mb-3 w-fit rounded-full bg-accent-subtle px-2.5 py-0.5 font-mono text-[10px] uppercase tracking-[0.15em] text-accent">
-          Destaque
+          {copy.featured}
         </span>
       )}
 
@@ -46,7 +81,7 @@ export function RepoCard({ repo }: { repo: Repo }) {
       */}
       <h3 className="text-base font-medium tracking-tight text-text">
         <Link
-          href={`/projetos/${repo.name}`}
+          href={`${projectPath}/${repo.name}`}
           transitionTypes={["nav-forward"]}
           className="after:absolute after:inset-0 after:content-[''] group-hover:text-accent"
         >
@@ -83,7 +118,7 @@ export function RepoCard({ repo }: { repo: Repo }) {
               >
                 <path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14l-5-4.87 6.91-1.01L12 2Z" />
               </svg>
-              <span className="sr-only">Estrelas: </span>
+              <span className="sr-only">{copy.stars}</span>
               {repo.stars}
             </span>
           )}
@@ -103,7 +138,7 @@ export function RepoCard({ repo }: { repo: Repo }) {
                 <circle cx="18" cy="6" r="3" />
                 <path d="M18 9v1a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V9M12 12v3" />
               </svg>
-              <span className="sr-only">Forks: </span>
+              <span className="sr-only">{copy.forks}</span>
               {repo.forks}
             </span>
           )}
@@ -111,9 +146,11 @@ export function RepoCard({ repo }: { repo: Repo }) {
           <time
             dateTime={repo.pushedAt}
             className="text-xs text-muted"
-            title={`Último commit em ${updatedAt.toLocaleDateString("pt-BR")}`}
+            title={fill(copy.lastCommitOn, {
+              date: formatDate(updatedAt, intl),
+            })}
           >
-            {dateFormatter.format(updatedAt)}
+            {formatDate(updatedAt, intl)}
           </time>
         </div>
 
@@ -123,7 +160,7 @@ export function RepoCard({ repo }: { repo: Repo }) {
               aria-hidden="true"
               className="size-1.5 rounded-full bg-accent"
             />
-            Publicado
+            {copy.published}
           </span>
         )}
         </div>

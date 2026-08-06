@@ -7,7 +7,14 @@ import { languageColor } from "@/lib/languages";
  * em vários repositórios. O endpoint `/languages` traz a distribuição
  * real, que é informação de verdade sobre o projeto em vez de um rótulo.
  */
-export function LanguageBar({ bytes }: { bytes: Record<string, number> }) {
+export function LanguageBar({
+  bytes,
+  label,
+}: {
+  bytes: Record<string, number>;
+  /** Prefixo do rótulo acessível da barra — o título da seção. */
+  label: string;
+}) {
   const total = Object.values(bytes).reduce((sum, value) => sum + value, 0);
   if (total === 0) return null;
 
@@ -24,7 +31,7 @@ export function LanguageBar({ bytes }: { bytes: Record<string, number> }) {
       <div
         className="flex h-1.5 w-full overflow-hidden rounded-full bg-surface-2"
         role="img"
-        aria-label={`Composição: ${parts
+        aria-label={`${label}: ${parts
           .map((part) => `${part.name} ${part.percent.toFixed(1)}%`)
           .join(", ")}`}
       >

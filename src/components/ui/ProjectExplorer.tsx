@@ -2,31 +2,56 @@
 
 import { useMemo, useState } from "react";
 
-import { RepoCard } from "./RepoCard";
+import { RepoCard, type CardCopy } from "./RepoCard";
 import { GlowCard } from "./spotlight-card";
 import { Reveal } from "./Reveal";
+import { fill } from "@/i18n/config";
 import { languageColor } from "@/lib/languages";
 import type { Repo } from "@/lib/types";
 
 type SortKey = "recent" | "stars" | "name";
 
-const SORT_OPTIONS: { value: SortKey; label: string }[] = [
-  { value: "recent", label: "Mais recentes" },
-  { value: "stars", label: "Mais estrelas" },
-  { value: "name", label: "Nome (A–Z)" },
-];
+type ExplorerCopy = {
+  filterByLanguage: string;
+  all: string;
+  sortLabel: string;
+  sortRecent: string;
+  sortStars: string;
+  sortName: string;
+  emptyForLanguage: string;
+  viewAll: string;
+  countOne: string;
+  countMany: string;
+  loading: string;
+};
 
 const ALL = "__all__";
 
 export function ProjectExplorer({
   repos,
   languages,
+  copy,
+  card,
+  intl,
+  projectPath,
 }: {
   repos: Repo[];
   languages: string[];
+  copy: ExplorerCopy;
+  card: CardCopy;
+  /** Tag de idioma para datas e ordenação alfabética. */
+  intl: string;
+  /** Prefixo da rota de detalhe, já com o idioma: `/pt/projetos`. */
+  projectPath: string;
 }) {
   const [language, setLanguage] = useState<string>(ALL);
   const [sort, setSort] = useState<SortKey>("recent");
+
+  const sortOptions: { value: SortKey; label: string }[] = [
+    { value: "recent", label: copy.sortRecent },
+    { value: "stars", label: copy.sortStars },
+    { value: "name", label: copy.sortName },
+  ];
 
   const visible = useMemo(() => {
     const filtered =
@@ -42,12 +67,12 @@ export function ProjectExplorer({
         case "stars":
           return b.stars - a.stars || Date.parse(b.pushedAt) - Date.parse(a.pushedAt);
         case "name":
-          return a.name.localeCompare(b.name, "pt-BR");
+          return a.name.localeCompare(b.name, intl);
         default:
           return Date.parse(b.pushedAt) - Date.parse(a.pushedAt);
       }
     });
-  }, [repos, language, sort]);
+  }, [repos, language, sort, intl]);
 
   return (
     <>
@@ -55,14 +80,14 @@ export function ProjectExplorer({
         {languages.length > 0 && (
           <div
             role="group"
-            aria-label="Filtrar por linguagem"
+            aria-label={copy.filterByLanguage}
             className="flex flex-wrap gap-2"
           >
             <FilterChip
               active={language === ALL}
               onClick={() => setLanguage(ALL)}
             >
-              Todos
+              {copy.all}
               <span className="ml-1.5 text-[10px] opacity-60">
                 {repos.length}
               </span>
@@ -87,7 +112,7 @@ export function ProjectExplorer({
 
         <div className="flex shrink-0 items-center gap-2">
           <label htmlFor="ordenar" className="text-xs text-muted">
-            Ordenar
+            {copy.sortLabel}
           </label>
           <select
             id="ordenar"
@@ -95,7 +120,7 @@ export function ProjectExplorer({
             onChange={(event) => setSort(event.target.value as SortKey)}
             className="rounded-lg border border-border bg-surface px-3 py-1.5 text-xs text-text transition-colors hover:border-accent"
           >
-            {SORT_OPTIONS.map((option) => (
+            {sortOptions.map((option) => (
               <option key={option.value} value={option.value}>
                 {option.label}
               </option>
@@ -106,13 +131,13 @@ export function ProjectExplorer({
 
       {visible.length === 0 ? (
         <p className="rounded-xl border border-dashed border-border p-8 text-center text-sm text-muted">
-          Nenhum projeto em {language}.{" "}
+          {fill(copy.emptyForLanguage, { language })}{" "}
           <button
             type="button"
             onClick={() => setLanguage(ALL)}
             className="text-accent underline underline-offset-4"
           >
-            Ver todos
+            {copy.viewAll}
           </button>
         </p>
       ) : (
@@ -129,7 +154,12 @@ export function ProjectExplorer({
               delay={Math.min(index, 6) * 60}
             >
               <GlowCard customSize className="h-full" glowColor="brand">
-                <RepoCard repo={repo} />
+                <RepoCard
+                  repo={repo}
+                  copy={card}
+                  intl={intl}
+                  projectPath={projectPath}
+                />
               </GlowCard>
             </Reveal>
           ))}
@@ -137,8 +167,9 @@ export function ProjectExplorer({
       )}
 
       <p aria-live="polite" className="sr-only">
-        {visible.length} projeto{visible.length === 1 ? "" : "s"} exibido
-        {visible.length === 1 ? "" : "s"}.
+        {fill(visible.length === 1 ? copy.countOne : copy.countMany, {
+          count: visible.length,
+        })}
       </p>
     </>
   );
