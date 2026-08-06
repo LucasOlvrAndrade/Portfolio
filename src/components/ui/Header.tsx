@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import { LocaleToggle } from "./LocaleToggle";
 import { NavPill } from "./NavPill";
 import { ThemeToggle } from "./ThemeToggle";
 import { getI18n } from "@/i18n";
@@ -42,6 +43,14 @@ export async function Header() {
             items={items}
             basePath={`/${locale}`}
             label={copy.a11y.mainNav}
+          />
+          <LocaleToggle
+            locale={locale}
+            labels={{
+              group: copy.a11y.languageGroup,
+              switchTo: copy.a11y.switchLanguage,
+              current: copy.a11y.currentLanguage,
+            }}
           />
           <ThemeToggle
             labels={{
