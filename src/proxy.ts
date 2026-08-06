@@ -1,6 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 
 import { defaultLocale, isLocale, type Locale } from "@/i18n/config";
+import { folderFor, keyForFolder, keyForSlug, slugFor } from "@/i18n/routes";
 
 /**
  * Escolhe o idioma pela preferência declarada no navegador.
@@ -37,13 +38,57 @@ function negotiate(header: string | null): Locale {
   return defaultLocale;
 }
 
+/**
+ * Concilia o slug público com a pasta da rota.
+ *
+ * Há uma árvore de rotas só, nomeada em português. O inglês existe como
+ * URL — `/en/about` é servido pela pasta `sobre` por reescrita, e a
+ * barra de endereços não muda. O caminho inverso (`/en/sobre`, a pasta
+ * exposta crua) redireciona para o slug público, para que cada página
+ * tenha uma URL canônica e não duas.
+ */
+function resolveSection(
+  request: NextRequest,
+  locale: Locale,
+  segments: string[],
+): NextResponse | null {
+  const [segment, ...rest] = segments;
+  if (!segment) return null;
+
+  const key = keyForSlug(locale, segment);
+
+  if (key) {
+    const folder = folderFor(key);
+    // Slug público. Só reescreve quando ele difere do nome da pasta.
+    if (folder === segment) return null;
+    const url = request.nextUrl.clone();
+    url.pathname = ["", locale, folder, ...rest].join("/");
+    return NextResponse.rewrite(url);
+  }
+
+  const exposed = keyForFolder(segment);
+  if (exposed) {
+    // Pasta crua num idioma que a chama de outro nome: manda ao canônico,
+    // para que cada página tenha uma URL só.
+    const url = request.nextUrl.clone();
+    url.pathname = ["", locale, slugFor(locale, exposed), ...rest].join("/");
+    return NextResponse.redirect(url);
+  }
+
+  return null;
+}
+
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
-  const first = pathname.split("/")[1];
+  const segments = pathname.split("/").filter(Boolean);
+  const [first, ...rest] = segments;
 
-  // Já prefixado: nada a fazer. É o caso da esmagadora maioria dos
-  // acessos, e sair cedo mantém o custo do proxy perto de zero.
-  if (first && isLocale(first)) return NextResponse.next();
+  // Já prefixado: só resta conciliar o slug da seção. É o caso da
+  // esmagadora maioria dos acessos, e sair cedo mantém o custo perto de
+  // zero para quem não precisa de reescrita.
+  if (first && isLocale(first)) {
+    return resolveSection(request, first, rest) ?? NextResponse.next();
+  }
 
   const locale = negotiate(request.headers.get("accept-language"));
   const url = request.nextUrl.clone();

@@ -73,7 +73,7 @@ export async function Contact() {
 
   return (
     <Section
-      id={copy.sections.contact.id}
+      id="contact"
       eyebrow={copy.sections.contact.eyebrow}
       title={copy.sections.contact.title}
       description={copy.sections.contact.description}

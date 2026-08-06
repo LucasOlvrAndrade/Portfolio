@@ -8,6 +8,7 @@ import { TranslationNotice } from "@/components/ui/TranslationNotice";
 import { siteConfig } from "@/config/site";
 import { getCopyFor, getI18n } from "@/i18n";
 import { fill, isLocale, locales, localeMeta } from "@/i18n/config";
+import { projectPath } from "@/i18n/routes";
 import {
   getRepo,
   getRepoLanguages,
@@ -59,11 +60,11 @@ export async function generateMetadata({
     title,
     description,
     alternates: {
-      canonical: `${siteConfig.url}/${lang}/projetos/${repo.name}`,
+      canonical: `${siteConfig.url}${projectPath(lang, repo.name)}`,
       languages: Object.fromEntries(
         locales.map((locale) => [
           localeMeta[locale].html,
-          `${siteConfig.url}/${locale}/projetos/${repo.name}`,
+          `${siteConfig.url}${projectPath(locale, repo.name)}`,
         ]),
       ),
     },
@@ -116,7 +117,7 @@ export default async function ProjectPage({
     >
       <article className="mx-auto max-w-3xl px-6 pb-24 pt-14 sm:pt-20">
         <Link
-          href={`/${locale}#${copy.sections.projects.id}`}
+          href={projectPath(locale)}
           transitionTypes={["nav-back"]}
           className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.15em] text-muted transition-colors hover:text-accent"
         >

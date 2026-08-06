@@ -52,24 +52,6 @@ export const localeMeta = {
 } as const satisfies Record<Locale, unknown>;
 
 /**
- * Troca o prefixo de idioma de um caminho, preservando o resto.
- *
- * `/pt/projetos/x` + `en` → `/en/projetos/x`. Se o caminho ainda não
- * tiver prefixo (só acontece antes do `proxy` agir), acrescenta um.
- */
-export function withLocale(pathname: string, locale: Locale): string {
-  const segments = pathname.split("/").filter(Boolean);
-
-  if (segments.length > 0 && isLocale(segments[0])) {
-    segments[0] = locale;
-  } else {
-    segments.unshift(locale);
-  }
-
-  return `/${segments.join("/")}`;
-}
-
-/**
  * Substitui `{chave}` pelos valores dados.
  *
  * Os dicionários guardam só strings — nada de funções. É o que permite

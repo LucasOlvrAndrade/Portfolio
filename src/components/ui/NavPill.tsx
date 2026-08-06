@@ -1,7 +1,8 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 import {
   MAX_DT,
@@ -11,13 +12,23 @@ import {
   stepSpring,
 } from "@/lib/spring";
 
-type NavItem = { id: string; label: string };
+export type NavItem = {
+  /** URL pública, já com o prefixo de idioma. */
+  href: string;
+  label: string;
+  /**
+   * Segmentos que contam como "esta seção" ao comparar com a URL.
+   *
+   * São dois porque a URL em inglês (`about`) é servida pela pasta em
+   * português (`sobre`) via reescrita no proxy. Dependendo de onde a
+   * comparação acontece — servidor ou cliente — o caminho visível pode
+   * ser um ou o outro, e aceitar ambos elimina divergência de hidratação.
+   */
+  segments: string[];
+};
 
 type NavPillProps = {
-  /** Seções na ordem da página. Os `id` mudam de idioma — vêm do dicionário. */
   items: NavItem[];
-  /** Prefixo de idioma da home, para as âncoras: `/pt` → `/pt#sobre`. */
-  basePath: string;
   label: string;
 };
 
@@ -25,31 +36,32 @@ const DAMPING = 26;
 const STIFF_LEAD = 260;
 const STIFF_TRAIL = 170;
 
-/**
- * Janela em que o observer fica calado após um clique. O smooth scroll
- * atravessa as seções intermediárias e o observer dispararia em cada
- * uma — a pílula pularia de item em item até chegar. Com a supressão
- * ela vai direto ao destino.
- */
-const CLICK_SUPPRESSION_MS = 600;
-
 /** Arredonda para meio pixel: valores fracionários borram o texto. */
 const half = (value: number) => Math.round(value * 2) / 2;
 
-export function NavPill({ items, basePath, label }: NavPillProps) {
+export function NavPill({ items, label }: NavPillProps) {
+  const pathname = usePathname();
   const listRef = useRef<HTMLUListElement>(null);
   const pillRef = useRef<HTMLSpanElement>(null);
   const itemRefs = useRef<(HTMLAnchorElement | null)[]>([]);
 
-  /** `null` fora da home, onde as seções não existem. */
-  const [active, setActive] = useState<number | null>(null);
+  /*
+    O segmento seguinte ao idioma identifica a seção. Pegá-lo por posição
+    — e não o caminho inteiro — faz a página de um projeto
+    (`/pt/projetos/portfolio`) manter "Projetos" aceso, que é o que o
+    usuário espera de uma navegação de topo.
+  */
+  const current = pathname.split("/").filter(Boolean)[1] ?? "";
+  const found = items.findIndex((item) => item.segments.includes(current));
+
+  /** `null` na home, onde nenhuma seção está ativa. */
+  const active = found >= 0 ? found : null;
 
   const leftSpring = useRef(createSpring());
   const rightSpring = useRef(createSpring());
   const frame = useRef(0);
   const lastTime = useRef(0);
   const measured = useRef(false);
-  const suppressUntil = useRef(0);
 
   const paint = useCallback(() => {
     const pill = pillRef.current;
@@ -72,97 +84,6 @@ export function NavPill({ items, basePath, label }: NavPillProps) {
       right: item.offsetLeft + item.offsetWidth - offset,
     };
   }, []);
-
-  /* ── Qual seção está à vista ─────────────────────────────────── */
-  useEffect(() => {
-    const sections = items
-      .map(({ id }) => document.getElementById(id))
-      .filter((element): element is HTMLElement => element !== null);
-    if (sections.length === 0) return;
-
-    const ratios = new Map<string, number>();
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        // Durante a janela de supressão o clique manda, não o scroll.
-        if (performance.now() < suppressUntil.current) return;
-
-        for (const entry of entries) {
-          if (entry.isIntersecting) {
-            ratios.set(entry.target.id, entry.intersectionRatio);
-          } else {
-            ratios.delete(entry.target.id);
-          }
-        }
-
-        if (ratios.size === 0) return;
-
-        let bestId = "";
-        let bestRatio = -1;
-        for (const [id, ratio] of ratios) {
-          if (ratio > bestRatio) {
-            bestRatio = ratio;
-            bestId = id;
-          }
-        }
-
-        const index = items.findIndex((item) => item.id === bestId);
-        if (index >= 0) setActive(index);
-      },
-      {
-        /*
-          -80px no topo compensa o header fixo de 4rem e o
-          `scroll-padding-top: 5rem` do CSS. Sem isso a seção que está
-          escondida ATRÁS do header ainda contaria como visível, e a
-          pílula ficaria sempre uma posição adiantada.
-        */
-        rootMargin: "-80px 0px -55% 0px",
-        threshold: [0, 0.25, 0.5, 0.75, 1],
-      },
-    );
-
-    for (const section of sections) observer.observe(section);
-    return () => observer.disconnect();
-  }, [items]);
-
-  /* ── Fim da página ativa a última seção ──────────────────────── */
-  useEffect(() => {
-    if (items.length === 0) return;
-    if (!document.getElementById(items[items.length - 1].id)) return;
-
-    /*
-      "Contato" é curta: pode nunca conquistar a maior fatia da tela e,
-      sem isto, a pílula jamais chegaria nela por rolagem.
-    */
-    const onScroll = () => {
-      if (performance.now() < suppressUntil.current) return;
-
-      const atBottom =
-        window.innerHeight + window.scrollY >=
-        document.documentElement.scrollHeight - 2;
-
-      if (atBottom) setActive(items.length - 1);
-    };
-
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, [items]);
-
-  /* ── Âncora vinda de fora (link externo, voltar do navegador) ─── */
-  useEffect(() => {
-    const sync = () => {
-      const id = window.location.hash.replace("#", "");
-      if (!id) return;
-      const index = items.findIndex((item) => item.id === id);
-      if (index < 0) return;
-      suppressUntil.current = performance.now() + CLICK_SUPPRESSION_MS;
-      setActive(index);
-    };
-
-    sync();
-    window.addEventListener("hashchange", sync);
-    return () => window.removeEventListener("hashchange", sync);
-  }, [items]);
 
   /* ── Molas ───────────────────────────────────────────────────── */
   useEffect(() => {
@@ -273,15 +194,6 @@ export function NavPill({ items, basePath, label }: NavPillProps) {
     return () => observer.disconnect();
   }, [active, bounds, paint]);
 
-  // `useCallback` não é otimização aqui: sem ele o linter de pureza do
-  // React trata `performance.now()` como chamada em tempo de render.
-  const handleClick = useCallback((index: number) => {
-    // Assume o destino na hora e cala o observer enquanto a rolagem
-    // suave atravessa o que houver pelo caminho.
-    suppressUntil.current = performance.now() + CLICK_SUPPRESSION_MS;
-    setActive(index);
-  }, []);
-
   return (
     <nav aria-label={label} className="hidden sm:block">
       <ul
@@ -300,14 +212,13 @@ export function NavPill({ items, basePath, label }: NavPillProps) {
         />
 
         {items.map((item, index) => (
-          <li key={item.id}>
+          <li key={item.href}>
             <Link
-              href={`${basePath}#${item.id}`}
+              href={item.href}
               ref={(node) => {
                 itemRefs.current[index] = node;
               }}
               aria-current={active === index ? "page" : undefined}
-              onClick={() => handleClick(index)}
               className={`nav-item relative z-[1] block rounded-full px-2.5 py-1.5 text-[13px] md:px-3 md:text-sm ${
                 active === index ? "text-text" : "text-muted hover:text-accent"
               }`}

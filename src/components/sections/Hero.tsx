@@ -1,8 +1,10 @@
 import Image from "next/image";
+import Link from "next/link";
 
 import { siteConfig } from "@/config/site";
 import { getI18n } from "@/i18n";
 import { fill } from "@/i18n/config";
+import { sectionPath } from "@/i18n/routes";
 import type { GitHubUser } from "@/lib/types";
 
 /** `profile` pode ser null se a API falhar — o Hero continua renderizando. */
@@ -111,18 +113,20 @@ export async function Hero({ profile }: { profile: GitHubUser | null }) {
           )}
 
           <div className="animate-fade-up delay-225 mt-9 flex flex-wrap items-center gap-3">
-            <a
-              href={`#${copy.sections.projects.id}`}
+            <Link
+              href={sectionPath(locale, "projects")}
+              transitionTypes={["nav-forward"]}
               className="rounded-lg bg-accent px-5 py-2.5 text-sm font-medium text-bg transition-colors hover:bg-accent-hover"
             >
               {copy.hero.viewProjects}
-            </a>
-            <a
-              href={`#${copy.sections.contact.id}`}
+            </Link>
+            <Link
+              href={sectionPath(locale, "contact")}
+              transitionTypes={["nav-forward"]}
               className="rounded-lg border border-border bg-surface px-5 py-2.5 text-sm font-medium text-text transition-colors hover:border-accent hover:text-accent"
             >
               {copy.hero.getInTouch}
-            </a>
+            </Link>
           </div>
         </div>
 

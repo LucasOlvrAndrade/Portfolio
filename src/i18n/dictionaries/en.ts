@@ -44,14 +44,14 @@ export const en: Translation<Dictionary> = {
 
   sections: {
     about: {
-      id: "about",
       nav: "About",
       eyebrow: "About",
       title: "Who is behind the projects",
       empty: "This profile has no description on GitHub yet.",
+      metaDescription:
+        "Software Engineering studies at UniCEUB and a background in technical support.",
     },
     projects: {
-      id: "projects",
       nav: "Projects",
       eyebrow: "Projects",
       title: "What I have been building",
@@ -59,21 +59,25 @@ export const en: Translation<Dictionary> = {
         "Loaded straight from the GitHub API — always current, never edited by hand. Forks and archived repositories are left out.",
       empty: "No public repositories to show yet.",
       viewProfile: "View profile on GitHub",
+      metaDescription:
+        "Projects by Lucas Andrade, loaded straight from the GitHub API.",
     },
     skills: {
-      id: "skills",
       nav: "Technologies",
       eyebrow: "Technologies",
       title: "Everyday tools",
       description:
         "What I already use with confidence, and what I am studying right now.",
+      metaDescription:
+        "Languages, databases and tools I use and the ones I am studying.",
     },
     contact: {
-      id: "contact",
       nav: "Contact",
       eyebrow: "Contact",
       title: "Let's talk",
       description: "Open to projects and conversations about technology.",
+      metaDescription:
+        "Email, GitHub, LinkedIn and Instagram for Lucas Andrade.",
     },
   },
 

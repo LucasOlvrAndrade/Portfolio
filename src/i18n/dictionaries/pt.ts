@@ -45,14 +45,14 @@ export const pt = {
 
   sections: {
     about: {
-      id: "sobre",
       nav: "Sobre",
       eyebrow: "Sobre",
       title: "Quem está por trás dos projetos",
       empty: "Perfil ainda sem descrição no GitHub.",
+      metaDescription:
+        "Formação em Engenharia de Software no UniCEUB e experiência em suporte técnico.",
     },
     projects: {
-      id: "projetos",
       nav: "Projetos",
       eyebrow: "Projetos",
       title: "O que eu venho construindo",
@@ -60,21 +60,25 @@ export const pt = {
         "Carregado direto da API do GitHub — sempre atualizado, sem edição manual. Forks e repositórios arquivados ficam de fora.",
       empty: "Nenhum repositório público para exibir ainda.",
       viewProfile: "Ver perfil no GitHub",
+      metaDescription:
+        "Projetos de Lucas Andrade, carregados direto da API do GitHub.",
     },
     skills: {
-      id: "tecnologias",
       nav: "Tecnologias",
       eyebrow: "Tecnologias",
       title: "Ferramentas do dia a dia",
       description:
         "O que já uso com confiança e o que estou estudando agora.",
+      metaDescription:
+        "Linguagens, bancos de dados e ferramentas que uso e que estudo.",
     },
     contact: {
-      id: "contato",
       nav: "Contato",
       eyebrow: "Contato",
       title: "Vamos conversar",
       description: "Aberto a projetos e trocas sobre tecnologia.",
+      metaDescription:
+        "E-mail, GitHub, LinkedIn e Instagram de Lucas Andrade.",
     },
   },
 

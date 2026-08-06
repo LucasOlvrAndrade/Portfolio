@@ -1,22 +1,30 @@
 import Link from "next/link";
 
 import { LocaleToggle } from "./LocaleToggle";
-import { NavPill } from "./NavPill";
+import { NavPill, type NavItem } from "./NavPill";
 import { ThemeToggle } from "./ThemeToggle";
 import { getI18n } from "@/i18n";
+import {
+  folderFor,
+  homePath,
+  sectionKeys,
+  sectionPath,
+  slugFor,
+} from "@/i18n/routes";
 
 export async function Header() {
   const { locale, copy } = await getI18n();
-  const { about, projects, skills, contact } = copy.sections;
 
   /*
-    Os `id` vêm do dicionário porque as âncoras mudam de idioma:
-    `/pt#sobre` e `/en#about`. Uma lista só, aqui, mantém a navegação e
-    as seções falando do mesmo lugar.
+    Uma lista só, derivada das chaves de seção. Os rótulos vêm do
+    dicionário e as URLs de `routes.ts` — nada de caminho escrito à mão,
+    que é o que fazia o menu e as páginas divergirem.
   */
-  const items = [about, projects, skills, contact].map((section) => ({
-    id: section.id,
-    label: section.nav,
+  const items: NavItem[] = sectionKeys.map((key) => ({
+    href: sectionPath(locale, key),
+    label: copy.sections[key].nav,
+    // Slug público e pasta: a reescrita do proxy faz os dois aparecerem.
+    segments: [...new Set([slugFor(locale, key), folderFor(key)])],
   }));
 
   return (
@@ -31,7 +39,7 @@ export async function Header() {
     >
       <div className="mx-auto flex h-16 max-w-5xl items-center justify-between px-6">
         <Link
-          href={`/${locale}`}
+          href={homePath(locale)}
           transitionTypes={["nav-back"]}
           className="font-mono text-sm font-medium tracking-tight text-text transition-colors hover:text-accent"
         >
@@ -39,11 +47,7 @@ export async function Header() {
         </Link>
 
         <div className="flex items-center gap-2">
-          <NavPill
-            items={items}
-            basePath={`/${locale}`}
-            label={copy.a11y.mainNav}
-          />
+          <NavPill items={items} label={copy.a11y.mainNav} />
           <LocaleToggle
             locale={locale}
             labels={{

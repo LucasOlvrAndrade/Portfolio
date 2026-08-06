@@ -31,7 +31,7 @@ export async function About({ sections, bio, localized }: AboutProps) {
 
   return (
     <Section
-      id={copy.sections.about.id}
+      id="about"
       eyebrow={copy.sections.about.eyebrow}
       title={copy.sections.about.title}
       description={description ?? undefined}

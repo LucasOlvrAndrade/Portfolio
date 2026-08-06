@@ -9,7 +9,7 @@ export async function Skills() {
 
   return (
     <Section
-      id={copy.sections.skills.id}
+      id="skills"
       eyebrow={copy.sections.skills.eyebrow}
       title={copy.sections.skills.title}
       description={copy.sections.skills.description}

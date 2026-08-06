@@ -4,6 +4,7 @@ import { ProjectExplorer } from "@/components/ui/ProjectExplorer";
 import { RepoSkeletonGrid } from "@/components/ui/RepoSkeleton";
 import { siteConfig } from "@/config/site";
 import { getI18n, type Copy } from "@/i18n";
+import { projectPath } from "@/i18n/routes";
 import { collectLanguages, getRepos, localize } from "@/lib/github";
 
 type ProjectsCopy = Copy["sections"]["projects"];
@@ -23,7 +24,7 @@ export function ProjectsFallback({
 }) {
   return (
     <Section
-      id={section.id}
+      id="projects"
       eyebrow={section.eyebrow}
       title={section.title}
       description={section.description}
@@ -41,7 +42,7 @@ export async function Projects() {
 
   return (
     <Section
-      id={section.id}
+      id="projects"
       eyebrow={section.eyebrow}
       title={section.title}
       description={section.description}
@@ -70,7 +71,7 @@ export async function Projects() {
           copy={copy.explorer}
           card={copy.card}
           intl={intl}
-          projectPath={`/${locale}/projetos`}
+          projectPath={projectPath(locale)}
         />
       )}
     </Section>

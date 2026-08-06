@@ -2,13 +2,8 @@
 
 import { usePathname } from "next/navigation";
 
-import {
-  fill,
-  locales,
-  localeMeta,
-  withLocale,
-  type Locale,
-} from "@/i18n/config";
+import { fill, locales, localeMeta, type Locale } from "@/i18n/config";
+import { translatePath } from "@/i18n/routes";
 
 type LocaleToggleProps = {
   locale: Locale;
@@ -75,7 +70,7 @@ export function LocaleToggle({ locale, labels }: LocaleToggleProps) {
         return (
           <a
             key={item}
-            href={withLocale(pathname, item)}
+            href={translatePath(pathname, item)}
             hrefLang={meta.html}
             aria-current={isActive ? "true" : undefined}
             /*
