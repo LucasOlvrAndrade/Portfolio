@@ -14,8 +14,15 @@ export const siteConfig = {
   /** Username do GitHub. Vem do env, com fallback para não quebrar o build. */
   githubUser: process.env.NEXT_PUBLIC_GITHUB_USER ?? "LucasOlvrAndrade",
 
-  /** Usado em metadata/SEO. Ajuste após definir o domínio final. */
-  url: "https://lucasolvrandrade.vercel.app",
+  /**
+   * Domínio canônico. Alimenta `metadataBase`, as tags canônicas, o
+   * Open Graph e o `hreflang` — apontar para um endereço morto faz o
+   * buscador indexar o lugar errado e quebra a prévia de compartilhamento.
+   *
+   * Sem `www` de propósito: é o domínio raiz que serve o site, e o
+   * endereço mais curto é o que vai para a bio das redes.
+   */
+  url: "https://lucas-andrade.dev",
 
   /** Exibido no Hero, no <title> da aba e na imagem de compartilhamento. */
   role: {
