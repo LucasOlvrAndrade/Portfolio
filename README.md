@@ -7,7 +7,7 @@ suporte técnico, e hoje estagiário de desenvolvimento no Grupo RAM. Estou
 construindo base sólida em programação, banco de dados e infraestrutura — um
 projeto de cada vez. Este site é onde esses projetos ficam.
 
-<https://lucas-andrade.dev>
+[lucas-andrade.dev](https://lucas-andrade.dev/pt)
 
 ## Por que ele se atualiza sozinho
 
