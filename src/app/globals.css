@@ -53,6 +53,17 @@
     scroll-behavior: smooth;
   }
 
+  /*
+    O cabeçalho é `sticky` e cobre o topo da área rolável. Sem esta
+    folga, clicar em "Sobre" alinha o título da seção exatamente atrás
+    dele — a âncora funciona e mesmo assim parece quebrada, porque o
+    que se procurava ficou escondido.
+  */
+  :target,
+  .page-section {
+    scroll-margin-top: 5rem;
+  }
+
   body {
     background-color: var(--bg);
     color: var(--text);
@@ -111,6 +122,21 @@
     min-height: 0;
     overflow-y: auto;
     overscroll-behavior: contain;
+
+    /*
+      `scroll-behavior` no <html> não alcança este elemento: quem rola
+      aqui é ele, não o documento, e a propriedade vale para o contêiner
+      que de fato rola. Sem esta linha o menu salta seco em telas
+      grandes e desliza suave nas pequenas — o mesmo clique com dois
+      comportamentos, dependendo do tamanho da janela.
+    */
+    scroll-behavior: smooth;
+  }
+
+  /* Aqui o cabeçalho está FORA da área rolável, então não há o que
+     descontar: a folga de 5rem viraria um buraco no topo da seção. */
+  .app-main .page-section {
+    scroll-margin-top: 1.5rem;
   }
 
   /*
@@ -225,6 +251,25 @@
   [data-glow]::after {
     display: none;
   }
+}
+
+/*
+  Durante a rolagem, o halo externo sai de cena.
+
+  Ele é o elemento mais caro da página para repintar: um `blur(12px)`
+  sobre um fundo com `background-attachment: fixed`. Fundo ancorado na
+  viewport precisa ser repintado a cada quadro de rolagem, e passar
+  esse repintura por um desfoque a cada quadro é o que trava.
+
+  Some só o halo — a borda que acende continua acesa, e ela é o que se
+  reconhece como spotlight. A marcação vem do `ScrollTuning` e cai
+  sozinha 140ms depois de a página parar.
+
+  Para reverter, basta apagar esta regra: o efeito volta integral, com
+  o custo de rolagem junto.
+*/
+html[data-scrolling] [data-glow] > [data-glow] {
+  display: none;
 }
 
 /* ───────────────────────────────────────────────────────────
@@ -438,6 +483,244 @@
 
 .animate-skeleton {
   animation: skeleton 1.6s ease-in-out infinite;
+}
+
+/* ───────────────────────────────────────────────────────────
+   Parallax de dois planos.
+
+   A página é UM bloco sólido que sobe; atrás dela, uma camada de fundo
+   sobe mais devagar. A profundidade nasce da diferença entre as duas
+   velocidades, e de mais nada.
+
+   Esta é a segunda arquitetura do efeito. A primeira fixava o Hero e
+   fazia o conteúdo passar por cima, com cada seção recuando e
+   desvanecendo ao sair. Funcionava, e estava errada para este site: a
+   borda da pilha que encobria o Hero era uma aresta atravessando a
+   tela, e o desvanecer de cada seção quebrava a página em cartões
+   independentes. O resultado era um empilhamento de partes, não uma
+   página inteira. Registrado aqui porque a tentação de "dar mais vida"
+   com movimento por seção vai voltar, e é ela que fragmenta.
+
+   Guiado por rolagem em CSS (`animation-timeline`), não por listener
+   de scroll em JavaScript. A razão é estrutural: em telas grandes quem
+   rola é o `.app-main`, e no resto é o documento. `view()` e `scroll()`
+   resolvem contra o scrollport mais próximo sozinhos — um listener
+   precisaria saber qual dos dois observar, e errar isso significa um
+   efeito que simplesmente não acontece em metade dos aparelhos.
+
+   O movimento vive sob duas condicionais, e nenhuma é decorativa:
+
+   - `@supports`: onde não houver suporte, nada se aplica e a página
+     fica estática e íntegra. Nunca quebrada.
+   - `prefers-reduced-motion: no-preference`: parallax é gatilho
+     vestibular reconhecido. E há uma armadilha concreta aqui — a regra
+     de movimento reduzido lá embaixo zera `animation-duration` com
+     `!important`. Numa animação de rolagem isso não a desliga: ela
+     salta direto para o estado FINAL. Por isso a proteção é não
+     declarar as regras, em vez de tentar sobrescrevê-las depois.
+   ─────────────────────────────────────────────────────────── */
+
+/*
+  Não há `@property` aqui, e a ausência é deliberada. As camadas
+  animavam propriedades customizadas registradas, o que funcionava e
+  custava caro: cada quadro passava pela thread principal. Animando
+  `transform` diretamente, o trabalho vai para o compositor. Se algum
+  dia for preciso compor DUAS animações no mesmo elemento, a
+  propriedade customizada volta a ser a saída — mas só então, e
+  sabendo o que se paga por ela.
+*/
+
+/* ── O palco ──────────────────────────────────────────────────
+   A página inteira é UM plano. Nada aqui recorta, encobre ou apaga
+   nada — é o que faz a rolagem ler como uma peça só subindo, e não
+   como cartões trocando de lugar.
+
+   Fora das condicionais de propósito: isto é empilhamento, não
+   movimento. Sem suporte a animação de rolagem, ou com movimento
+   reduzido, a estrutura tem que continuar de pé.
+   ─────────────────────────────────────────────────────────── */
+.cine-stage {
+  position: relative;
+  z-index: 1;
+  /*
+    Sem cor de fundo, e isso é o ponto. Uma pilha opaca aqui esconderia
+    a camada de trás — era exatamente ela que passava por cima do Hero
+    e produzia a aresta que cortava o topo.
+  */
+}
+
+/* ── A camada de trás ─────────────────────────────────────────
+   `sticky` mais margem negativa da mesma altura: o elemento ocupa a
+   tela inteira e, ao mesmo tempo, nenhum espaço no fluxo. É o que
+   permite uma camada de fundo do tamanho da viewport sem empurrar
+   uma única linha de conteúdo.
+
+   `sticky`, e não `fixed`: em telas grandes quem rola é o `.app-main`,
+   e um elemento fixo se ancora na viewport — ficaria fora do
+   scrollport e a linha do tempo de rolagem nem o alcançaria.
+
+   Os gradientes desvanecem para transparente antes das bordas, então
+   a deriva nunca revela um limite do elemento.
+   ─────────────────────────────────────────────────────────── */
+.cine-backdrop {
+  position: sticky;
+  top: 0;
+  z-index: 0;
+  height: 100dvh;
+  margin-bottom: -100dvh;
+  pointer-events: none;
+  /*
+    `clip`, e NÃO `hidden`. A diferença é decisiva aqui: `overflow:
+    hidden` faz do elemento um contêiner de rolagem, e as camadas
+    filhas usam `scroll()`, que se liga ao scrollport mais próximo.
+    Elas se ligariam a este pai — que não rola — e a animação ficaria
+    parada em zero para sempre.
+
+    `overflow: clip` recorta o transbordo sem criar contêiner de
+    rolagem, então `scroll()` continua encontrando o `.app-main` (ou o
+    documento) e as camadas se movem. O recorte é necessário de todo
+    jeito: sem ele, as camadas alongadas esticariam a área rolável da
+    página.
+  */
+  overflow: clip;
+}
+
+/*
+  As duas camadas são bem mais altas que a tela porque precisam cobrir
+  todo o percurso que percorrem. Uma camada do tamanho da viewport
+  deslizaria para fora dela e deixaria uma faixa vazia no rodapé.
+*/
+.cine-backdrop > * {
+  position: absolute;
+  inset: -110dvh 0;
+}
+
+/*
+  A malha de pontos. É ela que torna o parallax VISÍVEL: um gradiente
+  difuso pode derivar a página inteira sem que se perceba, porque não
+  há traço nenhum cuja posição o olho possa acompanhar. Pontos têm
+  posição — e é o deslocamento deles contra o texto que se lê como
+  profundidade.
+
+  Na cor de borda, que já é o tom mais discreto da paleta nos dois
+  temas. A máscara desvanece a malha nas extremidades para ela ler
+  como textura de fundo, e não como uma folha quadriculada por cima
+  do site.
+*/
+.cine-grid {
+  background-image: radial-gradient(
+    circle at 1px 1px,
+    var(--border) 1px,
+    transparent 0
+  );
+  background-size: 30px 30px;
+  opacity: 0.7;
+  -webkit-mask-image: radial-gradient(
+    ellipse 80% 60% at 50% 45%,
+    #000 35%,
+    transparent 75%
+  );
+  mask-image: radial-gradient(
+    ellipse 80% 60% at 50% 45%,
+    #000 35%,
+    transparent 75%
+  );
+}
+
+/* O halo, mais perto que a malha e por isso mais rápido que ela. */
+.cine-glow {
+  background:
+    radial-gradient(
+      50rem 50rem at 18% 22%,
+      color-mix(in oklab, var(--accent) 16%, transparent),
+      transparent 68%
+    ),
+    radial-gradient(
+      42rem 42rem at 86% 68%,
+      color-mix(in oklab, var(--accent) 11%, transparent),
+      transparent 66%
+    );
+}
+
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion: no-preference) {
+    /* As duas camadas de trás sobem MENOS que a página, e uma menos que
+       a outra. São três velocidades ao todo — malha, halo e conteúdo —
+       e é a distância entre elas que se lê como profundidade.
+
+       O curso é medido em `dvh` e não em `rem` de propósito: assim ele
+       acompanha a proporção da página em telas diferentes, em vez de
+       virar um passinho imperceptível em monitor grande. A malha
+       percorre cerca de um terço do que o conteúdo percorre; o halo,
+       perto da metade.
+
+       A faixa é a rolagem completa (`0% 100%`), então o atraso se
+       distribui por toda a página em vez de se gastar nos primeiros
+       centímetros. */
+    /*
+      Os quadros animam `transform` DIRETO, e não uma propriedade
+      customizada que o `transform` depois consome. A diferença não é
+      de estilo: animação de propriedade customizada obriga o navegador
+      a recalcular estilo na thread principal a cada quadro, porque ele
+      não sabe de antemão o que aquele valor afeta. `transform` sozinho
+      sobe para o compositor e roda fora da thread principal — que é
+      exatamente onde uma animação amarrada à rolagem precisa estar.
+    */
+    .cine-grid,
+    .cine-glow {
+      animation-timing-function: linear;
+      animation-fill-mode: both;
+      animation-timeline: scroll();
+      animation-range: 0% 100%;
+      will-change: transform;
+    }
+
+    .cine-grid {
+      animation-name: cine-grid;
+    }
+
+    .cine-glow {
+      animation-name: cine-glow;
+    }
+
+    @keyframes cine-grid {
+      from {
+        transform: translate3d(0, 0, 0);
+      }
+      to {
+        transform: translate3d(0, -65dvh, 0);
+      }
+    }
+
+    @keyframes cine-glow {
+      from {
+        transform: translate3d(0, 0, 0);
+      }
+      to {
+        transform: translate3d(0, -110dvh, 0);
+      }
+    }
+
+    /* Profundidade de objeto, para o que é objeto de verdade — a foto
+       do perfil. `--cine-depth` gradua o atraso; negativo inverte o
+       sentido. Usado com parcimônia: cada elemento que ganha vida
+       própria é um pedaço a menos do plano único. */
+    .cine-drift {
+      animation: cine-drift linear both;
+      animation-timeline: view();
+      animation-range: cover 0% cover 100%;
+      will-change: transform;
+    }
+
+    @keyframes cine-drift {
+      from {
+        transform: translate3d(0, calc(var(--cine-depth, 1) * 4rem), 0);
+      }
+      to {
+        transform: translate3d(0, calc(var(--cine-depth, 1) * -4rem), 0);
+      }
+    }
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

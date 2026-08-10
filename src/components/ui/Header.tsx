@@ -7,8 +7,8 @@ import { getI18n } from "@/i18n";
 import {
   folderFor,
   homePath,
+  sectionAnchor,
   sectionKeys,
-  sectionPath,
   slugFor,
 } from "@/i18n/routes";
 
@@ -21,8 +21,17 @@ export async function Header() {
     que é o que fazia o menu e as páginas divergirem.
   */
   const items: NavItem[] = sectionKeys.map((key) => ({
-    href: sectionPath(locale, key),
+    /*
+      Caminho completo com âncora, e não só `#about`. O cabeçalho também
+      aparece na página de um projeto, e de lá o fragmento sozinho não
+      levaria a lugar nenhum — a seção não existe naquele documento. Com
+      o caminho, o `Link` navega até a home e desce até a âncora; já na
+      home, ele reconhece a mesma rota e apenas rola.
+    */
+    href: sectionAnchor(locale, key),
     label: copy.sections[key].nav,
+    // O `id` no HTML é a chave, estável entre idiomas.
+    id: key,
     // Slug público e pasta: a reescrita do proxy faz os dois aparecerem.
     segments: [...new Set([slugFor(locale, key), folderFor(key)])],
   }));

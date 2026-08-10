@@ -22,9 +22,14 @@ export function Section({
 
   return (
     /*
-      A borda superior separava seções empilhadas na página única. Com
-      uma seção por rota não há o que separar, e ela virava um traço
-      solto no topo do conteúdo.
+      Sem borda superior e sem movimento próprio. As seções são partes
+      do mesmo plano, não painéis empilhados: qualquer `transform` aqui
+      as descolaria umas das outras, e é exatamente essa separação que
+      fazia a página parecer um monte de cartões em vez de uma peça só.
+
+      O que ainda anima dentro da seção é o `.reveal` — opacidade na
+      chegada, sem deslocar o bloco. Aparecer não é o mesmo que se mover
+      em relação ao vizinho.
     */
     <section
       id={id}
@@ -48,6 +53,7 @@ export function Section({
             </p>
           )}
         </Reveal>
+
         <div className="mt-12">{children}</div>
       </div>
     </section>

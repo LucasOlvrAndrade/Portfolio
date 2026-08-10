@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -13,9 +13,11 @@ import {
 } from "@/lib/spring";
 
 export type NavItem = {
-  /** URL pública, já com o prefixo de idioma. */
+  /** URL pública, já com o prefixo de idioma e a âncora. */
   href: string;
   label: string;
+  /** `id` do elemento da seção na página vertical. */
+  id: string;
   /**
    * Segmentos que contam como "esta seção" ao comparar com a URL.
    *
@@ -52,10 +54,65 @@ export function NavPill({ items, label }: NavPillProps) {
     usuário espera de uma navegação de topo.
   */
   const current = pathname.split("/").filter(Boolean)[1] ?? "";
-  const found = items.findIndex((item) => item.segments.includes(current));
+  const fromPath = items.findIndex((item) => item.segments.includes(current));
 
-  /** `null` na home, onde nenhuma seção está ativa. */
-  const active = found >= 0 ? found : null;
+  /** Seção sob o olhar na página vertical. `null` antes da primeira. */
+  const [fromScroll, setFromScroll] = useState<number | null>(null);
+
+  // Identidade estável para a dependência do efeito: `items` é um array
+  // novo a cada render do servidor, e observá-lo religaria o observador
+  // sem necessidade.
+  const ids = items.map((item) => item.id).join(",");
+
+  /* ── Observação da rolagem ───────────────────────────────────── */
+  useEffect(() => {
+    // Numa rota própria (a página de um projeto) quem manda é a URL:
+    // não há seções nesta página para observar.
+    if (fromPath >= 0) return;
+
+    const nodes = ids
+      .split(",")
+      .map((id) => document.getElementById(id));
+
+    if (!nodes.some(Boolean)) return;
+
+    /*
+      Uma faixa estreita perto do topo decide quem está ativo, em vez da
+      tela inteira: com a tela toda, duas ou três seções se sobrepõem o
+      tempo todo e o item aceso oscila. A faixa fica entre 25% e 40% da
+      altura — abaixo do cabeçalho, e mais ou menos onde o olho pousa.
+
+      O `root` fica no padrão (a viewport) de propósito, mesmo quando
+      quem rola é o `.app-main`: o que importa é onde a seção aparece na
+      TELA, e isso vale nos dois modos de rolagem sem ramificar.
+    */
+    const visible = new Set<number>();
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          const index = nodes.indexOf(entry.target as HTMLElement);
+          if (index < 0) continue;
+          if (entry.isIntersecting) visible.add(index);
+          else visible.delete(index);
+        }
+
+        // A primeira da faixa: rolando para baixo, a seção que chega
+        // assume só depois que a anterior sai — sem piscar entre as duas.
+        setFromScroll(visible.size ? Math.min(...visible) : null);
+      },
+      { rootMargin: "-25% 0px -60% 0px", threshold: 0 },
+    );
+
+    for (const node of nodes) {
+      if (node) observer.observe(node);
+    }
+
+    return () => observer.disconnect();
+  }, [ids, fromPath]);
+
+  /** `null` no topo da página, onde nenhuma seção está ativa. */
+  const active = fromPath >= 0 ? fromPath : fromScroll;
 
   const leftSpring = useRef(createSpring());
   const rightSpring = useRef(createSpring());
@@ -218,7 +275,19 @@ export function NavPill({ items, label }: NavPillProps) {
               ref={(node) => {
                 itemRefs.current[index] = node;
               }}
-              aria-current={active === index ? "page" : undefined}
+              /*
+                `location`, e não `page`, quando quem acende é a
+                rolagem: a seção não é outra PÁGINA, é onde se está
+                dentro desta. `page` continua valendo na rota de um
+                projeto, que é uma página de verdade.
+              */
+              aria-current={
+                active === index
+                  ? fromPath >= 0
+                    ? "page"
+                    : "location"
+                  : undefined
+              }
               className={`nav-item relative z-[1] block rounded-full px-2.5 py-1.5 text-[13px] md:px-3 md:text-sm ${
                 active === index ? "text-text" : "text-muted hover:text-accent"
               }`}

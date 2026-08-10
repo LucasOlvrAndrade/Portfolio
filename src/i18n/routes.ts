@@ -2,7 +2,6 @@ import {
   defaultLocale,
   isLocale,
   locales,
-  localeMeta,
   type Locale,
 } from "./config";
 
@@ -67,6 +66,27 @@ export function sectionPath(locale: Locale, key: SectionKey): string {
   return `/${locale}/${slugs[locale][key]}`;
 }
 
+/**
+ * A seção na página vertical: `/pt#about`.
+ *
+ * O fragmento é a CHAVE, não o slug traduzido. Um `id` no HTML não é
+ * conteúdo — é endereço interno, e mantê-lo estável entre idiomas faz
+ * `translatePath` continuar valendo para a página única: trocar de
+ * idioma preserva a âncora sem precisar traduzi-la.
+ */
+export function sectionAnchor(locale: Locale, key: SectionKey): string {
+  return `${homePath(locale)}#${key}`;
+}
+
+/**
+ * Só o fragmento: `#about`. Para links DENTRO da própria página, onde
+ * repetir o prefixo de idioma faria o navegador tratar como navegação
+ * e recarregar o documento em vez de rolar até a seção.
+ */
+export function sectionHash(key: SectionKey): string {
+  return `#${key}`;
+}
+
 /** URL pública da home do idioma. */
 export function homePath(locale: Locale): string {
   return `/${locale}`;
@@ -119,43 +139,34 @@ export function translatePath(pathname: string, target: Locale): string {
 }
 
 /**
- * Âncora antiga → rota nova.
+ * Âncora antiga → `id` da seção na página vertical.
  *
- * O site era uma página só, com `#sobre`, `#projetos` e companhia. Esses
- * links já foram compartilhados e precisam continuar chegando a algum
- * lugar — e o servidor NÃO pode ajudar: o fragmento da URL nunca entra
- * no pedido HTTP, então nenhum `redirect` do `next.config` o enxerga.
- * A tradução tem que acontecer no cliente, na home.
+ * O site já teve âncoras em português (`#sobre`, `#projetos`) antes de
+ * virar rotas, e agora volta a ter âncoras — mas nomeadas pela chave
+ * (`#about`). Os links antigos continuam existindo por aí, e o servidor
+ * NÃO pode ajudar: o fragmento da URL nunca entra no pedido HTTP, então
+ * nenhum `redirect` do `next.config` chega a enxergá-lo. A tradução
+ * acontece no cliente, na própria home.
  *
  * O mapa aceita as âncoras dos dois idiomas e o nome das pastas, porque
  * todos já apareceram em links públicos em algum momento.
  */
-export function legacyHashTargets(locale: Locale): Record<string, string> {
-  const targets: Record<string, string> = {};
+export function legacyHashTargets(): Record<string, SectionKey> {
+  const targets: Record<string, SectionKey> = {};
 
   for (const key of sectionKeys) {
-    const destination = sectionPath(locale, key);
-    targets[folders[key]] = destination;
+    targets[folders[key]] = key;
     for (const other of locales) {
-      targets[slugs[other][key]] = destination;
+      targets[slugs[other][key]] = key;
     }
   }
 
   return targets;
 }
 
-/**
- * Mapa de idioma → URL para o `hreflang` de uma seção. Cada idioma
- * aponta para o próprio slug, e não para o nome da pasta.
- */
-export function sectionAlternates(
-  origin: string,
-  key: SectionKey,
-): Record<string, string> {
-  return Object.fromEntries(
-    locales.map((locale) => [
-      localeMeta[locale].html,
-      `${origin}${sectionPath(locale, key)}`,
-    ]),
-  );
-}
+/*
+  `sectionAlternates` vivia aqui e saiu junto com `lib/metadata.ts`: as
+  seções deixaram de ser páginas indexáveis, então não há mais um
+  `hreflang` por seção a declarar. O `hreflang` da página inteira
+  continua no layout, que é onde ele passou a valer.
+*/

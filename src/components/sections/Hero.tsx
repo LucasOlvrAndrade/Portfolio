@@ -1,10 +1,9 @@
 import Image from "next/image";
-import Link from "next/link";
 
 import { siteConfig } from "@/config/site";
 import { getI18n } from "@/i18n";
 import { fill } from "@/i18n/config";
-import { sectionPath } from "@/i18n/routes";
+import { sectionHash } from "@/i18n/routes";
 import type { GitHubUser } from "@/lib/types";
 
 /** `profile` pode ser null se a API falhar — o Hero continua renderizando. */
@@ -17,6 +16,12 @@ export async function Hero({ profile }: { profile: GitHubUser | null }) {
   const company = profile?.company;
 
   return (
+    /*
+      O Hero não é fixado. Ele sobe junto com o resto da página, como
+      qualquer outra seção — é o que faz o documento inteiro ler como
+      uma peça só. Fixá-lo e cobri-lo com a pilha de seções criava uma
+      aresta atravessando o topo, que era justamente o corte a eliminar.
+    */
     <section className="page-section mx-auto max-w-5xl px-6 pb-20 pt-20 sm:pb-28 sm:pt-28">
       <div className="flex flex-col-reverse items-start gap-10 sm:flex-row sm:items-center sm:justify-between">
         <div className="max-w-2xl">
@@ -112,34 +117,53 @@ export async function Hero({ profile }: { profile: GitHubUser | null }) {
             </p>
           )}
 
+          {/*
+            Âncoras de verdade, não `Link`: o destino está nesta mesma
+            página. Um `Link` para `/pt#projects` faria o Next tratar o
+            clique como navegação de rota e remontar a árvore inteira
+            para chegar onde a rolagem chega sozinha.
+          */}
           <div className="animate-fade-up delay-225 mt-9 flex flex-wrap items-center gap-3">
-            <Link
-              href={sectionPath(locale, "projects")}
-              transitionTypes={["nav-forward"]}
+            <a
+              href={sectionHash("projects")}
               className="rounded-lg bg-accent px-5 py-2.5 text-sm font-medium text-bg transition-colors hover:bg-accent-hover"
             >
               {copy.hero.viewProjects}
-            </Link>
-            <Link
-              href={sectionPath(locale, "contact")}
-              transitionTypes={["nav-forward"]}
+            </a>
+            <a
+              href={sectionHash("contact")}
               className="rounded-lg border border-border bg-surface px-5 py-2.5 text-sm font-medium text-text transition-colors hover:border-accent hover:text-accent"
             >
               {copy.hero.getInTouch}
-            </Link>
+            </a>
           </div>
         </div>
 
         {profile?.avatar_url && (
-          <div className="animate-fade-in shrink-0">
-            <Image
-              src={profile.avatar_url}
-              alt={fill(copy.hero.avatarAlt, { name })}
-              width={132}
-              height={132}
-              priority
-              className="size-24 rounded-2xl border border-border object-cover sm:size-33"
-            />
+          /*
+            A única camada com vida própria na página. A foto é um
+            objeto, não texto corrido, e um atraso discreto dela contra
+            o bloco basta para o topo não parecer chapado — sem soltá-la
+            do plano, que é o que quebraria a sensação de peça inteira.
+
+            A deriva fica no invólucro e o `animate-fade-in` no filho:
+            as duas classes declaram `animation`, e no mesmo elemento
+            uma anularia a outra por completo.
+          */
+          <div
+            className="cine-drift shrink-0"
+            style={{ "--cine-depth": 0.5 } as React.CSSProperties}
+          >
+            <div className="animate-fade-in">
+              <Image
+                src={profile.avatar_url}
+                alt={fill(copy.hero.avatarAlt, { name })}
+                width={132}
+                height={132}
+                priority
+                className="size-24 rounded-2xl border border-border object-cover sm:size-33"
+              />
+            </div>
           </div>
         )}
       </div>

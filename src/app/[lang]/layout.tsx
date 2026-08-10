@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 
 import { Header } from "@/components/ui/Header";
 import { Footer } from "@/components/ui/Footer";
+import { ScrollTuning } from "@/components/ui/ScrollTuning";
 import { siteConfig } from "@/config/site";
 import { getCopyFor } from "@/i18n";
 import { isLocale, locales, localeMeta } from "@/i18n/config";
@@ -139,6 +140,8 @@ export default async function RootLayout({
         >
           {copy.a11y.skipToContent}
         </a>
+        {/* Amortece a roda e sinaliza rolagem ao CSS. Não renderiza nada. */}
+        <ScrollTuning />
         <Header />
         <main id="conteudo" className="app-main flex-1">
           {children}

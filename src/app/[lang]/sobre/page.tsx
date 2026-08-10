@@ -1,43 +1,23 @@
-import { notFound } from "next/navigation";
+import { redirect } from "next/navigation";
 
-import { About } from "@/components/sections/About";
 import { getI18n } from "@/i18n";
-import { isLocale } from "@/i18n/config";
-import { getProfile, getProfileReadme } from "@/lib/github";
-import { sectionMetadata } from "@/lib/metadata";
-import { parseProfileReadme } from "@/lib/readme";
+import { sectionAnchor } from "@/i18n/routes";
 
-export const revalidate = 3600;
-
-export async function generateMetadata({
-  params,
-}: PageProps<"/[lang]/sobre">) {
-  const { lang } = await params;
-  if (!isLocale(lang)) notFound();
-  return sectionMetadata(lang, "about");
-}
-
+/**
+ * A seção voltou a viver na página vertical. A rota permanece só para
+ * não quebrar links já compartilhados.
+ *
+ * `redirect` (307), e não `permanentRedirect` (308), de propósito: o
+ * navegador guarda um redirecionamento permanente com afinco, e quem
+ * visitou uma vez continuaria sendo desviado mesmo depois de a rota
+ * voltar a existir. Enquanto a decisão entre página única e rotas
+ * puder ser revista, o desvio tem que ser revogável.
+ *
+ * O fragmento sobrevive ao desvio: ele viaja no cabeçalho `Location`,
+ * que o navegador aplica ao chegar. É o único ponto do sistema em que
+ * o servidor consegue tratar de uma âncora.
+ */
 export default async function AboutPage() {
   const { locale } = await getI18n();
-
-  // Perfil e README são independentes — buscados em paralelo. As duas
-  // respostas ficam no cache de `fetch`, então a home não as pede de novo.
-  const [profileResult, readmeResult] = await Promise.all([
-    getProfile(),
-    getProfileReadme(locale),
-  ]);
-
-  const profile = profileResult.ok ? profileResult.data : null;
-  const readme = readmeResult.ok ? readmeResult.data : null;
-  const sections = readme ? parseProfileReadme(readme.markdown) : [];
-
-  return (
-    <About
-      sections={sections}
-      bio={profile?.bio ?? null}
-      // Sem README nenhum não há o que avisar: o aviso é sobre idioma,
-      // não sobre ausência de conteúdo.
-      localized={readme?.localized ?? true}
-    />
-  );
+  redirect(sectionAnchor(locale, "about"));
 }
