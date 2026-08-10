@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 
 import { LocaleToggle } from "./LocaleToggle";
@@ -50,9 +51,28 @@ export async function Header() {
         <Link
           href={homePath(locale)}
           transitionTypes={["nav-back"]}
-          className="font-mono text-sm font-medium tracking-tight text-text transition-colors hover:text-accent"
+          className="flex items-center gap-2.5 font-mono text-sm font-medium tracking-tight text-text transition-colors hover:text-accent"
         >
-          lucas<span className="text-accent">.</span>andrade
+          {/*
+            `alt` vazio de propósito. O texto ao lado já nomeia o link, e
+            um alt descritivo faria o leitor de tela anunciar a marca duas
+            vezes seguidas. Aqui ela é redundante com o que está escrito.
+
+            O arquivo é uma versão própria, recortada mais justa que o
+            favicon: aquele tem 38% de área útil, e nos 28px do cabeçalho
+            a letra ficaria perdida no meio do preto.
+          */}
+          <Image
+            src="/logo.png"
+            alt=""
+            width={28}
+            height={28}
+            priority
+            className="size-7 shrink-0 rounded-md"
+          />
+          <span>
+            lucas<span className="text-accent">.</span>andrade
+          </span>
         </Link>
 
         <div className="flex items-center gap-2">
