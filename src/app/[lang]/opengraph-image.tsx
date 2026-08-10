@@ -47,7 +47,7 @@ export default async function OpenGraphImage({
           <div
             style={{
               fontSize: 24,
-              color: "#38bdf8",
+              color: "#fb923c",
               letterSpacing: "0.2em",
               textTransform: "uppercase",
             }}
@@ -89,7 +89,7 @@ export default async function OpenGraphImage({
           }}
         >
           <span>github.com/{siteConfig.githubUser}</span>
-          <span style={{ color: "#38bdf8" }}>
+          <span style={{ color: "#fb923c" }}>
             {siteConfig.url.replace("https://", "")}
           </span>
         </div>

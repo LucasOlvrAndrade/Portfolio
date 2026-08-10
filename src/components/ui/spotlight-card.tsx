@@ -25,10 +25,19 @@ interface GlowCardProps {
  */
 const glowColorMap: Record<GlowColor, { base: number; spread: number }> = {
   /**
-   * Paleta do site: azul do acento à esquerda, descendo por ciano até o
-   * verde do logotipo do Grupo RAM (#0F7433, matiz 141) à direita.
+   * Paleta do site: terracota à esquerda, subindo até o âmbar do
+   * logotipo do Grupo RAM à direita.
+   *
+   * A varredura percorre exatamente os três matizes quentes do site,
+   * medidos em HSL: 15 é o acento do tema claro, 27 o do escuro, e 39
+   * o âmbar do Grupo RAM. Começar em 15 com amplitude 24 faz a luz
+   * atravessar os três, e o acento do tema escuro cai no meio.
+   *
+   * Era `base: 220, spread: -79` — azul descendo até o verde da marca
+   * — de quando o acento do site era frio. Acendia azul num site que
+   * deixou de ter azul.
    */
-  brand: { base: 220, spread: -79 },
+  brand: { base: 15, spread: 24 },
   blue: { base: 220, spread: 200 },
   purple: { base: 280, spread: 300 },
   green: { base: 120, spread: 200 },

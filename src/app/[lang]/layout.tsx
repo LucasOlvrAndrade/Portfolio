@@ -84,7 +84,9 @@ export async function generateMetadata({
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#fafaf9" },
+    // Acompanha `--bg` do tema claro. Divergir daqui pinta a barra do
+    // navegador de uma cor que não existe na página.
+    { media: "(prefers-color-scheme: light)", color: "#f2ede3" },
     { media: "(prefers-color-scheme: dark)", color: "#0c0a09" },
   ],
 };

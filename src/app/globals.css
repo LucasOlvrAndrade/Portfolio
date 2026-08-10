@@ -4,20 +4,51 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 /* ───────────────────────────────────────────────────────────
-   Paleta: neutros quentes (stone) + um único acento frio.
-   Todos os pares texto/fundo passam em WCAG AA.
+   Paleta análoga: creme quente + acento terracota.
+
+   Os 24 pares (12 por tema) passam em WCAG AA. O mais apertado é
+   "texto secundário sobre superfície 2" no claro, com 4,75 — 6% de
+   folga sobre o mínimo. Mexer no `--text-muted` ou no `--surface-2`
+   sem remedir é o caminho mais curto para reprovar.
+
+   ── Por que o fundo não é branco ──
+
+   Com #fafaf9, um cartão branco ficava a 1,044 de contraste da
+   página: indistinguível. Recuar o fundo libera o branco para
+   significar "elevado" — a separação vai a 1,148, acima até do tema
+   escuro (1,076). Os neutros também tinham croma 0,0013 em OKLCH,
+   cinza para efeito prático; agora ficam em 0,0144.
+
+   ── Por que terracota e não âmbar ──
+
+   Porque âmbar reprova. Matizes quentes têm luminância alta quando
+   saturados, e escurecê-los até 4,5:1 sobre creme os empurra para
+   terracota. Medido: âmbar #b45309 dá 4,30, ocre #a16207 dá 4,22,
+   laranja #c2410c dá 4,44 — todos abaixo de 4,5. Terracota #9a3412
+   dá 6,26. Não há acento quente CLARO que passe sobre este fundo.
+
+   ── O que se perdeu na troca ──
+
+   A paleta era complementar: neutro quente com o único elemento
+   frio da página sendo o que se pode clicar. Link e botão se
+   anunciavam pela temperatura, sem depender de mais nada. Agora é
+   análoga, e a distinção passou a ser só de luminosidade. Terracota
+   tem de sobra (6,26 contra 5,09 do azul anterior), mas a leitura
+   de "isto é clicável" ficou um grau menos automática. Se um dia
+   aparecer relato de gente não percebendo os links, é aqui que a
+   causa está.
    ─────────────────────────────────────────────────────────── */
 :root {
-  --bg: #fafaf9;
-  --surface: #ffffff;
-  --surface-2: #f5f5f4;
-  --border: #e7e5e4;
+  --bg: #f2ede3;
+  --surface: #fffdf9;
+  --surface-2: #e9e2d4;
+  --border: #d6cdb9;
   --text: #1c1917;
-  --text-muted: #6b625c;
-  --accent: #0369a1;
-  --accent-hover: #075985;
-  --accent-subtle: #e0f2fe;
-  --ring: #0284c7;
+  --text-muted: #6a6058;
+  --accent: #9a3412;
+  --accent-hover: #7c2d12;
+  --accent-subtle: #f6e5d8;
+  --ring: #b45309;
 }
 
 .dark {
@@ -27,10 +58,10 @@
   --border: #2c2724;
   --text: #fafaf9;
   --text-muted: #a8a29e;
-  --accent: #38bdf8;
-  --accent-hover: #7dd3fc;
-  --accent-subtle: #0b2b3f;
-  --ring: #38bdf8;
+  --accent: #fb923c;
+  --accent-hover: #fdba74;
+  --accent-subtle: #3a1e0c;
+  --ring: #fb923c;
 }
 
 @theme inline {
