@@ -64,7 +64,7 @@ export const siteConfig = {
    * Repositórios destacados — aparecem primeiro, com card maior.
    * Basta adicionar o nome exato do repo. Ex.: ["Calculadora-java"]
    */
-  featured: ["portfolio", "Calculadora-java"] as string[],
+  featured: ["sistema-barbearia", "portfolio", "Calculadora-java"] as string[],
 
   /**
    * Repositórios ocultos, além dos forks e arquivados (escondidos por padrão).
@@ -94,6 +94,8 @@ export const siteConfig = {
    */
   descriptions: {
     en: {
+      "sistema-barbearia":
+        "Booking site with barber choice and a management panel for the barbershop: schedule, revenue, commissions, clients and days off. Next.js 16 + Postgres. Live demo.",
       portfolio:
         "Personal portfolio site that lists GitHub repositories automatically through the API. Next.js 16 + TypeScript + Tailwind v4.",
       "Calculadora-java":
