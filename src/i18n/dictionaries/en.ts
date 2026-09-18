@@ -80,7 +80,7 @@ export const en: Translation<Dictionary> = {
         "Email, GitHub, LinkedIn and Instagram for Lucas Andrade.",
       proposal:
         "Run a barbershop, salon or another appointment-based business? I build the booking site with your brand.",
-      proposalLink: "See the proposal, with price and timeline",
+      proposalLink: "Message me on WhatsApp",
     },
   },
 
