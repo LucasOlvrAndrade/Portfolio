@@ -79,6 +79,9 @@ export const pt = {
       description: "Aberto a projetos e trocas sobre tecnologia.",
       metaDescription:
         "E-mail, GitHub, LinkedIn e Instagram de Lucas Andrade.",
+      proposal:
+        "Tem uma barbearia, salão ou outro negócio com hora marcada? Faço o site de agendamento com a sua marca.",
+      proposalLink: "Ver a proposta, com preço e prazo",
     },
   },
 

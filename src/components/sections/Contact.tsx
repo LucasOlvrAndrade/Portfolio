@@ -1,6 +1,8 @@
 import { Reveal } from "@/components/ui/Reveal";
 import { Section } from "@/components/ui/Section";
 import { siteConfig } from "@/config/site";
+import Link from "next/link";
+
 import { getI18n } from "@/i18n";
 
 type Link = {
@@ -22,7 +24,7 @@ const iconProps = {
 };
 
 export async function Contact() {
-  const { copy } = await getI18n();
+  const { copy, locale } = await getI18n();
 
   // Os rótulos são nomes próprios de serviços — não se traduzem.
   const links: Link[] = [
@@ -107,6 +109,18 @@ export async function Contact() {
           );
         })}
       </ul>
+
+      {/* A proposta do sistema de barbearia: quem chega pelo portfólio
+          e tem um negócio com hora marcada precisa achar o caminho. */}
+      <Reveal className="mt-8 rounded-xl border border-dashed border-border p-5" delay={300}>
+        <p className="text-sm leading-relaxed text-muted">{copy.sections.contact.proposal}</p>
+        <Link
+          href={`/${locale}/proposta`}
+          className="mt-2 inline-flex min-h-9 items-center text-sm font-medium text-accent underline-offset-4 hover:underline"
+        >
+          {copy.sections.contact.proposalLink} →
+        </Link>
+      </Reveal>
     </Section>
   );
 }
