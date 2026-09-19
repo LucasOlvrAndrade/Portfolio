@@ -805,7 +805,7 @@ html[data-scrolling] [data-glow] > [data-glow] {
   background: #000;
 }
 
-/* A pedra cromada (ChromeGem): halo branco atrás do canvas, que é o que
+/* O anel cromado (ChromeHalo): halo branco atrás do canvas, que é o que
    faz o metal parecer iluminado por trás em vez de colado no preto. */
 .gema::before {
   content: "";

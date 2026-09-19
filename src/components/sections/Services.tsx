@@ -1,5 +1,5 @@
 import { Reveal } from "@/components/ui/Reveal";
-import { ChromeGem } from "@/components/ui/ChromeGem";
+import { ChromeHalo } from "@/components/ui/ChromeHalo";
 import { Section } from "@/components/ui/Section";
 import { siteConfig } from "@/config/site";
 import { getI18n } from "@/i18n";
@@ -23,7 +23,7 @@ export async function Services() {
           const mensagem = fill(c.whatsappMessage, { service: nome });
           return (
             <Reveal as="li" key={s.key} delay={index * 80}>
-              {/* O card é preto de propósito (ver `.vitrine`): a pedra cromada
+              {/* O card é preto de propósito (ver `.vitrine`): o anel cromado
                   fica à direita no desktop e em cima no celular. */}
               <article className="vitrine relative isolate grid gap-6 overflow-hidden rounded-2xl border border-border p-6 sm:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] sm:p-8">
                 <div className="relative">
@@ -58,7 +58,7 @@ export async function Services() {
                     )}
                   </div>
                 </div>
-                <ChromeGem className="order-first mx-auto w-full max-w-[280px] sm:order-none sm:max-w-[380px] sm:self-center" />
+                <ChromeHalo className="order-first mx-auto w-full max-w-[280px] sm:order-none sm:max-w-[380px] sm:self-center" />
               </article>
             </Reveal>
           );
