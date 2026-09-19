@@ -81,7 +81,7 @@ export const pt = {
       metaDescription:
         "Serviços de Lucas Andrade: site de agendamento com painel de gestão para barbearias e outros negócios com hora marcada.",
       demo: "Ver a demo",
-      ask: "Pedir proposta",
+      ask: "Contrate",
       whatsappMessage: "Olá, Lucas! Vi o serviço “{service}” no seu portfólio e quero uma proposta.",
     },
     contact: {

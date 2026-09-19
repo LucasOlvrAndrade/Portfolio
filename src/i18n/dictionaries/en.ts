@@ -80,7 +80,7 @@ export const en: Translation<Dictionary> = {
       metaDescription:
         "Services by Lucas Andrade: booking website with a management panel for barbershops and other appointment-based businesses.",
       demo: "See the demo",
-      ask: "Request a proposal",
+      ask: "Hire me",
       whatsappMessage: "Hi Lucas! I saw the “{service}” service on your portfolio and I'd like a proposal.",
     },
     contact: {
