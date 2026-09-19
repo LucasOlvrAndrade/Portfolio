@@ -48,7 +48,7 @@ export async function generateMetadata({
   if (!isLocale(lang)) notFound();
 
   const copy = getCopyFor(lang);
-  const title = `Lucas Andrade — ${siteConfig.role[lang]}`;
+  const title = `Lucas Andrade · ${siteConfig.role[lang]}`;
   const description = copy.metadata.description;
 
   return {

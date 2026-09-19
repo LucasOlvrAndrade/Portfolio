@@ -75,8 +75,8 @@ export const siteConfig = {
       key: "agendamento",
       title: { pt: "Site de agendamento com painel", en: "Booking website with management panel" },
       tagline: {
-        pt: "Para barbearia, salão, estúdio de tatuagem, clínica — qualquer negócio com hora marcada.",
-        en: "For barbershops, salons, tattoo studios, clinics — any appointment-based business.",
+        pt: "Para barbearia, salão, estúdio de tatuagem, clínica, qualquer negócio com hora marcada.",
+        en: "For barbershops, salons, tattoo studios, clinics, any appointment-based business.",
       },
       includes: {
         pt: [

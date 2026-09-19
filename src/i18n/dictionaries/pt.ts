@@ -27,7 +27,7 @@ export const pt = {
       "Brasília",
     ],
     /** Sufixo do <title> das páginas internas. */
-    titleTemplate: "%s — Lucas Andrade",
+    titleTemplate: "%s · Lucas Andrade",
   },
 
   a11y: {
@@ -57,7 +57,7 @@ export const pt = {
       eyebrow: "Projetos",
       title: "O que eu venho construindo",
       description:
-        "Carregado direto da API do GitHub — sempre atualizado, sem edição manual. Forks e repositórios arquivados ficam de fora.",
+        "Carregado direto da API do GitHub, sempre atualizado, sem edição manual. Forks e repositórios arquivados ficam de fora.",
       empty: "Nenhum repositório público para exibir ainda.",
       viewProfile: "Ver perfil no GitHub",
       metaDescription:
@@ -77,7 +77,7 @@ export const pt = {
       eyebrow: "Serviços",
       title: "O que eu faço para o seu negócio",
       description:
-        "Sistemas prontos para vender, adaptados com a sua marca. Preço e prazo vão na proposta — é só chamar.",
+        "Sistemas prontos para vender, adaptados com a sua marca. Preço e prazo vão na proposta, é só chamar.",
       metaDescription:
         "Serviços de Lucas Andrade: site de agendamento com painel de gestão para barbearias e outros negócios com hora marcada.",
       demo: "Ver a demo",
@@ -99,10 +99,10 @@ export const pt = {
 
   hero: {
     tagline:
-      "Estudante de Engenharia de Software com experiência em suporte técnico. Construindo base sólida em programação, banco de dados e infraestrutura — um projeto de cada vez.",
+      "Estudante de Engenharia de Software com experiência em suporte técnico. Construindo base sólida em programação, banco de dados e infraestrutura, um projeto de cada vez.",
     viewProjects: "Ver projetos",
     getInTouch: "Entrar em contato",
-    companyLink: "{company} — abrir site em nova aba",
+    companyLink: "{company}: abrir site em nova aba",
     companyLogoAlt: "Logotipo do {company}",
     avatarAlt: "Foto de perfil de {name}",
   },

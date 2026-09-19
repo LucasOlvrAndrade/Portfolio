@@ -27,7 +27,7 @@ export const en: Translation<Dictionary> = {
       "UniCEUB",
       "Brasília",
     ],
-    titleTemplate: "%s — Lucas Andrade",
+    titleTemplate: "%s · Lucas Andrade",
   },
 
   a11y: {
@@ -56,7 +56,7 @@ export const en: Translation<Dictionary> = {
       eyebrow: "Projects",
       title: "What I have been building",
       description:
-        "Loaded straight from the GitHub API — always current, never edited by hand. Forks and archived repositories are left out.",
+        "Loaded straight from the GitHub API, always current, never edited by hand. Forks and archived repositories are left out.",
       empty: "No public repositories to show yet.",
       viewProfile: "View profile on GitHub",
       metaDescription:
@@ -76,7 +76,7 @@ export const en: Translation<Dictionary> = {
       eyebrow: "Services",
       title: "What I build for your business",
       description:
-        "Ready-made systems, adapted to your brand. Price and timeline come in the proposal — just reach out.",
+        "Ready-made systems, adapted to your brand. Price and timeline come in the proposal, just reach out.",
       metaDescription:
         "Services by Lucas Andrade: booking website with a management panel for barbershops and other appointment-based businesses.",
       demo: "See the demo",
@@ -98,10 +98,10 @@ export const en: Translation<Dictionary> = {
 
   hero: {
     tagline:
-      "Software Engineering student with a background in technical support. Building a solid foundation in programming, databases and infrastructure — one project at a time.",
+      "Software Engineering student with a background in technical support. Building a solid foundation in programming, databases and infrastructure, one project at a time.",
     viewProjects: "View projects",
     getInTouch: "Get in touch",
-    companyLink: "{company} — open website in a new tab",
+    companyLink: "{company}: open website in a new tab",
     companyLogoAlt: "{company} logo",
     avatarAlt: "Profile photo of {name}",
   },
