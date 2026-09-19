@@ -1,5 +1,5 @@
 import { Reveal } from "@/components/ui/Reveal";
-import { ChromeCrystal } from "@/components/ui/ChromeCrystal";
+import { ChromeRing } from "@/components/ui/ChromeRing";
 import { Section } from "@/components/ui/Section";
 import { siteConfig } from "@/config/site";
 import { getI18n } from "@/i18n";
@@ -23,12 +23,8 @@ export async function Services() {
           const mensagem = fill(c.whatsappMessage, { service: nome });
           return (
             <Reveal as="li" key={s.key} delay={index * 80}>
-              {/*
-                O card é uma cena: canvas preto com estrelas cobrindo tudo e o
-                cristal de cromo posicionado no slot vazio da grade, que fica
-                à direita no desktop e em cima no celular. O texto senta por
-                cima com `relative`.
-              */}
+              {/* O card é preto de propósito (ver `.vitrine`): o anel cromado
+                  fica à direita no desktop e em cima no celular. */}
               <article className="vitrine relative isolate grid gap-6 overflow-hidden rounded-2xl border border-border p-6 sm:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] sm:p-8">
                 <div className="relative">
                   <h3 className="text-xl font-semibold tracking-tight text-text">{nome}</h3>
@@ -62,7 +58,7 @@ export async function Services() {
                     )}
                   </div>
                 </div>
-                <ChromeCrystal className="order-first mx-auto aspect-square w-full max-w-[260px] sm:order-none sm:min-h-[340px] sm:max-w-none sm:self-center" />
+                <ChromeRing text={c.ring} className="order-first mx-auto w-full max-w-[280px] sm:order-none sm:max-w-[360px] sm:self-center" />
               </article>
             </Reveal>
           );

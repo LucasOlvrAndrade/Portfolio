@@ -82,6 +82,7 @@ export const en: Translation<Dictionary> = {
       demo: "See the demo",
       ask: "Hire me",
       whatsappMessage: "Hi Lucas! I saw the “{service}” service on your portfolio and I'd like a proposal.",
+      ring: "Lucas Andrade Custom software Lucas Andrade Sites and panels ",
     },
     contact: {
       nav: "Contact",

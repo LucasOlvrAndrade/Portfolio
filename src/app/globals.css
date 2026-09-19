@@ -802,7 +802,21 @@ html[data-scrolling] [data-glow] > [data-glow] {
   --accent-hover: #fdba74;
   --accent-subtle: #3a1e0c;
   --ring: #fb923c;
-  background:
-    radial-gradient(60% 80% at 75% 50%, rgba(255, 255, 255, 0.06), transparent 70%),
-    #050505;
+  background: #000;
+}
+
+/* O anel cromado (ChromeRing): gira uma volta por minuto. O filtro e o
+   degradê ficam fora do grupo que gira, então as luzes não acompanham. */
+.anel {
+  aspect-ratio: 1;
+}
+.anel-gira {
+  transform-origin: 0 0;
+  animation: anel-girar 60s linear infinite;
+}
+@keyframes anel-girar {
+  to { transform: rotate(360deg); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .anel-gira { animation: none; }
 }
