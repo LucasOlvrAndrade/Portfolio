@@ -783,3 +783,29 @@ html[data-scrolling] [data-glow] > [data-glow] {
     transition: none;
   }
 }
+
+/*
+  Vitrine animada dos serviços (PhoneShowcase). Cada slide fica visível por
+  uma fatia do ciclo e invisível no resto; o atraso escalonado (`--i`) faz as
+  telas se revezarem. 4s por tela: dá para ler a legenda sem parecer
+  apresentação de slides. Quem pediu menos movimento vê só a primeira tela,
+  parada.
+*/
+.showcase {
+  --por-tela: 4s;
+}
+.showcase-slide {
+  opacity: 0;
+  animation: showcase-revezar calc(var(--por-tela) * var(--n)) infinite;
+  animation-delay: calc(var(--por-tela) * var(--i));
+}
+@keyframes showcase-revezar {
+  0%, 3% { opacity: 0; }
+  8%, 17% { opacity: 1; }
+  22%, 100% { opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .showcase-slide { animation: none; }
+  .showcase-slide[style*="--i: 0"] { opacity: 1; }
+}
+

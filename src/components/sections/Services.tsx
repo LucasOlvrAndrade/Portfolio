@@ -1,4 +1,5 @@
 import { Reveal } from "@/components/ui/Reveal";
+import { PhoneShowcase } from "@/components/ui/PhoneShowcase";
 import { Section } from "@/components/ui/Section";
 import { siteConfig } from "@/config/site";
 import { getI18n } from "@/i18n";
@@ -22,7 +23,7 @@ export async function Services() {
           const mensagem = fill(c.whatsappMessage, { service: nome });
           return (
             <Reveal as="li" key={s.key} delay={index * 80}>
-              <article className="grid gap-6 rounded-xl border border-border bg-surface p-6 sm:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] sm:p-8">
+              <article className="grid gap-8 rounded-xl border border-border bg-surface p-6 sm:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] sm:p-8">
                 <div>
                   <h3 className="text-xl font-semibold tracking-tight text-text">{nome}</h3>
                   <p className="mt-2 text-sm leading-relaxed text-muted">{s.tagline[locale]}</p>
@@ -34,27 +35,29 @@ export async function Services() {
                       </li>
                     ))}
                   </ul>
-                </div>
-                <div className="flex flex-col justify-end gap-3 sm:items-end">
-                  <a
-                    href={`https://wa.me/${siteConfig.contact.whatsapp}?text=${encodeURIComponent(mensagem)}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex min-h-11 items-center justify-center rounded-xl bg-accent px-5 text-sm font-medium text-bg transition-colors hover:bg-accent-hover sm:w-full"
-                  >
-                    {c.ask}
-                  </a>
-                  {s.demo && (
+                  <div className="mt-6 flex flex-wrap gap-3">
                     <a
-                      href={s.demo}
+                      href={`https://wa.me/${siteConfig.contact.whatsapp}?text=${encodeURIComponent(mensagem)}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex min-h-11 items-center justify-center rounded-xl border border-border px-5 text-sm font-medium text-text transition-colors hover:border-accent/60 hover:text-accent sm:w-full"
+                      className="inline-flex min-h-11 items-center justify-center rounded-xl bg-accent px-5 text-sm font-medium text-bg transition-colors hover:bg-accent-hover"
                     >
-                      {c.demo} ↗
+                      {c.ask}
                     </a>
-                  )}
+                    {s.demo && (
+                      <a
+                        href={s.demo}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex min-h-11 items-center justify-center rounded-xl border border-border px-5 text-sm font-medium text-text transition-colors hover:border-accent/60 hover:text-accent"
+                      >
+                        {c.demo} ↗
+                      </a>
+                    )}
+                  </div>
                 </div>
+                {/* A vitrine: o celular passando pelas telas do produto. */}
+                {s.screens && <PhoneShowcase screens={s.screens} locale={locale} alt={nome} />}
               </article>
             </Reveal>
           );
