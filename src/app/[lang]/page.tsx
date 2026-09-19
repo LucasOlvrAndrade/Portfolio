@@ -4,6 +4,7 @@ import { About } from "@/components/sections/About";
 import { Contact } from "@/components/sections/Contact";
 import { Hero } from "@/components/sections/Hero";
 import { Projects, ProjectsFallback } from "@/components/sections/Projects";
+import { Services } from "@/components/sections/Services";
 import { Skills } from "@/components/sections/Skills";
 import { LegacyHashRedirect } from "@/components/ui/LegacyHashRedirect";
 import { getI18n } from "@/i18n";
@@ -102,6 +103,7 @@ export default async function Home() {
             <Projects />
           </Suspense>
 
+          <Services />
           <Skills />
           <Contact />
         </div>

@@ -72,6 +72,18 @@ export const pt = {
       metaDescription:
         "Linguagens, bancos de dados e ferramentas que uso e que estudo.",
     },
+    services: {
+      nav: "Serviços",
+      eyebrow: "Serviços",
+      title: "O que eu faço para o seu negócio",
+      description:
+        "Sistemas prontos para vender, adaptados com a sua marca. Preço e prazo vão na proposta — é só chamar.",
+      metaDescription:
+        "Serviços de Lucas Andrade: site de agendamento com painel de gestão para barbearias e outros negócios com hora marcada.",
+      demo: "Ver a demo",
+      ask: "Pedir proposta",
+      whatsappMessage: "Olá, Lucas! Vi o serviço “{service}” no seu portfólio e quero uma proposta.",
+    },
     contact: {
       nav: "Contato",
       eyebrow: "Contato",

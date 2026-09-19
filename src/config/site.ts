@@ -63,6 +63,40 @@ export const siteConfig = {
   },
 
   /**
+   * Serviços à venda — a vitrine da seção "Serviços".
+   *
+   * Cada item é um produto pronto que se adapta ao cliente. Sem preço aqui
+   * de propósito: a proposta vai na conversa. Para vender mais um, é
+   * acrescentar um objeto — o card, o botão e a mensagem do WhatsApp saem
+   * daqui.
+   */
+  services: [
+    {
+      key: "agendamento",
+      title: { pt: "Site de agendamento com painel", en: "Booking website with management panel" },
+      tagline: {
+        pt: "Para barbearia, salão, estúdio de tatuagem, clínica — qualquer negócio com hora marcada.",
+        en: "For barbershops, salons, tattoo studios, clinics — any appointment-based business.",
+      },
+      includes: {
+        pt: [
+          "Cliente escolhe o profissional, o serviço e o horário pelo celular",
+          "Painel com agenda do dia e da semana, folgas e feriados automáticos",
+          "Faturamento, comissão por profissional e exportação para o contador",
+          "Sua marca, seu domínio, sem mensalidade de app nem intermediário",
+        ],
+        en: [
+          "Clients pick the professional, the service and the time from their phone",
+          "Panel with day and week schedule, days off and automatic holidays",
+          "Revenue, commission per professional and an export for the accountant",
+          "Your brand, your domain, no app subscription and no middleman",
+        ],
+      },
+      demo: "https://barbearia.lucas-andrade.dev",
+    },
+  ],
+
+  /**
    * Repositórios destacados — aparecem primeiro, com card maior.
    * Basta adicionar o nome exato do repo. Ex.: ["Calculadora-java"]
    */

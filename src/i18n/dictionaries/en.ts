@@ -71,6 +71,18 @@ export const en: Translation<Dictionary> = {
       metaDescription:
         "Languages, databases and tools I use and the ones I am studying.",
     },
+    services: {
+      nav: "Services",
+      eyebrow: "Services",
+      title: "What I build for your business",
+      description:
+        "Ready-made systems, adapted to your brand. Price and timeline come in the proposal — just reach out.",
+      metaDescription:
+        "Services by Lucas Andrade: booking website with a management panel for barbershops and other appointment-based businesses.",
+      demo: "See the demo",
+      ask: "Request a proposal",
+      whatsappMessage: "Hi Lucas! I saw the “{service}” service on your portfolio and I'd like a proposal.",
+    },
     contact: {
       nav: "Contact",
       eyebrow: "Contact",

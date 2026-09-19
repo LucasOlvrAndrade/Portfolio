@@ -23,6 +23,7 @@ import {
 export const sectionKeys = [
   "about",
   "projects",
+  "services",
   "skills",
   "contact",
 ] as const;
@@ -33,6 +34,7 @@ export type SectionKey = (typeof sectionKeys)[number];
 const folders: Record<SectionKey, string> = {
   about: "sobre",
   projects: "projetos",
+  services: "servicos",
   skills: "tecnologias",
   contact: "contato",
 };
@@ -42,12 +44,14 @@ const slugs: Record<Locale, Record<SectionKey, string>> = {
   pt: {
     about: "sobre",
     projects: "projetos",
+    services: "servicos",
     skills: "tecnologias",
     contact: "contato",
   },
   en: {
     about: "about",
     projects: "projects",
+    services: "services",
     skills: "skills",
     contact: "contact",
   },
