@@ -83,8 +83,6 @@ export const pt = {
       demo: "Ver a demo",
       ask: "Contrate",
       whatsappMessage: "Olá, Lucas! Vi o serviço “{service}” no seu portfólio e quero uma proposta.",
-      /** Roda no anel cromado; repete até fechar o círculo. */
-      ring: "Lucas Andrade Sistemas sob medida Lucas Andrade Sites e painéis ",
     },
     contact: {
       nav: "Contato",

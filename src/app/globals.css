@@ -805,18 +805,13 @@ html[data-scrolling] [data-glow] > [data-glow] {
   background: #000;
 }
 
-/* O anel cromado (ChromeRing): gira uma volta por minuto. O filtro e o
-   degradê ficam fora do grupo que gira, então as luzes não acompanham. */
-.anel {
-  aspect-ratio: 1;
-}
-.anel-gira {
-  transform-origin: 0 0;
-  animation: anel-girar 60s linear infinite;
-}
-@keyframes anel-girar {
-  to { transform: rotate(360deg); }
-}
-@media (prefers-reduced-motion: reduce) {
-  .anel-gira { animation: none; }
+/* A pedra cromada (ChromeGem): halo branco atrás do canvas, que é o que
+   faz o metal parecer iluminado por trás em vez de colado no preto. */
+.gema::before {
+  content: "";
+  position: absolute;
+  inset: 8%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.06) 45%, transparent 70%);
+  filter: blur(18px);
 }

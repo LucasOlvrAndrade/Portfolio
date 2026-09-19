@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono, UnifrakturMaguntia } from "next/font/google";
+import { Geist, Geist_Mono } from "next/font/google";
 import { notFound } from "next/navigation";
 
 import { Header } from "@/components/ui/Header";
@@ -22,13 +22,6 @@ const geistMono = Geist_Mono({
   display: "swap",
 });
 
-/** Blackletter do anel cromado da vitrine de serviços (ChromeRing). */
-const gotica = UnifrakturMaguntia({
-  variable: "--font-gotica",
-  weight: "400",
-  subsets: ["latin"],
-  display: "swap",
-});
 
 /** As duas versões são geradas no build — nenhuma delas é renderizada sob demanda. */
 export function generateStaticParams() {
@@ -138,7 +131,7 @@ export default async function RootLayout({
     <html
       lang={localeMeta[lang].html}
       suppressHydrationWarning
-      className={`${geistSans.variable} ${geistMono.variable} ${gotica.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
