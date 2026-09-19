@@ -1,5 +1,5 @@
 import { Reveal } from "@/components/ui/Reveal";
-import { PhoneShowcase } from "@/components/ui/PhoneShowcase";
+import { ChromeCrystal } from "@/components/ui/ChromeCrystal";
 import { Section } from "@/components/ui/Section";
 import { siteConfig } from "@/config/site";
 import { getI18n } from "@/i18n";
@@ -23,8 +23,14 @@ export async function Services() {
           const mensagem = fill(c.whatsappMessage, { service: nome });
           return (
             <Reveal as="li" key={s.key} delay={index * 80}>
-              <article className="grid gap-8 rounded-xl border border-border bg-surface p-6 sm:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] sm:p-8">
-                <div>
+              {/*
+                O card é uma cena: canvas preto com estrelas cobrindo tudo e o
+                cristal de cromo posicionado no slot vazio da grade, que fica
+                à direita no desktop e em cima no celular. O texto senta por
+                cima com `relative`.
+              */}
+              <article className="vitrine relative isolate grid gap-6 overflow-hidden rounded-2xl border border-border p-6 sm:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] sm:p-8">
+                <div className="relative">
                   <h3 className="text-xl font-semibold tracking-tight text-text">{nome}</h3>
                   <p className="mt-2 text-sm leading-relaxed text-muted">{s.tagline[locale]}</p>
                   <ul className="mt-5 space-y-2">
@@ -56,8 +62,7 @@ export async function Services() {
                     )}
                   </div>
                 </div>
-                {/* A vitrine: o celular passando pelas telas do produto. */}
-                {s.screens && <PhoneShowcase screens={s.screens} locale={locale} alt={nome} />}
+                <ChromeCrystal className="order-first mx-auto aspect-square w-full max-w-[260px] sm:order-none sm:min-h-[340px] sm:max-w-none sm:self-center" />
               </article>
             </Reveal>
           );

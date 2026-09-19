@@ -93,34 +93,6 @@ export const siteConfig = {
         ],
       },
       demo: "https://barbearia.lucas-andrade.dev",
-      /** Telas que a vitrine animada passa, com a legenda de cada uma. */
-      screens: [
-        {
-          src: "/servicos/1-inicio.png",
-          pt: "A página inicial, com o próximo horário livre de cada barbeiro",
-          en: "The home page, with each barber's next free slot",
-        },
-        {
-          src: "/servicos/2-horario.png",
-          pt: "O cliente escolhe o dia e a hora pelo celular",
-          en: "The client picks the day and time from their phone",
-        },
-        {
-          src: "/servicos/3-servicos.png",
-          pt: "Tabela de serviços e preços, editável no painel",
-          en: "Services and prices, editable in the panel",
-        },
-        {
-          src: "/servicos/4-painel.png",
-          pt: "O painel da barbearia: faturamento, comissões e alertas",
-          en: "The shop panel: revenue, commissions and alerts",
-        },
-        {
-          src: "/servicos/5-semana.png",
-          pt: "A agenda da semana, com a ocupação de cada dia",
-          en: "The week schedule, with each day's occupancy",
-        },
-      ],
     },
   ],
 
