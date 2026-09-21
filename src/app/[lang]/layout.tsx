@@ -163,8 +163,13 @@ export default async function RootLayout({
           site roda limpo sem eles (dev, fork, preview). IDs de GA e Clarity
           são públicos por natureza; o NEXT_PUBLIC_ é de propósito.
         */}
+        {/*
+          O id do Script NÃO pode ser "clarity": elemento com id vira global
+          (`window.clarity` seria o <script>), o trecho de início acha que
+          já existe e a tag do Clarity quebra com "is not a function".
+        */}
         {process.env.NEXT_PUBLIC_CLARITY_ID && (
-          <Script id="clarity" strategy="afterInteractive">
+          <Script id="clarity-tag" strategy="afterInteractive">
             {`(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
 t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
 y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
