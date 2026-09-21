@@ -1,5 +1,5 @@
 import { Reveal } from "@/components/ui/Reveal";
-import { ChromeHalo } from "@/components/ui/ChromeHalo";
+import { LivePreview } from "@/components/ui/LivePreview";
 import { Section } from "@/components/ui/Section";
 import { siteConfig } from "@/config/site";
 import { getI18n } from "@/i18n";
@@ -23,10 +23,8 @@ export async function Services() {
           const mensagem = fill(c.whatsappMessage, { service: nome });
           return (
             <Reveal as="li" key={s.key} delay={index * 80}>
-              {/* O card é preto de propósito (ver `.vitrine`): o anel cromado
-                  fica à direita no desktop e em cima no celular. */}
-              <article className="vitrine relative isolate grid gap-6 overflow-hidden rounded-2xl border border-border p-6 sm:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] sm:p-8">
-                <div className="relative">
+              <article className="grid gap-8 rounded-xl border border-border bg-surface p-6 sm:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] sm:p-8">
+                <div>
                   <h3 className="text-xl font-semibold tracking-tight text-text">{nome}</h3>
                   <p className="mt-2 text-sm leading-relaxed text-muted">{s.tagline[locale]}</p>
                   <ul className="mt-5 space-y-2">
@@ -58,7 +56,14 @@ export async function Services() {
                     )}
                   </div>
                 </div>
-                <ChromeHalo className="order-first mx-auto w-full max-w-[280px] sm:order-none sm:max-w-[380px] sm:self-center" />
+                {/* O site de verdade, ao vivo, passeando sozinho (modo vitrine da demo). */}
+                {s.demo && (
+                  <LivePreview
+                    src={`${s.demo}/?vitrine=1`}
+                    title={nome}
+                    className="order-first max-w-[220px] sm:order-none sm:max-w-[240px] sm:self-center"
+                  />
+                )}
               </article>
             </Reveal>
           );

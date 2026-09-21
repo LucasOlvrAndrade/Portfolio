@@ -783,35 +783,3 @@ html[data-scrolling] [data-glow] > [data-glow] {
     transition: none;
   }
 }
-
-/*
-  A vitrine dos serviços (ChromeCrystal) é preta nos dois temas, de
-  propósito: é uma peça de cromo num céu de estrelas, e cromo sobre creme
-  não existe. Os tokens são redefinidos só dentro do card, então os
-  utilitários (text-text, bg-accent, border-border) continuam valendo e
-  saem na paleta escura.
-*/
-.vitrine {
-  --bg: #050505;
-  --surface: #0c0c0c;
-  --surface-2: #161616;
-  --border: #2a2a2a;
-  --text: #f5f5f4;
-  --text-muted: #a3a3a3;
-  --accent: #fb923c;
-  --accent-hover: #fdba74;
-  --accent-subtle: #3a1e0c;
-  --ring: #fb923c;
-  background: #000;
-}
-
-/* O anel cromado (ChromeHalo): halo branco atrás do canvas, que é o que
-   faz o metal parecer iluminado por trás em vez de colado no preto. */
-.gema::before {
-  content: "";
-  position: absolute;
-  inset: 8%;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.06) 45%, transparent 70%);
-  filter: blur(18px);
-}
