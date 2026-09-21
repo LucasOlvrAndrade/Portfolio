@@ -3,7 +3,6 @@
 import { useMemo, useState } from "react";
 
 import { RepoCard, type CardCopy } from "./RepoCard";
-import { GlowCard } from "./spotlight-card";
 import { Reveal } from "./Reveal";
 import { fill } from "@/i18n/config";
 import { languageColor } from "@/lib/languages";
@@ -153,14 +152,12 @@ export function ProjectExplorer({
               // os últimos cards em listas grandes.
               delay={Math.min(index, 6) * 60}
             >
-              <GlowCard customSize className="h-full" glowColor="brand">
-                <RepoCard
-                  repo={repo}
-                  copy={card}
-                  intl={intl}
-                  projectPath={projectPath}
-                />
-              </GlowCard>
+              <RepoCard
+                repo={repo}
+                copy={card}
+                intl={intl}
+                projectPath={projectPath}
+              />
             </Reveal>
           ))}
         </div>

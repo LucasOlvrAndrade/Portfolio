@@ -194,116 +194,6 @@
 }
 
 /* ───────────────────────────────────────────────────────────
-   Spotlight (GlowCard) — borda que acende conforme o cursor.
-
-   As coordenadas do ponteiro vêm de `--glow-x/--glow-y`, escritas
-   no <html> por um único listener (ver spotlight-card.tsx) e
-   herdadas por todos os cards. `background-attachment: fixed`
-   ancora os gradientes na viewport, e não em cada elemento — é o
-   que faz a luz atravessar os cards como uma fonte só.
-   ─────────────────────────────────────────────────────────── */
-[data-glow] {
-  --border-size: calc(var(--border, 1) * 1px);
-  --spotlight-size: calc(var(--size, 260) * 1px);
-  --hue: calc(var(--base, 220) + (var(--glow-xp, 0) * var(--spread, 200)));
-
-  position: relative;
-  touch-action: none;
-}
-
-[data-glow]::before,
-[data-glow]::after {
-  pointer-events: none;
-  content: "";
-  position: absolute;
-  inset: calc(var(--border-size) * -1);
-  border: var(--border-size) solid transparent;
-  border-radius: calc(var(--radius, 12) * 1px);
-  background-attachment: fixed;
-  background-size: calc(100% + (2 * var(--border-size)))
-    calc(100% + (2 * var(--border-size)));
-  background-repeat: no-repeat;
-  background-position: 50% 50%;
-  -webkit-mask:
-    linear-gradient(transparent, transparent),
-    linear-gradient(white, white);
-  mask:
-    linear-gradient(transparent, transparent),
-    linear-gradient(white, white);
-  -webkit-mask-clip: padding-box, border-box;
-  mask-clip: padding-box, border-box;
-  -webkit-mask-composite: xor;
-  mask-composite: intersect;
-}
-
-/* Borda colorida, acompanhando o cursor. */
-[data-glow]::before {
-  background-image: radial-gradient(
-    calc(var(--spotlight-size) * 0.75) calc(var(--spotlight-size) * 0.75) at
-      calc(var(--glow-x, -1000) * 1px) calc(var(--glow-y, -1000) * 1px),
-    hsl(var(--hue) 90% 60% / var(--border-spot-opacity, 1)),
-    transparent 100%
-  );
-  filter: brightness(1.4);
-}
-
-/* Núcleo claro, um pouco menor, que dá o brilho quente no centro. */
-[data-glow]::after {
-  background-image: radial-gradient(
-    calc(var(--spotlight-size) * 0.5) calc(var(--spotlight-size) * 0.5) at
-      calc(var(--glow-x, -1000) * 1px) calc(var(--glow-y, -1000) * 1px),
-    hsl(0 0% 100% / var(--border-light-opacity, 0.6)),
-    transparent 100%
-  );
-}
-
-/* O filho [data-glow] é só o halo externo desfocado. */
-[data-glow] > [data-glow] {
-  position: absolute;
-  inset: 0;
-  will-change: filter;
-  opacity: var(--outer, 1);
-  border-radius: calc(var(--radius, 12) * 1px);
-  border: none;
-  background: none;
-  filter: blur(calc(var(--border-size) * 12));
-  pointer-events: none;
-}
-
-[data-glow] > [data-glow]::before {
-  inset: -6px;
-  border-width: 6px;
-}
-
-/* Sem cursor não há spotlight: em toque e teclado o halo só
-   escureceria as bordas sem nunca acender. */
-@media (hover: none) {
-  [data-glow]::before,
-  [data-glow]::after {
-    display: none;
-  }
-}
-
-/*
-  Durante a rolagem, o halo externo sai de cena.
-
-  Ele é o elemento mais caro da página para repintar: um `blur(12px)`
-  sobre um fundo com `background-attachment: fixed`. Fundo ancorado na
-  viewport precisa ser repintado a cada quadro de rolagem, e passar
-  esse repintura por um desfoque a cada quadro é o que trava.
-
-  Some só o halo — a borda que acende continua acesa, e ela é o que se
-  reconhece como spotlight. A marcação vem do `ScrollTuning` e cai
-  sozinha 140ms depois de a página parar.
-
-  Para reverter, basta apagar esta regra: o efeito volta integral, com
-  o custo de rolagem junto.
-*/
-html[data-scrolling] [data-glow] > [data-glow] {
-  display: none;
-}
-
-/* ───────────────────────────────────────────────────────────
    Navegação do header — trilha rebaixada com pílula elevada.
 
    O volume vem do PAR: sombra `inset` na trilha (afunda) contra
@@ -765,13 +655,6 @@ html[data-scrolling] [data-glow] > [data-glow] {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
-  }
-
-  /* O spotlight persegue o cursor continuamente — é movimento,
-     e some para quem pede menos dele. A borda estática permanece. */
-  [data-glow]::before,
-  [data-glow]::after {
-    display: none;
   }
 
   /* Sem revelação: o conteúdo já nasce visível. A regra acima zera a
