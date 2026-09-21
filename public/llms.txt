@@ -1,0 +1,22 @@
+# Lucas Andrade
+
+> Portfólio de Lucas Andrade, estudante de Engenharia de Software (CEUB, Brasília) e estagiário de desenvolvimento no Grupo RAM. Projetos, serviços sob medida e contato.
+
+O site lista os repositórios públicos do GitHub, as tecnologias usadas e uma vitrine de serviços à venda. Existe em português e em inglês.
+
+## Serviços
+
+- Site de agendamento com painel de gestão: para barbearia, salão, estúdio de tatuagem, clínica e qualquer negócio com hora marcada. O cliente escolhe profissional, serviço e horário pelo celular; o painel tem agenda do dia e da semana, folgas, feriados automáticos, faturamento, comissão por profissional e exportação para o contador. Demo em https://barbearia.lucas-andrade.dev
+
+## Páginas
+
+- [Início (pt)](https://lucas-andrade.dev/pt): apresentação, projetos, serviços, tecnologias e contato
+- [Home (en)](https://lucas-andrade.dev/en): the same page in English
+- [Vitrine pública do sistema de barbearia](https://github.com/LucasOlvrAndrade/sistema-barbearia)
+
+## Contato
+
+- E-mail: lucasolvrandrade@gmail.com
+- WhatsApp: +55 61 99318-6733
+- GitHub: https://github.com/LucasOlvrAndrade
+- LinkedIn: https://www.linkedin.com/in/lucas-andrade-93b3273b3/
