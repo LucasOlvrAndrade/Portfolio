@@ -68,6 +68,7 @@ export function LivePreview({ src, title, className = "" }: { src: string; title
             title={title}
             tabIndex={-1}
             loading="lazy"
+            scrolling="no"
             onLoad={() => setPronto(true)}
             className="pointer-events-none absolute left-0 top-0 origin-top-left border-0 transition-opacity duration-700"
             style={{

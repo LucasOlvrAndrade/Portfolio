@@ -23,7 +23,7 @@ export async function Services() {
           const mensagem = fill(c.whatsappMessage, { service: nome });
           return (
             <Reveal as="li" key={s.key} delay={index * 80}>
-              <article className="grid gap-8 rounded-xl border border-border bg-surface p-6 sm:p-8">
+              <article className="grid gap-8 rounded-xl border border-border bg-surface p-6 sm:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] sm:p-8">
                 <div>
                   <h3 className="text-xl font-semibold tracking-tight text-text">{nome}</h3>
                   <p className="mt-2 text-sm leading-relaxed text-muted">{s.tagline[locale]}</p>
@@ -57,7 +57,9 @@ export async function Services() {
                   </div>
                 </div>
                 {/* O site de verdade, ao vivo, em desktop e no escuro (modo vitrine da demo). */}
-                {s.demo && <LivePreview src={`${s.demo}/?vitrine=1&tema=escuro`} title={nome} />}
+                {s.demo && (
+                  <LivePreview src={`${s.demo}/?vitrine=1&tema=escuro`} title={nome} className="sm:self-center" />
+                )}
               </article>
             </Reveal>
           );
