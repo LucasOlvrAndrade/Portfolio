@@ -61,7 +61,7 @@ export async function Services() {
                   <LivePreview
                     src={`${s.demo}/?vitrine=1`}
                     title={nome}
-                    className="order-first max-w-[220px] sm:order-none sm:max-w-[240px] sm:self-center"
+                    className="order-first sm:order-none sm:max-w-[300px] sm:self-center"
                   />
                 )}
               </article>
