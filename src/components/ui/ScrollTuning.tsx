@@ -173,6 +173,23 @@ export function ScrollTuning() {
       }
     };
 
+    /*
+      Clique numa âncora da própria página (o menu) cancela o
+      amortecimento na hora. Sem isto, rolar com a roda e clicar em
+      "Serviços" logo em seguida não levava a lugar nenhum: o navegador
+      começava o deslize até a seção e o loop, ainda vivo por causa do
+      gesto anterior, puxava o scrollTop de volta ao alvo da roda a
+      cada quadro. O gesto de clicar diz que o destino mudou.
+    */
+    const onClick = (event: MouseEvent) => {
+      if (!running) return;
+      const link = (event.target as Element | null)?.closest("a[href*='#']");
+      if (!link) return;
+      cancelAnimationFrame(frame);
+      running = false;
+    };
+    window.addEventListener("click", onClick, { capture: true });
+
     /** Liga e desliga conforme o ambiente muda sob os pés. */
     const sync = () => {
       const enabled = fine.matches && !reduced.matches;
@@ -193,6 +210,7 @@ export function ScrollTuning() {
     fine.addEventListener("change", sync);
 
     return () => {
+      window.removeEventListener("click", onClick, { capture: true });
       window.removeEventListener("wheel", onWheel);
       window.removeEventListener("scroll", markScrolling);
       main?.removeEventListener("scroll", markScrolling);
