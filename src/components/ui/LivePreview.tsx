@@ -12,18 +12,19 @@ import { useEffect, useRef, useState } from "react";
   dentro do telefone. Agora é um cartão de cantos redondos, sem borda, e o
   site aparece como se a janela fosse o próprio cartão.
 
-  O iframe tem a largura real de um celular (390px) e é reduzido por
-  `transform: scale` para caber no cartão, então o site se desenha no
-  layout móvel dele, não numa versão espremida. A altura do iframe é a do
-  cartão desfeita pela escala, para a janela do site coincidir com o que se
-  vê. Medido por ResizeObserver porque CSS ainda não divide comprimentos
-  com segurança.
+  O iframe tem largura de DESKTOP (1280px) e é reduzido por
+  `transform: scale` para caber no cartão: o que se vê é o herói inteiro da
+  demo, título, quadro de hoje e o carimbo girando, como numa tela grande.
+  A altura do iframe é a do cartão desfeita pela escala, para a janela do
+  site coincidir com o que se vê. Medido por ResizeObserver porque CSS
+  ainda não divide comprimentos com segurança. O fundo do cartão é o preto
+  quente da demo, para não piscar claro enquanto o iframe carrega.
 
   Só monta quando se aproxima da tela (o iframe carrega um site inteiro) e
   não recebe ponteiro: é uma vitrine, e a roda do mouse por cima dela deve
   rolar o portfólio, não a demo. Para usar, tem o botão "Ver a demo".
 */
-const LARGURA = 390;
+const LARGURA = 1280;
 
 export function LivePreview({ src, title, className = "" }: { src: string; title: string; className?: string }) {
   const ref = useRef<HTMLDivElement>(null);
@@ -59,7 +60,7 @@ export function LivePreview({ src, title, className = "" }: { src: string; title
     <div className={`mx-auto w-full ${className}`}>
       <div
         ref={ref}
-        className="relative aspect-[4/5] overflow-hidden rounded-2xl bg-surface-2 shadow-[0_20px_50px_-30px_rgba(0,0,0,0.35)] sm:aspect-[3/4]"
+        className="relative aspect-[16/10] overflow-hidden rounded-2xl bg-[#171412] shadow-[0_20px_50px_-30px_rgba(0,0,0,0.35)]"
       >
         {perto && medida.escala > 0 && (
           <iframe
