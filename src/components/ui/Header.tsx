@@ -63,7 +63,7 @@ export async function Header() {
             a letra ficaria perdida no meio do preto.
           */}
           <Image
-            src="/logo.png"
+            src="/logo.webp"
             alt=""
             width={28}
             height={28}

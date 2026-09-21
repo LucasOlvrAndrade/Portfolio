@@ -43,7 +43,7 @@ export const siteConfig = {
       en: "Development intern",
     },
     url: "https://memoriaram.com.br",
-    logo: "/grupo-ram.png",
+    logo: "/grupo-ram.webp",
     logoWidth: 540,
     logoHeight: 150,
     /** Cores amostradas do próprio arquivo do logo, para o realce combinar. */

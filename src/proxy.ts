@@ -107,7 +107,7 @@ export const config = {
     /*
       Fora: rotas internas do Next, o endpoint de imagem e qualquer
       caminho com extensão (o logo em `public/`, por exemplo). Sem a
-      última exclusão, `/grupo-ram.png` viraria `/pt/grupo-ram.png` e o
+      última exclusão, `/grupo-ram.webp` viraria `/pt/grupo-ram.webp` e o
       Hero ficaria sem o logo.
     */
     "/((?!_next/|_vercel/|.*\\..*).*)",
