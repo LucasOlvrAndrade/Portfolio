@@ -58,7 +58,13 @@ export async function Services() {
                 </div>
                 {/* O site de verdade, ao vivo, em desktop e no escuro (modo vitrine da demo). */}
                 {s.demo && (
-                  <LivePreview src={`${s.demo}/?vitrine=1&tema=escuro`} title={nome} className="sm:self-center" />
+                  <LivePreview
+                    src={`${s.demo}/?vitrine=1&tema=escuro`}
+                    href={s.demo}
+                    title={nome}
+                    label={`${c.demo}: ${nome}`}
+                    className="sm:self-center"
+                  />
                 )}
               </article>
             </Reveal>

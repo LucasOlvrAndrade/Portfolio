@@ -22,11 +22,27 @@ import { useEffect, useRef, useState } from "react";
 
   Só monta quando se aproxima da tela (o iframe carrega um site inteiro) e
   não recebe ponteiro: é uma vitrine, e a roda do mouse por cima dela deve
-  rolar o portfólio, não a demo. Para usar, tem o botão "Ver a demo".
+  rolar o portfólio, não a demo. Numa miniatura a 30% ninguém acerta um
+  botão do site de dentro; por isso o cartão INTEIRO é um link que abre a
+  demo em aba nova (`href`), e o site de verdade se usa lá.
 */
 const LARGURA = 1280;
 
-export function LivePreview({ src, title, className = "" }: { src: string; title: string; className?: string }) {
+export function LivePreview({
+  src,
+  href,
+  title,
+  label,
+  className = "",
+}: {
+  src: string;
+  /** Para onde o cartão leva ao ser clicado: a demo, em aba nova. */
+  href: string;
+  title: string;
+  /** Nome acessível do link, por exemplo "Abrir a demo". */
+  label: string;
+  className?: string;
+}) {
   const ref = useRef<HTMLDivElement>(null);
   const [medida, setMedida] = useState({ escala: 0, altura: 0 });
   const [perto, setPerto] = useState(false);
@@ -57,10 +73,16 @@ export function LivePreview({ src, title, className = "" }: { src: string; title
   }, []);
 
   return (
-    <div className={`mx-auto w-full ${className}`}>
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label={label}
+      className={`group mx-auto block w-full rounded-2xl focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent ${className}`}
+    >
       <div
         ref={ref}
-        className="relative aspect-[16/10] overflow-hidden rounded-2xl bg-[#171412] shadow-[0_20px_50px_-30px_rgba(0,0,0,0.35)]"
+        className="relative aspect-[16/10] overflow-hidden rounded-2xl bg-[#171412] shadow-[0_20px_50px_-30px_rgba(0,0,0,0.35)] transition-transform duration-300 group-hover:scale-[1.02]"
       >
         {perto && medida.escala > 0 && (
           <iframe
@@ -80,6 +102,6 @@ export function LivePreview({ src, title, className = "" }: { src: string; title
           />
         )}
       </div>
-    </div>
+    </a>
   );
 }
