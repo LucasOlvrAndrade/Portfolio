@@ -551,7 +551,13 @@
    ─────────────────────────────────────────────────────────── */
 .intro {
   position: relative;
-  height: 300svh;
+  /*
+    Duas telas: uma de percurso, já que a primeira fica sob o palco fixo.
+    Eram três, e a sequência inteira cabia nelas com folga — o problema é
+    que folga aqui se paga em rolagem, e quem chega para ver o trabalho
+    tinha de girar o dedo três vezes antes de encontrar o nome.
+  */
+  height: 200svh;
 }
 
 .intro-palco {
@@ -565,7 +571,8 @@
   padding-top: 4rem;
 }
 
-.globe-canvas {
+/* A cena da abertura ocupa o palco inteiro. */
+.cena-canvas {
   position: absolute;
   inset: 0;
   width: 100%;

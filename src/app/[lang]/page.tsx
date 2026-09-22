@@ -7,7 +7,7 @@ import { Projects, ProjectsFallback } from "@/components/sections/Projects";
 import { Services } from "@/components/sections/Services";
 import { Skills } from "@/components/sections/Skills";
 import { LegacyHashRedirect } from "@/components/ui/LegacyHashRedirect";
-import { GlobeScene } from "@/components/ui/GlobeScene";
+import { LogoScene } from "@/components/ui/LogoScene";
 import { getI18n } from "@/i18n";
 import { legacyHashTargets } from "@/i18n/routes";
 import { getProfile, getProfileReadme } from "@/lib/github";
@@ -33,6 +33,7 @@ export default async function Home() {
   // Sem repositório de perfil (404), a seção "Sobre" cai na bio.
   const readme = readmeResult.ok ? readmeResult.data : null;
   const sections = readme ? parseProfileReadme(readme.markdown) : [];
+
 
   return (
     /*
@@ -79,7 +80,7 @@ export default async function Home() {
         </div>
 
         {/*
-          A abertura: o globo de pontos, e mais nada. Sem título, sem
+          A abertura: a marca, com volume, e mais nada. Sem título, sem
           cargo, sem botão — a rolagem é que leva às informações.
 
           A seção tem três telas de altura e o palco dentro dela fica
@@ -93,7 +94,7 @@ export default async function Home() {
         */}
         <div className="intro" aria-hidden="true">
           <div className="intro-palco">
-            <GlobeScene />
+            <LogoScene />
             <div className="scroll-hint">
               <span />
             </div>
