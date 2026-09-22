@@ -100,6 +100,23 @@ export function GlobeScene() {
     let ultimo = performance.now();
     /** 0 a 1: onde a rolagem está dentro da seção da cena. */
     let avanco = 0;
+    /*
+      0 a 1: a montagem, contada em tempo a partir do primeiro quadro.
+
+      Ela já dependeu da rolagem, e era um erro grosseiro: com a página
+      parada no topo o avanço vale zero, a opacidade também, e quem
+      abria o site encontrava uma tela preta. Parecia que não tinha
+      carregado. A cena precisa existir antes de qualquer gesto — o que
+      a rolagem controla é o que vem DEPOIS dela.
+    */
+    let montagem = 0;
+    /*
+      Instante do primeiro quadro da cena. O tempo que o rAF entrega é o
+      da PÁGINA: numa carga lenta ele já chegaria grande, e as rotas,
+      que entram escalonadas, apareceriam todas juntas no primeiro
+      quadro. O que interessa aqui é a idade da cena.
+    */
+    let nascimento = 0;
 
     /*
       Dez baldes de opacidade, reaproveitados quadro a quadro. São dez
@@ -179,7 +196,7 @@ export function GlobeScene() {
 
       const cx = largura / 2;
       const cy = altura / 2;
-      const base = Math.min(largura, altura) * 0.36;
+      const base = Math.min(largura, altura) * 0.44;
 
       /*
         A cena inteira responde ao avanço da rolagem: entra crescendo,
@@ -187,9 +204,9 @@ export function GlobeScene() {
         e não em classes de CSS, porque é o mesmo desenho o tempo todo —
         só o estado muda.
       */
-      const entrada = Math.min(1, avanco / 0.18);
+      const entrada = montagem;
       const saida = Math.max(0, (avanco - 0.62) / 0.38);
-      const escala = base * (0.82 + entrada * 0.18) * (1 - saida * 0.22);
+      const escala = base * (0.86 + entrada * 0.14) * (1 - saida * 0.2);
       const opacidade = entrada * (1 - saida);
 
       if (opacidade <= 0.01) return;
@@ -308,8 +325,9 @@ export function GlobeScene() {
          recomeça, e só entra em cena depois que a fase de montagem
          terminou. */
       ROTAS.forEach(([ia, ib], i) => {
-        const entra = 0.2 + i * 0.07;
-        if (avanco < entra) return;
+        // Entram no tempo, uma a cada 700 ms depois da montagem. Presas
+        // à rolagem, o site parado não mostraria rota nenhuma.
+        if (t < 1400 + i * 700) return;
 
         const a = paraVetor(LUGARES[ia].lat, LUGARES[ia].lon);
         const b = paraVetor(LUGARES[ib].lat, LUGARES[ib].lon);
@@ -380,14 +398,24 @@ export function GlobeScene() {
         quadro = 0;
         return;
       }
+      if (!nascimento) nascimento = t;
       const dt = Math.min(64, t - ultimo);
       ultimo = t;
+
+      /*
+        A montagem leva 1,4 s e acontece uma vez. A curva é de saída
+        (rápida no começo, macia no fim): o planeta parece assentar, e
+        não inflar em velocidade constante.
+      */
+      if (montagem < 1) {
+        montagem = Math.min(1, montagem + dt / 1400);
+      }
 
       // Gira sozinho, e a rolagem adianta o giro: parar de rolar não
       // congela o planeta, mas rolar acelera a viagem.
       giro += dt * 0.00009 + avanco * 0.0006;
 
-      desenhar(t);
+      desenhar(t - nascimento);
       quadro = requestAnimationFrame(passo);
     };
 
@@ -436,9 +464,9 @@ export function GlobeScene() {
 
       medir();
       if (calmo) {
-        // Sem movimento: o planeta aparece montado, no estado de operação.
-        avanco = 0.4;
-        desenhar(0);
+        // Sem movimento: o planeta aparece montado e fica.
+        montagem = 1;
+        desenhar(4000);
         return;
       }
       ligar();
