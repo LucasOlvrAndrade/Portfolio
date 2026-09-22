@@ -7,6 +7,7 @@ import { Projects, ProjectsFallback } from "@/components/sections/Projects";
 import { Services } from "@/components/sections/Services";
 import { Skills } from "@/components/sections/Skills";
 import { LegacyHashRedirect } from "@/components/ui/LegacyHashRedirect";
+import { GlobeScene } from "@/components/ui/GlobeScene";
 import { getI18n } from "@/i18n";
 import { legacyHashTargets } from "@/i18n/routes";
 import { getProfile, getProfileReadme } from "@/lib/github";
@@ -66,12 +67,37 @@ export default async function Home() {
 
           São duas, e não uma, porque parallax entre dois planos apenas
           — fundo e conteúdo — dá uma leitura de profundidade rasa. Com
-          a malha atrás do halo, e o halo atrás do texto, são três
+          a cena atrás do halo, e o halo atrás do texto, são três
           distâncias distintas.
+
+          No lugar da malha de pontos que ficava aqui, a logo em
+          partículas: ela cumpre a mesma função ótica, dar ao olho um
+          traço cuja posição acompanhar, e diz respeito a alguma coisa.
         */}
         <div className="cine-backdrop" aria-hidden="true">
-          <div className="cine-grid" />
           <div className="cine-glow" />
+        </div>
+
+        {/*
+          A abertura: o globo de pontos, e mais nada. Sem título, sem
+          cargo, sem botão — a rolagem é que leva às informações.
+
+          A seção tem três telas de altura e o palco dentro dela fica
+          fixo: rolar não sai da cena, avança a cena. É o que dá o
+          percurso longo, em vez de uma animação que toca e acaba.
+
+          Fora do palco de conteúdo de propósito: isto não é seção, é
+          abertura. Nada aqui é lido por leitor de tela, e quem navega
+          por teclado ou por leitor cai direto no conteúdo, sem três
+          telas vazias no caminho.
+        */}
+        <div className="intro" aria-hidden="true">
+          <div className="intro-palco">
+            <GlobeScene />
+            <div className="scroll-hint">
+              <span />
+            </div>
+          </div>
         </div>
 
         {/*

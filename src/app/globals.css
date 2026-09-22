@@ -347,48 +347,53 @@
 }
 
 /* ───────────────────────────────────────────────────────────
-   Animações de entrada — sutis, e desligadas por completo
-   para quem pede menos movimento no sistema.
+   Entrada de conteúdo.
+
+   Aqui viviam `fade-up` e `fade-in`, animações de CARGA: disparavam ao
+   abrir a página, com atrasos escalonados. Funcionavam enquanto o Hero
+   era a primeira coisa na tela. Com a abertura na frente dele, o Hero
+   passou a ficar três telas abaixo — a animação terminava sozinha, no
+   vazio, e quem rolava até lá encontrava o bloco já parado.
+
+   O que revela agora é a chegada à tela, pelo observador: `.reveal`
+   para blocos e `.mask-line` para os títulos.
    ─────────────────────────────────────────────────────────── */
-@keyframes fade-up {
-  from {
-    opacity: 0;
-    transform: translateY(14px);
-  }
-  to {
-    opacity: 1;
-    transform: none;
-  }
+
+/* ───────────────────────────────────────────────────────────
+   Máscara por linha — o título sobe de dentro da própria caixa.
+
+   Substitui o fade genérico nos dois títulos que importam: o nome, no
+   topo do conteúdo, e o de cada seção. A diferença não é de gosto. Um
+   fade pode ser trocado por `opacity: 1` sem que nada se perca, então
+   ele só atrasa a leitura; a máscara mostra o texto CHEGANDO a um
+   lugar, e é isso que dá a leitura de peça montada na frente de quem lê.
+
+   A caixa recorta e o filho desliza. `overflow: clip` e não `hidden`:
+   `hidden` faria do elemento um contêiner de rolagem, e um título com
+   descendente (o "g" de "Engenharia") ganharia barra fantasma em alguns
+   navegadores.
+
+   Depende de `.js` pela mesma razão que o `.reveal`: sem script, nada
+   se esconde.
+   ─────────────────────────────────────────────────────────── */
+.mask-line {
+  display: block;
+  overflow: clip;
+  /* O recorte cola na letra e corta acento e descendente. A folga
+     devolve o espaço, e a margem negativa a desconta do layout. */
+  padding: 0.12em 0;
+  margin: -0.12em 0;
 }
 
-@keyframes fade-in {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+.js .mask-line > * {
+  display: block;
+  transform: translateY(105%);
+  transition: transform 850ms cubic-bezier(0.22, 1, 0.36, 1)
+    var(--reveal-delay, 0ms);
 }
 
-.animate-fade-up {
-  animation: fade-up 600ms cubic-bezier(0.22, 1, 0.36, 1) backwards;
-}
-
-.animate-fade-in {
-  animation: fade-in 700ms ease backwards;
-}
-
-.delay-75 {
-  animation-delay: 75ms;
-}
-.delay-150 {
-  animation-delay: 150ms;
-}
-.delay-225 {
-  animation-delay: 225ms;
-}
-.delay-300 {
-  animation-delay: 300ms;
+.js .mask-line[data-visible="true"] > * {
+  transform: none;
 }
 
 /* Pulso do skeleton de carregamento. */
@@ -517,38 +522,125 @@
 }
 
 /*
-  A malha de pontos. É ela que torna o parallax VISÍVEL: um gradiente
+  A cena da marca. É ela que torna o parallax VISÍVEL: um gradiente
   difuso pode derivar a página inteira sem que se perceba, porque não
   há traço nenhum cuja posição o olho possa acompanhar. Pontos têm
   posição — e é o deslocamento deles contra o texto que se lê como
   profundidade.
 
-  Na cor de borda, que já é o tom mais discreto da paleta nos dois
-  temas. A máscara desvanece a malha nas extremidades para ela ler
-  como textura de fundo, e não como uma folha quadriculada por cima
-  do site.
+  Aqui ficava uma malha quadriculada de pontos, que cumpria essa função
+  e não dizia respeito a nada. Grade derivando ao fundo é o clichê de
+  site gerado por IA. A logo em partículas faz o mesmo trabalho ótico e
+  é sobre quem assina a página. O desenho mora em `LogoField.tsx`.
+
+  Ela ocupa o alto à direita, que é a mancha mais vazia do Hero, e para
+  de existir para o ponteiro: o cursor é ouvido na janela, porque a
+  cena vive atrás do conteúdo e o clique tem que atravessar.
 */
-.cine-grid {
-  background-image: radial-gradient(
-    circle at 1px 1px,
-    var(--border) 1px,
-    transparent 0
-  );
-  background-size: 30px 30px;
-  opacity: 0.7;
-  -webkit-mask-image: radial-gradient(
-    ellipse 80% 60% at 50% 45%,
-    #000 35%,
-    transparent 75%
-  );
-  mask-image: radial-gradient(
-    ellipse 80% 60% at 50% 45%,
-    #000 35%,
-    transparent 75%
-  );
+/* ── A abertura ──────────────────────────────────────────────
+   O globo de pontos, sozinho, por três telas de rolagem.
+
+   A seção é alta e o palco dentro dela é `sticky`: a cena fica parada
+   na tela enquanto a rolagem corre, e o que avança é a animação. Esse é
+   o percurso longo — sem a altura extra, a sequência inteira caberia em
+   um gesto de dedo e nenhuma das três fases seria vista.
+
+   As alturas em `svh` porque no celular a barra do navegador recolhe
+   durante a rolagem: com `vh` a abertura ficaria mais alta que a tela e
+   empurraria o conteúdo para fora no primeiro quadro.
+   ─────────────────────────────────────────────────────────── */
+.intro {
+  position: relative;
+  height: 300svh;
 }
 
-/* O halo, mais perto que a malha e por isso mais rápido que ela. */
+.intro-palco {
+  position: sticky;
+  top: 0;
+  display: grid;
+  place-items: center;
+  height: 100svh;
+  /* O cabeçalho é fixo e tem 4rem: sem este recuo o planeta nasceria
+     por baixo dele. */
+  padding-top: 4rem;
+}
+
+.globe-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+/* ── O traço de rolagem ──────────────────────────────────────
+   Uma linha fina com um ponto descendo dentro dela. Fica no pé da
+   primeira tela e se apaga assim que a rolagem começa: cumpriu a
+   função, sai de cena. O apagamento é guiado pela própria rolagem
+   (`animation-timeline`), não por listener — mesma razão das camadas
+   de parallax, `scroll()` acha o scrollport certo sozinho.
+   ─────────────────────────────────────────────────────────── */
+.scroll-hint {
+  position: absolute;
+  bottom: 2.5rem;
+  left: 50%;
+  width: 1px;
+  height: 3rem;
+  margin-left: -0.5px;
+  background: linear-gradient(to bottom, var(--border), transparent);
+}
+
+.scroll-hint span {
+  position: absolute;
+  top: 0;
+  left: -1px;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .scroll-hint span {
+      animation: hint-drop 2.2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+    }
+
+    .scroll-hint {
+      animation: hint-out linear both;
+      animation-timeline: scroll();
+      /* Some no primeiro palmo de rolagem: é o tempo que ele tem para
+         ser útil. */
+      animation-range: 0 15svh;
+    }
+
+    @keyframes hint-drop {
+      0% {
+        transform: translateY(0);
+        opacity: 0;
+      }
+      20% {
+        opacity: 1;
+      }
+      80% {
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(2.6rem);
+        opacity: 0;
+      }
+    }
+
+    @keyframes hint-out {
+      to {
+        opacity: 0;
+      }
+    }
+  }
+}
+
+/* O halo, a camada mais próxima do conteúdo e por isso a mais rápida
+   das que ficam atrás dele. */
 .cine-glow {
   background:
     radial-gradient(
@@ -565,15 +657,14 @@
 
 @supports (animation-timeline: scroll()) {
   @media (prefers-reduced-motion: no-preference) {
-    /* As duas camadas de trás sobem MENOS que a página, e uma menos que
-       a outra. São três velocidades ao todo — malha, halo e conteúdo —
-       e é a distância entre elas que se lê como profundidade.
+    /* O halo sobe MENOS que a página, e a cena da marca se desfaz no
+       próprio ritmo dela. São três velocidades ao todo — cena, halo e
+       conteúdo — e é a distância entre elas que se lê como profundidade.
 
        O curso é medido em `dvh` e não em `rem` de propósito: assim ele
        acompanha a proporção da página em telas diferentes, em vez de
-       virar um passinho imperceptível em monitor grande. A malha
-       percorre cerca de um terço do que o conteúdo percorre; o halo,
-       perto da metade.
+       virar um passinho imperceptível em monitor grande. O halo
+       percorre perto da metade do que o conteúdo percorre.
 
        A faixa é a rolagem completa (`0% 100%`), então o atraso se
        distribui por toda a página em vez de se gastar nos primeiros
@@ -587,7 +678,6 @@
       sobe para o compositor e roda fora da thread principal — que é
       exatamente onde uma animação amarrada à rolagem precisa estar.
     */
-    .cine-grid,
     .cine-glow {
       animation-timing-function: linear;
       animation-fill-mode: both;
@@ -596,21 +686,8 @@
       will-change: transform;
     }
 
-    .cine-grid {
-      animation-name: cine-grid;
-    }
-
     .cine-glow {
       animation-name: cine-glow;
-    }
-
-    @keyframes cine-grid {
-      from {
-        transform: translate3d(0, 0, 0);
-      }
-      to {
-        transform: translate3d(0, -65dvh, 0);
-      }
     }
 
     @keyframes cine-glow {
@@ -645,6 +722,12 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  /* A máscara esconde o texto fora da caixa: sem a animação que o traz,
+     ele nunca entraria. O estado final tem que ser o visível. */
+  .js .mask-line > * {
+    transform: none;
+  }
+
   html {
     scroll-behavior: auto;
   }
