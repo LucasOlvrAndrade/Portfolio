@@ -1,5 +1,7 @@
 import Image from "next/image";
 
+import { MaskLine } from "@/components/ui/MaskLine";
+import { Reveal } from "@/components/ui/Reveal";
 import { siteConfig } from "@/config/site";
 import { getI18n } from "@/i18n";
 import { fill } from "@/i18n/config";
@@ -17,10 +19,14 @@ export async function Hero({ profile }: { profile: GitHubUser | null }) {
 
   return (
     /*
-      O Hero não é fixado. Ele sobe junto com o resto da página, como
-      qualquer outra seção — é o que faz o documento inteiro ler como
-      uma peça só. Fixá-lo e cobri-lo com a pilha de seções criava uma
-      aresta atravessando o topo, que era justamente o corte a eliminar.
+      Bloco de topo do conteúdo, e não mais a primeira coisa que se vê:
+      a abertura animada vem antes dele. É aqui que o nome e a foto
+      chegam, depois da rolagem.
+
+      Não é fixado. Sobe junto com o resto da página, como qualquer
+      outra seção — é o que faz o documento inteiro ler como uma peça
+      só. Fixá-lo e cobri-lo com a pilha de seções criava uma aresta
+      atravessando o topo, que era justamente o corte a eliminar.
     */
     <section className="page-section mx-auto max-w-5xl px-6 pb-20 pt-20 sm:pb-28 sm:pt-28">
       <div className="flex flex-col-reverse items-start gap-10 sm:flex-row sm:items-center sm:justify-between">
@@ -31,7 +37,7 @@ export async function Hero({ profile }: { profile: GitHubUser | null }) {
             sustenta o contraste do cinza da marca, sem alterar as cores
             originais do logotipo.
           */}
-          <div className="animate-fade-up flex flex-wrap items-center gap-x-3 gap-y-3">
+          <Reveal className="flex flex-wrap items-center gap-x-3 gap-y-3">
             <p className="font-mono text-xs uppercase tracking-[0.2em] text-accent">
               {work.position[locale]}
             </p>
@@ -47,7 +53,7 @@ export async function Hero({ profile }: { profile: GitHubUser | null }) {
               aria-label={fill(copy.hero.companyLink, {
                 company: work.company,
               })}
-              className="group inline-flex items-center gap-2.5 rounded-full border border-border bg-white py-1.5 pl-3 pr-2.5 shadow-sm transition-all hover:-translate-y-0.5 hover:border-[var(--brand-green)] hover:shadow-md"
+              className="group inline-flex items-center gap-2.5 rounded-full border border-border bg-white py-1.5 pl-3 pr-2.5 shadow-sm transition-[transform,border-color,box-shadow] duration-200 hover:-translate-y-0.5 hover:border-[var(--brand-green)] hover:shadow-md"
               style={
                 {
                   "--brand-green": work.brand.green,
@@ -71,18 +77,30 @@ export async function Hero({ profile }: { profile: GitHubUser | null }) {
                 }}
               />
             </a>
-          </div>
+          </Reveal>
 
-          <h1 className="animate-fade-up delay-75 mt-4 text-balance text-4xl font-semibold leading-[1.1] tracking-tight text-text sm:text-6xl">
+          {/*
+            O nome sobe de dentro da máscara. É o primeiro texto depois
+            de três telas de abertura, e a chegada dele é o que marca que
+            a viagem terminou e o conteúdo começou.
+          */}
+          <MaskLine
+            as="h1"
+            delay={80}
+            className="mt-4 text-balance text-4xl font-semibold leading-[1.1] tracking-tight text-text sm:text-6xl"
+          >
             {name}
-          </h1>
+          </MaskLine>
 
-          <p className="animate-fade-up delay-150 mt-6 max-w-xl text-pretty text-lg leading-relaxed text-muted">
-            {copy.hero.tagline}
-          </p>
+          <Reveal delay={180}>
+            <p className="mt-6 max-w-xl text-pretty text-lg leading-relaxed text-muted">
+              {copy.hero.tagline}
+            </p>
+          </Reveal>
 
           {(location || company) && (
-            <p className="animate-fade-up delay-150 mt-5 flex flex-wrap items-center gap-x-4 gap-y-1 font-mono text-xs text-muted">
+            <Reveal delay={240} as="div">
+              <p className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-1 font-mono text-xs text-muted">
               {location && (
                 <span className="inline-flex items-center gap-1.5">
                   <svg
@@ -111,10 +129,11 @@ export async function Hero({ profile }: { profile: GitHubUser | null }) {
                   >
                     <path d="M3 21h18M5 21V7l7-4 7 4v14M9 9h.01M9 13h.01M9 17h.01M15 9h.01M15 13h.01M15 17h.01" />
                   </svg>
-                  {company}
-                </span>
-              )}
-            </p>
+                    {company}
+                  </span>
+                )}
+              </p>
+            </Reveal>
           )}
 
           {/*
@@ -123,7 +142,7 @@ export async function Hero({ profile }: { profile: GitHubUser | null }) {
             clique como navegação de rota e remontar a árvore inteira
             para chegar onde a rolagem chega sozinha.
           */}
-          <div className="animate-fade-up delay-225 mt-9 flex flex-wrap items-center gap-3">
+          <Reveal className="mt-9 flex flex-wrap items-center gap-3" delay={300}>
             <a
               href={sectionHash("projects")}
               className="rounded-lg bg-accent px-5 py-2.5 text-sm font-medium text-bg transition-colors hover:bg-accent-hover"
@@ -136,7 +155,7 @@ export async function Hero({ profile }: { profile: GitHubUser | null }) {
             >
               {copy.hero.getInTouch}
             </a>
-          </div>
+          </Reveal>
         </div>
 
         {profile?.avatar_url && (
@@ -146,15 +165,15 @@ export async function Hero({ profile }: { profile: GitHubUser | null }) {
             o bloco basta para o topo não parecer chapado — sem soltá-la
             do plano, que é o que quebraria a sensação de peça inteira.
 
-            A deriva fica no invólucro e o `animate-fade-in` no filho:
-            as duas classes declaram `animation`, e no mesmo elemento
-            uma anularia a outra por completo.
+            A deriva fica no invólucro e a revelação no filho: as duas
+            mexem em `transform`, e no mesmo elemento uma anularia a
+            outra por completo.
           */
           <div
             className="cine-drift shrink-0"
             style={{ "--cine-depth": 0.5 } as React.CSSProperties}
           >
-            <div className="animate-fade-in">
+            <Reveal delay={120}>
               <Image
                 src={profile.avatar_url}
                 alt={fill(copy.hero.avatarAlt, { name })}
@@ -163,7 +182,7 @@ export async function Hero({ profile }: { profile: GitHubUser | null }) {
                 priority
                 className="size-24 rounded-2xl border border-border object-cover sm:size-33"
               />
-            </div>
+            </Reveal>
           </div>
         )}
       </div>

@@ -31,6 +31,17 @@ function getObserver(): IntersectionObserver {
   return observer;
 }
 
+/**
+ * Liga um elemento ao observador e devolve a função que o desliga.
+ * Exportado porque a máscara de linha usa o mesmo observador: dois
+ * observadores fariam o mesmo trabalho duas vezes por rolagem.
+ */
+export function observarRevelacao(element: Element): () => void {
+  const instance = getObserver();
+  instance.observe(element);
+  return () => instance.unobserve(element);
+}
+
 export function Reveal({
   children,
   className = "",
@@ -53,10 +64,7 @@ export function Reveal({
 
     // Se o elemento já está visível na carga (acima da dobra), o
     // observador dispara na primeira checagem e revela sem espera.
-    const instance = getObserver();
-    instance.observe(element);
-
-    return () => instance.unobserve(element);
+    return observarRevelacao(element);
   }, []);
 
   return (
