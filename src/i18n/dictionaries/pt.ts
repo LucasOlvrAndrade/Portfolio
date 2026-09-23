@@ -39,8 +39,8 @@ export const pt = {
     themeDark: "Tema escuro",
     languageGroup: "Idioma",
     /** Título do link do idioma que NÃO está ativo. */
-    switchLanguage: "Ver em {language}",
-    currentLanguage: "Idioma atual: {language}",
+    switchLanguage: "{short}, ver em {language}",
+    currentLanguage: "{short}, idioma atual: {language}",
   },
 
   sections: {

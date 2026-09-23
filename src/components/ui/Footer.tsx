@@ -27,7 +27,7 @@ export async function Footer() {
             href={`https://github.com/${siteConfig.githubUser}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-accent underline-offset-4 hover:underline"
+            className="text-accent underline underline-offset-4"
           >
             {copy.footer.githubApi}
           </a>

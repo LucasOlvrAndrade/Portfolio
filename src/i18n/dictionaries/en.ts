@@ -38,8 +38,8 @@ export const en: Translation<Dictionary> = {
     themeLight: "Light theme",
     themeDark: "Dark theme",
     languageGroup: "Language",
-    switchLanguage: "View in {language}",
-    currentLanguage: "Current language: {language}",
+    switchLanguage: "{short}, view in {language}",
+    currentLanguage: "{short}, current language: {language}",
   },
 
   sections: {

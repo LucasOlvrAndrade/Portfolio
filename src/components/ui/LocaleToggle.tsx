@@ -75,15 +75,19 @@ export function LocaleToggle({ locale, labels }: LocaleToggleProps) {
             aria-current={isActive ? "true" : undefined}
             /*
               "PT" e "EN" são claros na tela e opacos no leitor de tela.
-              O rótulo acessível diz o nome do idioma por extenso.
+              O rótulo acessível diz o nome do idioma por extenso, mas
+              COMEÇA pelo que está escrito: quem usa comando de voz fala
+              "clicar EN", e o nome acessível precisa conter o texto
+              visível (WCAG 2.5.3).
             */
             aria-label={fill(isActive ? labels.current : labels.switchTo, {
+              short: meta.short,
               language: meta.label,
             })}
             title={
               isActive
                 ? undefined
-                : fill(labels.switchTo, { language: meta.label })
+                : fill(labels.switchTo, { short: meta.short, language: meta.label })
             }
             className={`nav-item relative z-[1] w-9 rounded-full py-1.5 text-center font-mono text-[13px] md:text-sm ${
               isActive ? "text-text" : "text-muted hover:text-accent"
