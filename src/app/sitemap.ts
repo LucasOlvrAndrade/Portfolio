@@ -25,6 +25,18 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: l === "pt" ? 1 : 0.8,
       alternates: { languages },
     })),
+    // Página de venda: a que existe para ser achada na busca.
+    ...locales.map((l) => ({
+      url: `${siteConfig.url}${sectionPath(l, "barbershop")}`,
+      lastModified: new Date("2026-09-23"),
+      changeFrequency: "monthly" as const,
+      priority: l === "pt" ? 0.9 : 0.6,
+      alternates: {
+        languages: Object.fromEntries(
+          locales.map((o) => [localeMeta[o].html, `${siteConfig.url}${sectionPath(o, "barbershop")}`]),
+        ),
+      },
+    })),
     ...locales.map((l) => ({
       url: `${siteConfig.url}${sectionPath(l, "privacy")}`,
       lastModified: new Date("2026-09-23"),

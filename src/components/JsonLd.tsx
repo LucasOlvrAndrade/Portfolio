@@ -2,6 +2,7 @@ import { siteConfig } from "@/config/site";
 import { getCopyFor } from "@/i18n";
 import type { Locale } from "@/i18n/config";
 import { localeMeta } from "@/i18n/config";
+import { sectionPath } from "@/i18n/routes";
 
 /**
  * Dados estruturados (schema.org) para o buscador entender quem é a pessoa
@@ -47,7 +48,7 @@ export function JsonLd({ locale }: { locale: Locale }) {
     description: s.tagline[locale],
     provider: { "@id": pessoa["@id"] },
     areaServed: "BR",
-    url: `${url}#services`,
+    url: s.page ? `${siteConfig.url}${sectionPath(locale, s.page)}` : `${url}#services`,
   }));
   const dados = { "@context": "https://schema.org", "@graph": [pessoa, site, ...servicos] };
 

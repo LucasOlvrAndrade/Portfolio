@@ -12,6 +12,7 @@ O site lista os repositórios públicos do GitHub, as tecnologias usadas e uma v
 
 - [Início (pt)](https://lucas-andrade.dev/pt): apresentação, projetos, serviços, tecnologias e contato
 - [Home (en)](https://lucas-andrade.dev/en): the same page in English
+- [Sistema de agendamento para barbearia](https://lucas-andrade.dev/pt/sistema-para-barbearia): o que o sistema faz, telas, como funciona a contratação e perguntas frequentes ([em inglês](https://lucas-andrade.dev/en/barbershop-booking-system))
 - [Vitrine pública do sistema de barbearia](https://github.com/LucasOlvrAndrade/sistema-barbearia)
 
 ## Contato

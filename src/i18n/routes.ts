@@ -34,7 +34,7 @@ export type SectionKey = (typeof sectionKeys)[number];
  * Páginas com rota própria que NÃO são seção: não entram na navegação nem
  * viram âncora. Ganham slug traduzido pelo mesmo caminho das seções.
  */
-export const pageKeys = ["privacy"] as const;
+export const pageKeys = ["privacy", "barbershop"] as const;
 
 export type PageKey = (typeof pageKeys)[number];
 
@@ -50,6 +50,7 @@ const folders: Record<RouteKey, string> = {
   skills: "tecnologias",
   contact: "contato",
   privacy: "privacidade",
+  barbershop: "sistema-para-barbearia",
 };
 
 /** URL pública de cada seção, por idioma. */
@@ -61,6 +62,7 @@ const slugs: Record<Locale, Record<RouteKey, string>> = {
     skills: "tecnologias",
     contact: "contato",
     privacy: "privacidade",
+    barbershop: "sistema-para-barbearia",
   },
   en: {
     about: "about",
@@ -69,6 +71,7 @@ const slugs: Record<Locale, Record<RouteKey, string>> = {
     skills: "skills",
     contact: "contact",
     privacy: "privacy",
+    barbershop: "barbershop-booking-system",
   },
 };
 

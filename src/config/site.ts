@@ -93,6 +93,8 @@ export const siteConfig = {
         ],
       },
       demo: "https://barbearia.lucas-andrade.dev",
+      /** Página própria do serviço (rota de `pageKeys`), para a busca. */
+      page: "barbershop" as const,
     },
   ],
 

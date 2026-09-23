@@ -81,6 +81,7 @@ export const en: Translation<Dictionary> = {
         "Services by Lucas Andrade: booking website with a management panel for barbershops and other appointment-based businesses.",
       demo: "See the demo",
       ask: "Hire me",
+      more: "How it works",
       whatsappMessage: "Hi Lucas! I saw the “{service}” service on your portfolio and I'd like a proposal.",
     },
     contact: {
@@ -261,6 +262,121 @@ export const en: Translation<Dictionary> = {
         "If anything here changes, the date at the top changes with it. Any new service that collects data goes through the banner first.",
       ],
       items: [],
+    },
+  },
+
+  barbershop: {
+    title: "Booking system for barbershops",
+    metaDescription:
+      "A booking website with your barbershop's brand: clients pick the barber, the service and the time from their phone, and the panel shows schedule, revenue and commission. Made in Brasília, Brazil.",
+    eyebrow: "Service · Brasília, Brazil",
+    lead: "A website with your barbershop's brand, where clients pick the barber, the service and the time from their phone. And a panel to follow the schedule, revenue and commission, also from your phone.",
+    demo: "See the live demo",
+    ask: "Ask for a proposal",
+    whatsappMessage: "Hi Lucas! I saw the barbershop system page and I'd like a proposal.",
+    demoNote:
+      "The demo has fictional barbers, prices and address, in Portuguese. To see the barbershop side, log into the panel with dono / demo-dono-2026.",
+    why: {
+      title: "Why a website of your own",
+      items: [
+        {
+          title: "Clients choose the barber",
+          body: "People come back to a barbershop because of one person. Each barber has their own schedule, their own page and a link for the Instagram bio.",
+        },
+        {
+          title: "The brand is the barbershop's",
+          body: "Your name, your colors, your web address. No third-party app showing a competitor right next to you.",
+        },
+        {
+          title: "Made to be used at the counter",
+          body: "The panel was designed for the phone, between one haircut and the next: who is next, how much came in today, how much each barber is owed.",
+        },
+      ],
+    },
+    screens: {
+      title: "What it looks like",
+      landing: "The home page, with each barber's next free slot.",
+      barbers: "The barbers: clients choose who cuts their hair.",
+      booking: "Only the times when the service really fits that barber's schedule show up.",
+      panel: "The month at a glance in the panel: revenue, appointments and who earned what.",
+      week: "The whole week's schedule, with each barber's appointments.",
+    },
+    features: {
+      title: "What comes with it",
+      client: {
+        title: "For clients",
+        items: [
+          "Sign up with name and phone: the slot is in their name, and nobody takes it",
+          "Pick barber, service, day and time, seeing only what is free",
+          "Two clients never get the same slot, not even clicking at the same moment",
+          "See and cancel their own appointments",
+          "Rate the service after the haircut",
+          "Delete their own account whenever they want, as Brazilian privacy law requires",
+        ],
+      },
+      panel: {
+        title: "For the barbershop",
+        items: [
+          "Day and week schedule, with late appointments highlighted",
+          "Days off, lunch breaks and national and local holidays added automatically",
+          "Revenue by period and commission per barber, in four calculation modes",
+          "Revenue and commission spreadsheet ready for the accountant",
+          "Each client's history, and who hasn't come back in a while",
+          "Discounts per service",
+          "Each barber sees their own schedule; the owner sees the whole shop",
+        ],
+      },
+    },
+    how: {
+      title: "How hiring works",
+      steps: [
+        {
+          title: "Talk",
+          body: "You tell me how the barbershop works: barbers, services, prices and opening hours.",
+        },
+        {
+          title: "Adapt",
+          body: "I put in your brand, your colors, your services and your barbers, at the barbershop's own address.",
+        },
+        {
+          title: "Live",
+          body: "I hand over the website and the panel working, and show the team how to use them.",
+        },
+      ],
+      price: "Price and timeline come with the proposal.",
+    },
+    faq: {
+      title: "Frequently asked questions",
+      items: [
+        {
+          q: "Do I need a computer?",
+          a: "No. The client website and the panel work on the phone. The panel was made to be used standing up, at the counter.",
+        },
+        {
+          q: "Do clients pay on the website?",
+          a: "No. The website only books the slot; payment stays at the barbershop, the way you already take it.",
+        },
+        {
+          q: "Can it use my barbershop's own address?",
+          a: "Yes. The website lives on the barbershop's domain, with its name, not on an app's.",
+        },
+        {
+          q: "I already use another booking app. Can I switch?",
+          a: "Yes. I move your services, prices and barbers to the new system, and you choose the switch day.",
+        },
+        {
+          q: "Does it work for salons, tattoo studios or clinics?",
+          a: "It works for any appointment-based business where the client picks the professional. The demo is a barbershop, but the system is the same.",
+        },
+        {
+          q: "What about client data?",
+          a: "It stays in the barbershop's database, with passwords stored hashed and a privacy policy ready. Clients can see their data and delete their account on their own.",
+        },
+      ],
+    },
+    cta: {
+      title: "Want to see it running at your barbershop?",
+      body: "Message me on WhatsApp with the barbershop's name. I'll show you the demo and send a proposal.",
     },
   },
 

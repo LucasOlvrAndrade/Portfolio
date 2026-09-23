@@ -4,6 +4,8 @@ import { Section } from "@/components/ui/Section";
 import { siteConfig } from "@/config/site";
 import { getI18n } from "@/i18n";
 import { fill } from "@/i18n/config";
+import { sectionPath } from "@/i18n/routes";
+import Link from "next/link";
 
 /**
  * Vitrine dos serviços à venda. Os itens vêm de `siteConfig.services`;
@@ -53,6 +55,14 @@ export async function Services() {
                       >
                         {c.demo} ↗
                       </a>
+                    )}
+                    {s.page && (
+                      <Link
+                        href={sectionPath(locale, s.page)}
+                        className="inline-flex min-h-11 items-center px-2 text-sm font-medium text-accent underline underline-offset-4"
+                      >
+                        {c.more}
+                      </Link>
                     )}
                   </div>
                 </div>

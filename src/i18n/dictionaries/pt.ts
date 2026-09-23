@@ -82,6 +82,7 @@ export const pt = {
         "Serviços de Lucas Andrade: site de agendamento com painel de gestão para barbearias e outros negócios com hora marcada.",
       demo: "Ver a demo",
       ask: "Contrate",
+      more: "Como funciona",
       whatsappMessage: "Olá, Lucas! Vi o serviço “{service}” no seu portfólio e quero uma proposta.",
     },
     contact: {
@@ -268,6 +269,121 @@ export const pt = {
         "Se algo aqui mudar, a data lá em cima muda junto. Se entrar um serviço novo que colete dados, ele passa pelo banner antes.",
       ],
       items: [],
+    },
+  },
+
+  barbershop: {
+    title: "Sistema de agendamento para barbearia",
+    metaDescription:
+      "Site de agendamento com a marca da sua barbearia: o cliente escolhe o barbeiro, o serviço e o horário pelo celular, e o painel mostra agenda, faturamento e comissão. Feito em Brasília (DF).",
+    eyebrow: "Serviço · Brasília (DF)",
+    lead: "Um site com a marca da sua barbearia, onde o cliente escolhe o barbeiro, o serviço e o horário pelo celular. E um painel para você acompanhar agenda, faturamento e comissão, também pelo celular.",
+    demo: "Ver a demo funcionando",
+    ask: "Pedir uma proposta",
+    whatsappMessage: "Olá, Lucas! Vi a página do sistema para barbearia e quero uma proposta.",
+    demoNote:
+      "A demo tem barbeiros, preços e endereço fictícios. Para ver o lado da barbearia, entre no painel com dono / demo-dono-2026.",
+    why: {
+      title: "Por que um site próprio",
+      items: [
+        {
+          title: "O cliente escolhe o barbeiro",
+          body: "Quem frequenta barbearia volta por causa de uma pessoa. Cada barbeiro tem agenda própria, página própria e um link para colocar na bio do Instagram.",
+        },
+        {
+          title: "A marca é da barbearia",
+          body: "Seu nome, suas cores, seu endereço na internet. Sem aplicativo de terceiros mostrando a barbearia concorrente ao lado da sua.",
+        },
+        {
+          title: "Feito para usar no balcão",
+          body: "O painel foi desenhado para o celular, entre um corte e outro: quem chega em seguida, quanto entrou hoje, quanto cada barbeiro tem a receber.",
+        },
+      ],
+    },
+    screens: {
+      title: "Como ele é",
+      landing: "A página inicial, com o próximo horário livre de cada barbeiro.",
+      barbers: "A vitrine dos barbeiros: o cliente escolhe com quem cortar.",
+      booking: "Só aparecem os horários em que o serviço cabe de verdade na agenda daquele barbeiro.",
+      panel: "Visão geral do mês no painel: faturamento, atendimentos e quem faturou.",
+      week: "A agenda da semana inteira, com os horários de cada barbeiro.",
+    },
+    features: {
+      title: "O que vem no sistema",
+      client: {
+        title: "Para o cliente",
+        items: [
+          "Cadastro com nome e telefone: o horário fica no nome dele, e ninguém toma",
+          "Escolhe barbeiro, serviço, dia e hora, e só vê o que está livre",
+          "Dois clientes nunca pegam o mesmo horário, nem clicando ao mesmo tempo",
+          "Vê e cancela os próprios horários",
+          "Avalia o atendimento depois do corte",
+          "Apaga a própria conta quando quiser, como pede a LGPD",
+        ],
+      },
+      panel: {
+        title: "Para a barbearia",
+        items: [
+          "Agenda do dia e da semana, com atraso destacado",
+          "Folgas, pausa de almoço e feriados nacionais e do DF lançados sozinhos",
+          "Faturamento por período e comissão por barbeiro, em quatro formas de cálculo",
+          "Planilha de faturamento e comissão pronta para o contador",
+          "Histórico de cada cliente e quem não aparece há tempo",
+          "Descontos por serviço",
+          "Cada barbeiro vê a própria agenda; o dono vê a barbearia inteira",
+        ],
+      },
+    },
+    how: {
+      title: "Como funciona a contratação",
+      steps: [
+        {
+          title: "Conversa",
+          body: "Você me conta como a barbearia funciona: barbeiros, serviços, preços e horários.",
+        },
+        {
+          title: "Adaptação",
+          body: "Coloco a sua marca, as suas cores, os seus serviços e os seus barbeiros, no endereço da barbearia.",
+        },
+        {
+          title: "No ar",
+          body: "Entrego o site e o painel funcionando e mostro para a equipe como usar.",
+        },
+      ],
+      price: "Preço e prazo vão na proposta.",
+    },
+    faq: {
+      title: "Perguntas frequentes",
+      items: [
+        {
+          q: "Preciso de computador?",
+          a: "Não. O site do cliente e o painel funcionam no celular. O painel foi pensado para ser usado de pé, no balcão.",
+        },
+        {
+          q: "O cliente paga pelo site?",
+          a: "Não. O site só marca o horário; o pagamento continua na barbearia, do jeito que você já recebe.",
+        },
+        {
+          q: "Dá para usar o endereço da minha barbearia?",
+          a: "Dá. O site fica no domínio da barbearia, com o nome dela, e não no de um aplicativo.",
+        },
+        {
+          q: "Já uso outro aplicativo de agendamento. Dá para trocar?",
+          a: "Dá. Passo os seus serviços, preços e barbeiros para o sistema novo, e você escolhe o dia da troca.",
+        },
+        {
+          q: "Serve para salão, estúdio de tatuagem ou clínica?",
+          a: "Serve para qualquer negócio com hora marcada em que o cliente escolhe o profissional. A demo é de barbearia, mas o sistema é o mesmo.",
+        },
+        {
+          q: "E os dados dos clientes?",
+          a: "Ficam no banco de dados da barbearia, com a senha guardada embaralhada e política de privacidade pronta. O cliente vê os próprios dados e pode apagar a conta sozinho.",
+        },
+      ],
+    },
+    cta: {
+      title: "Quer ver funcionando na sua barbearia?",
+      body: "Me chama no WhatsApp com o nome da barbearia. Te mostro a demo e mando a proposta.",
     },
   },
 
