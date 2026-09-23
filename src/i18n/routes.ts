@@ -30,23 +30,37 @@ export const sectionKeys = [
 
 export type SectionKey = (typeof sectionKeys)[number];
 
+/**
+ * Páginas com rota própria que NÃO são seção: não entram na navegação nem
+ * viram âncora. Ganham slug traduzido pelo mesmo caminho das seções.
+ */
+export const pageKeys = ["privacy"] as const;
+
+export type PageKey = (typeof pageKeys)[number];
+
+export type RouteKey = SectionKey | PageKey;
+
+const routeKeys: readonly RouteKey[] = [...sectionKeys, ...pageKeys];
+
 /** Diretório real da rota, sempre em português. */
-const folders: Record<SectionKey, string> = {
+const folders: Record<RouteKey, string> = {
   about: "sobre",
   projects: "projetos",
   services: "servicos",
   skills: "tecnologias",
   contact: "contato",
+  privacy: "privacidade",
 };
 
 /** URL pública de cada seção, por idioma. */
-const slugs: Record<Locale, Record<SectionKey, string>> = {
+const slugs: Record<Locale, Record<RouteKey, string>> = {
   pt: {
     about: "sobre",
     projects: "projetos",
     services: "servicos",
     skills: "tecnologias",
     contact: "contato",
+    privacy: "privacidade",
   },
   en: {
     about: "about",
@@ -54,19 +68,20 @@ const slugs: Record<Locale, Record<SectionKey, string>> = {
     services: "services",
     skills: "skills",
     contact: "contact",
+    privacy: "privacy",
   },
 };
 
-export function folderFor(key: SectionKey): string {
+export function folderFor(key: RouteKey): string {
   return folders[key];
 }
 
-export function slugFor(locale: Locale, key: SectionKey): string {
+export function slugFor(locale: Locale, key: RouteKey): string {
   return slugs[locale][key];
 }
 
-/** URL pública de uma seção: `/en/about`. */
-export function sectionPath(locale: Locale, key: SectionKey): string {
+/** URL pública de uma seção ou página: `/en/about`, `/en/privacy`. */
+export function sectionPath(locale: Locale, key: RouteKey): string {
   return `/${locale}/${slugs[locale][key]}`;
 }
 
@@ -103,17 +118,17 @@ export function projectPath(locale: Locale, name?: string): string {
 }
 
 /** A seção a que um slug público corresponde, ou `null`. */
-export function keyForSlug(locale: Locale, slug: string): SectionKey | null {
+export function keyForSlug(locale: Locale, slug: string): RouteKey | null {
   const table = slugs[locale];
-  for (const key of sectionKeys) {
+  for (const key of routeKeys) {
     if (table[key] === slug) return key;
   }
   return null;
 }
 
 /** A seção a que uma pasta corresponde, ou `null`. */
-export function keyForFolder(folder: string): SectionKey | null {
-  for (const key of sectionKeys) {
+export function keyForFolder(folder: string): RouteKey | null {
+  for (const key of routeKeys) {
     if (folders[key] === folder) return key;
   }
   return null;

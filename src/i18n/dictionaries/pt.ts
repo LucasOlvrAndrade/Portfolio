@@ -169,6 +169,105 @@ export const pt = {
     credit: "© {year} Lucas Andrade. Feito com Next.js e Tailwind.",
     loadedVia: "Projetos carregados via",
     githubApi: "API do GitHub",
+    privacy: "Privacidade",
+    cookiePreferences: "Preferências de cookies",
+  },
+
+  cookies: {
+    title: "Cookies",
+    text: "Uso cookies de estatística (Google Analytics e Microsoft Clarity) para saber o que é lido e o que está quebrado. Eles só carregam se você aceitar; recusando, o site funciona igual.",
+    learnMore: "Política de privacidade",
+    reject: "Recusar",
+    accept: "Aceitar",
+  },
+
+  privacy: {
+    title: "Privacidade",
+    metaDescription:
+      "O que acontece com os seus dados neste site, com quem são compartilhados, por quanto tempo ficam e como pedir para apagar.",
+    updated: "Última atualização: 23 de setembro de 2026",
+    intro:
+      "Este é um site pessoal. Ele não tem formulário, cadastro nem banco de dados. Esta página explica o pouco que acontece com os seus dados quando você visita ou me chama, e como pedir para apagar.",
+    who: {
+      title: "Quem cuida dos dados",
+      body: [
+        "Lucas de Oliveira Andrade, pessoa física, Brasília (DF). Para qualquer assunto de privacidade, escreva para {email}. Respondo em até 15 dias.",
+      ],
+      items: [],
+    },
+    what: {
+      title: "O que é coletado, e por quê",
+      body: [],
+      items: [
+        "Estatística de visitas, só se você aceitar os cookies: páginas vistas, cliques e rolagem, tipo de aparelho e navegador, cidade aproximada e um identificador aleatório guardado num cookie. Serve para eu saber o que é lido e o que está quebrado. Base legal: o seu consentimento (LGPD, art. 7, I).",
+        "Mensagens que você me manda por e-mail ou WhatsApp: seu nome, endereço ou número e o que você escrever. Servem para responder e, se você pedir, fazer uma proposta. Base legal: procedimentos anteriores a um contrato, a seu pedido (LGPD, art. 7, V).",
+        "Registros técnicos da hospedagem: endereço IP e navegador de cada acesso, guardados pela Vercel por pouco tempo para o site funcionar e se proteger de abuso. Base legal: legítimo interesse (LGPD, art. 7, IX).",
+      ],
+    },
+    notCollected: {
+      title: "O que não é coletado",
+      body: [
+        "Não há cookie de propaganda, pixel de rede social nem venda de dados. Os projetos vêm da API pública do GitHub, consultada pelo servidor, sem levar nada seu. O tema claro ou escuro fica salvo só no seu navegador.",
+      ],
+      items: [],
+    },
+    sharing: {
+      title: "Com quem é compartilhado",
+      body: [
+        "Não vendo nem cedo dados a ninguém. Eles passam só pelos serviços que fazem o site funcionar, que ficam fora do Brasil e seguem regras de proteção próprias (LGPD, art. 33):",
+      ],
+      items: [
+        "Vercel: hospedagem do site.",
+        "Google (Analytics) e Microsoft (Clarity): estatística, só com o seu aceite.",
+        "Google (Gmail) e Meta (WhatsApp): onde chegam as suas mensagens.",
+      ],
+    },
+    retention: {
+      title: "Por quanto tempo",
+      body: [],
+      items: [
+        "Estatística: até 14 meses no Google Analytics; no Clarity, gravações de sessão por 30 dias e mapas de calor por até 13 meses.",
+        "Mensagens: enquanto a conversa for útil. Apago quando você pedir.",
+        "Sua escolha sobre cookies: 6 meses. Depois o site pergunta de novo.",
+      ],
+    },
+    cookies: {
+      title: "Cookies",
+      body: [
+        "Você muda de ideia quando quiser em Preferências de cookies, no rodapé. Retirando o aceite, os cookies de estatística são apagados.",
+      ],
+      items: [
+        "consent: guarda a sua escolha. Necessário, 6 meses.",
+        "_ga e _ga_*: Google Analytics, estatística. Até 2 anos.",
+        "_clck e _clsk: Microsoft Clarity, estatística. 1 ano e 1 dia.",
+      ],
+    },
+    rights: {
+      title: "Seus direitos",
+      body: ["Pela LGPD (art. 18), você pode, de graça:"],
+      items: [
+        "saber se tenho dados seus e ver quais são;",
+        "corrigir o que estiver errado;",
+        "pedir para apagar;",
+        "saber com quem foram compartilhados;",
+        "retirar o consentimento que deu.",
+      ],
+    },
+    delete: {
+      title: "Como apagar os seus dados",
+      body: [
+        "Mande “quero apagar meus dados” para {email} ou no mesmo WhatsApp em que conversamos. Apago as mensagens e confirmo em até 15 dias.",
+        "Para a estatística, recuse os cookies em Preferências de cookies. Se quiser que eu apague também o que já foi coletado, me mande junto o valor do cookie _ga (o navegador mostra em Configurações do site) que eu peço a exclusão ao Google e à Microsoft.",
+      ],
+      items: [],
+    },
+    changes: {
+      title: "Mudanças",
+      body: [
+        "Se algo aqui mudar, a data lá em cima muda junto. Se entrar um serviço novo que colete dados, ele passa pelo banner antes.",
+      ],
+      items: [],
+    },
   },
 
   og: {

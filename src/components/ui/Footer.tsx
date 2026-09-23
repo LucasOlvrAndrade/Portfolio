@@ -1,14 +1,23 @@
 import { siteConfig } from "@/config/site";
 import { getI18n } from "@/i18n";
 import { fill } from "@/i18n/config";
+import { sectionPath } from "@/i18n/routes";
 
 export async function Footer() {
-  const { copy } = await getI18n();
+  const { locale, copy } = await getI18n();
 
   return (
     <footer className="border-t border-border">
       <div className="mx-auto flex max-w-5xl flex-col items-center justify-between gap-3 px-6 py-8 text-sm text-muted sm:flex-row">
         <p>{fill(copy.footer.credit, { year: new Date().getFullYear() })}</p>
+        <nav aria-label={copy.footer.privacy} className="flex gap-4">
+          <a
+            href={sectionPath(locale, "privacy")}
+            className="text-accent underline-offset-4 hover:underline"
+          >
+            {copy.footer.privacy}
+          </a>
+        </nav>
         <p className="font-mono text-xs">
           {copy.footer.loadedVia}{" "}
           <a

@@ -162,6 +162,105 @@ export const en: Translation<Dictionary> = {
     credit: "© {year} Lucas Andrade. Built with Next.js and Tailwind.",
     loadedVia: "Projects loaded via",
     githubApi: "GitHub API",
+    privacy: "Privacy",
+    cookiePreferences: "Cookie preferences",
+  },
+
+  cookies: {
+    title: "Cookies",
+    text: "I use analytics cookies (Google Analytics and Microsoft Clarity) to learn what gets read and what is broken. They only load if you accept; if you decline, the site works the same.",
+    learnMore: "Privacy policy",
+    reject: "Decline",
+    accept: "Accept",
+  },
+
+  privacy: {
+    title: "Privacy",
+    metaDescription:
+      "What happens to your data on this site, who it is shared with, how long it is kept and how to ask for it to be deleted.",
+    updated: "Last updated: September 23, 2026",
+    intro:
+      "This is a personal website. It has no forms, no sign-up and no database. This page explains the little that happens to your data when you visit or reach out, and how to ask for it to be deleted.",
+    who: {
+      title: "Who is responsible",
+      body: [
+        "Lucas de Oliveira Andrade, private individual, Brasília, Brazil. For anything privacy-related, write to {email}. I reply within 15 days.",
+      ],
+      items: [],
+    },
+    what: {
+      title: "What is collected, and why",
+      body: [],
+      items: [
+        "Visit analytics, only if you accept cookies: pages viewed, clicks and scrolling, device and browser type, approximate city and a random identifier stored in a cookie. It tells me what gets read and what is broken. Legal basis: your consent (Brazil's LGPD, art. 7, I).",
+        "Messages you send me by e-mail or WhatsApp: your name, address or number and whatever you write. They are used to reply and, if you ask, to send a proposal. Legal basis: steps prior to a contract, at your request (LGPD, art. 7, V).",
+        "Hosting logs: IP address and browser of each request, kept briefly by Vercel so the site works and is protected from abuse. Legal basis: legitimate interest (LGPD, art. 7, IX).",
+      ],
+    },
+    notCollected: {
+      title: "What is not collected",
+      body: [
+        "No advertising cookies, no social media pixels, no selling of data. Projects come from the public GitHub API, queried by the server, without taking anything of yours. The light or dark theme is saved only in your browser.",
+      ],
+      items: [],
+    },
+    sharing: {
+      title: "Who it is shared with",
+      body: [
+        "I do not sell or hand over data to anyone. It only goes through the services that run the site, which are outside Brazil and follow their own data protection rules (LGPD, art. 33):",
+      ],
+      items: [
+        "Vercel: website hosting.",
+        "Google (Analytics) and Microsoft (Clarity): analytics, only with your consent.",
+        "Google (Gmail) and Meta (WhatsApp): where your messages arrive.",
+      ],
+    },
+    retention: {
+      title: "How long",
+      body: [],
+      items: [
+        "Analytics: up to 14 months in Google Analytics; in Clarity, session recordings for 30 days and heatmaps for up to 13 months.",
+        "Messages: as long as the conversation is useful. I delete them when you ask.",
+        "Your cookie choice: 6 months. After that the site asks again.",
+      ],
+    },
+    cookies: {
+      title: "Cookies",
+      body: [
+        "Change your mind any time under Cookie preferences, in the footer. Withdrawing consent deletes the analytics cookies.",
+      ],
+      items: [
+        "consent: stores your choice. Necessary, 6 months.",
+        "_ga and _ga_*: Google Analytics, analytics. Up to 2 years.",
+        "_clck and _clsk: Microsoft Clarity, analytics. 1 year and 1 day.",
+      ],
+    },
+    rights: {
+      title: "Your rights",
+      body: ["Under the LGPD (art. 18), free of charge, you can:"],
+      items: [
+        "know whether I hold data about you and see it;",
+        "correct anything that is wrong;",
+        "ask for it to be deleted;",
+        "know who it was shared with;",
+        "withdraw consent you gave.",
+      ],
+    },
+    delete: {
+      title: "How to delete your data",
+      body: [
+        "Send “please delete my data” to {email} or on the same WhatsApp chat we used. I delete the messages and confirm within 15 days.",
+        "For analytics, decline cookies under Cookie preferences. If you also want what was already collected deleted, send me the value of your _ga cookie (your browser shows it under Site settings) and I will request deletion from Google and Microsoft.",
+      ],
+      items: [],
+    },
+    changes: {
+      title: "Changes",
+      body: [
+        "If anything here changes, the date at the top changes with it. Any new service that collects data goes through the banner first.",
+      ],
+      items: [],
+    },
   },
 
   og: {
