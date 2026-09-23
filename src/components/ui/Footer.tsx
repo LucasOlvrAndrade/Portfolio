@@ -3,6 +3,8 @@ import { getI18n } from "@/i18n";
 import { fill } from "@/i18n/config";
 import { sectionPath } from "@/i18n/routes";
 
+import { CookiePreferencesButton } from "./CookiePreferencesButton";
+
 export async function Footer() {
   const { locale, copy } = await getI18n();
 
@@ -17,6 +19,7 @@ export async function Footer() {
           >
             {copy.footer.privacy}
           </a>
+          <CookiePreferencesButton label={copy.footer.cookiePreferences} />
         </nav>
         <p className="font-mono text-xs">
           {copy.footer.loadedVia}{" "}

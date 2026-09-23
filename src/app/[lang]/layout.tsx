@@ -1,16 +1,17 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import Script from "next/script";
-import { GoogleAnalytics } from "@next/third-parties/google";
 import { notFound } from "next/navigation";
 
 import { JsonLd } from "@/components/JsonLd";
+import { Analytics } from "@/components/ui/Analytics";
+import { CookieBanner } from "@/components/ui/CookieBanner";
 import { Header } from "@/components/ui/Header";
 import { Footer } from "@/components/ui/Footer";
 import { ScrollTuning } from "@/components/ui/ScrollTuning";
 import { siteConfig } from "@/config/site";
 import { getCopyFor } from "@/i18n";
 import { isLocale, locales, localeMeta } from "@/i18n/config";
+import { sectionPath } from "@/i18n/routes";
 import "../globals.css";
 
 const geistSans = Geist({
@@ -159,25 +160,13 @@ export default async function RootLayout({
         </main>
         <Footer />
         {/*
-          Medição. Os dois só entram quando o ID está no ambiente, então o
-          site roda limpo sem eles (dev, fork, preview). IDs de GA e Clarity
-          são públicos por natureza; o NEXT_PUBLIC_ é de propósito.
+          Medição, só depois do aceite no banner. GA e Clarity não entram
+          em lugar nenhum fora de <Analytics>: carregar um deles direto no
+          layout volta a gravar cookie sem perguntar (LGPD, art. 7, I).
         */}
-        {/*
-          O id do Script NÃO pode ser "clarity": elemento com id vira global
-          (`window.clarity` seria o <script>), o trecho de início acha que
-          já existe e a tag do Clarity quebra com "is not a function".
-        */}
-        {process.env.NEXT_PUBLIC_CLARITY_ID && (
-          <Script id="clarity-tag" strategy="afterInteractive">
-            {`(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-})(window,document,"clarity","script","${process.env.NEXT_PUBLIC_CLARITY_ID}");`}
-          </Script>
-        )}
+        <CookieBanner copy={copy.cookies} privacyHref={sectionPath(lang, "privacy")} />
+        <Analytics />
       </body>
-      {process.env.NEXT_PUBLIC_GA_ID && <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID} />}
     </html>
   );
 }

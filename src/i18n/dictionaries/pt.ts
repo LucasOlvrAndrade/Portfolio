@@ -234,12 +234,13 @@ export const pt = {
     cookies: {
       title: "Cookies",
       body: [
-        "Você muda de ideia quando quiser em Preferências de cookies, no rodapé. Retirando o aceite, os cookies de estatística são apagados.",
+        "Você muda de ideia quando quiser em Preferências de cookies, no rodapé. Retirando o aceite, os cookies de estatística gravados neste site são apagados.",
       ],
       items: [
         "consent: guarda a sua escolha. Necessário, 6 meses.",
-        "_ga e _ga_*: Google Analytics, estatística. Até 2 anos.",
+        "_ga e _ga_*: Google Analytics, estatística. 13 meses.",
         "_clck e _clsk: Microsoft Clarity, estatística. 1 ano e 1 dia.",
+        "MUID, CLID, MR, SM, SRM_B e ANONCHK: gravados pelo Clarity nos domínios da Microsoft (clarity.ms e bing.com), por até 13 meses. Como ficam no domínio dela, este site não consegue apagá-los; o seu navegador apaga em Configurações, Cookies.",
       ],
     },
     rights: {

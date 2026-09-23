@@ -227,12 +227,13 @@ export const en: Translation<Dictionary> = {
     cookies: {
       title: "Cookies",
       body: [
-        "Change your mind any time under Cookie preferences, in the footer. Withdrawing consent deletes the analytics cookies.",
+        "Change your mind any time under Cookie preferences, in the footer. Withdrawing consent deletes the analytics cookies set by this site.",
       ],
       items: [
         "consent: stores your choice. Necessary, 6 months.",
-        "_ga and _ga_*: Google Analytics, analytics. Up to 2 years.",
+        "_ga and _ga_*: Google Analytics, analytics. 13 months.",
         "_clck and _clsk: Microsoft Clarity, analytics. 1 year and 1 day.",
+        "MUID, CLID, MR, SM, SRM_B and ANONCHK: set by Clarity on Microsoft domains (clarity.ms and bing.com), for up to 13 months. Since they live on Microsoft's domain, this site cannot delete them; your browser can, under Settings, Cookies.",
       ],
     },
     rights: {
