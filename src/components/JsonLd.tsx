@@ -21,6 +21,7 @@ export function JsonLd({ locale }: { locale: Locale }) {
     name: "Lucas Andrade",
     url: siteConfig.url,
     email: `mailto:${siteConfig.contact.email}`,
+    image: `${siteConfig.url}/eu.webp`,
     jobTitle: siteConfig.work.position[locale],
     worksFor: {
       "@type": "Organization",

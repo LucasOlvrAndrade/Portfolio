@@ -158,33 +158,35 @@ export async function Hero({ profile }: { profile: GitHubUser | null }) {
           </Reveal>
         </div>
 
-        {profile?.avatar_url && (
-          /*
-            A única camada com vida própria na página. A foto é um
-            objeto, não texto corrido, e um atraso discreto dela contra
-            o bloco basta para o topo não parecer chapado — sem soltá-la
-            do plano, que é o que quebraria a sensação de peça inteira.
+        {/*
+          A única camada com vida própria na página. A foto é um
+          objeto, não texto corrido, e um atraso discreto dela contra
+          o bloco basta para o topo não parecer chapado — sem soltá-la
+          do plano, que é o que quebraria a sensação de peça inteira.
 
-            A deriva fica no invólucro e a revelação no filho: as duas
-            mexem em `transform`, e no mesmo elemento uma anularia a
-            outra por completo.
-          */
-          <div
-            className="cine-drift shrink-0"
-            style={{ "--cine-depth": 0.5 } as React.CSSProperties}
-          >
-            <Reveal delay={120}>
-              <Image
-                src={profile.avatar_url}
-                alt={fill(copy.hero.avatarAlt, { name })}
-                width={132}
-                height={132}
-                priority
-                className="size-24 rounded-2xl border border-border object-cover sm:size-33"
-              />
-            </Reveal>
-          </div>
-        )}
+          A deriva fica no invólucro e a revelação no filho: as duas
+          mexem em `transform`, e no mesmo elemento uma anularia a
+          outra por completo.
+
+          A foto é do próprio site (public/eu.webp), e não o avatar do
+          GitHub: é a que ele escolheu para o portfólio, e assim ela não
+          some quando a API do GitHub falha.
+        */}
+        <div
+          className="cine-drift shrink-0"
+          style={{ "--cine-depth": 0.5 } as React.CSSProperties}
+        >
+          <Reveal delay={120}>
+            <Image
+              src="/eu.webp"
+              alt={fill(copy.hero.avatarAlt, { name })}
+              width={132}
+              height={132}
+              priority
+              className="size-24 rounded-2xl border border-border object-cover sm:size-33"
+            />
+          </Reveal>
+        </div>
       </div>
     </section>
   );
