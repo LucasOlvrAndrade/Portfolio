@@ -58,7 +58,7 @@ export const siteConfig = {
     email: "lucasolvrandrade@gmail.com",
     /** Digitos com DDI, para o wa.me. */
     whatsapp: "5561993186733",
-    linkedin: "https://www.linkedin.com/in/lucas-andrade-93b3273b3/",
+    linkedin: "https://www.linkedin.com/in/lucasolvrandrade/",
     instagram: "https://instagram.com/lucxsolvr",
   },
 

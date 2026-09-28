@@ -4,5 +4,5 @@
 
 ## Falar comigo
 
-[LinkedIn](https://www.linkedin.com/in/lucas-andrade-93b3273b3/) ·
+[LinkedIn](https://www.linkedin.com/in/lucasolvrandrade/) ·
 lucasolvrandrade@gmail.com
