@@ -69,7 +69,7 @@ export const en: Translation<Dictionary> = {
       description:
         "What I already use with confidence, and what I am studying right now.",
       metaDescription:
-        "Languages, databases and tools I use and the ones I am studying.",
+        "Languages, front end, motion and 3D, back end and tools I use, and what I am studying.",
     },
     services: {
       nav: "Services",

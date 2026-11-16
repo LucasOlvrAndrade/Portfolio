@@ -70,7 +70,7 @@ export const pt = {
       description:
         "O que já uso com confiança e o que estou estudando agora.",
       metaDescription:
-        "Linguagens, bancos de dados e ferramentas que uso e que estudo.",
+        "Linguagens, front-end, animação e 3D, back-end e ferramentas que uso, e o que estou estudando.",
     },
     services: {
       nav: "Serviços",

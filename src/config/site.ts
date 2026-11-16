@@ -150,54 +150,96 @@ export const siteConfig = {
   },
 
   /**
-   * Skills exibidas na seção "Tecnologias".
-   * Vêm do seu README de perfil — não das linguagens dos repositórios,
-   * que hoje estão majoritariamente nulas na API.
+   * Tecnologias exibidas na seção "Tecnologias" (a rota /tecnologias leva
+   * para ela).
+   *
+   * Levantadas do GitHub em 2026-11-16, e só o que aparece lá: as
+   * linguagens que a API conta nos repositórios públicos (TypeScript,
+   * JavaScript, Java, CSS, HTML) e o "Como foi feito" das vitrines, cujo
+   * código é privado e por isso a API conta como vazio:
+   *
+   * - sistema-barbearia: Next.js 16 + Postgres
+   * - site-grupo-ram: PHP 7.4 (CoffeeCode Router, Plates), Three.js, GSAP,
+   *   Lenis, Lighthouse 100 em acessibilidade, LGPD
+   * - ram-talk-landing e ram-remote-landing: Three.js, GSAP, ScrollTrigger, Lenis
+   * - apps-grupo-ram: HTML, CSS e JS puros, WebGL, `animation-timeline`
+   * - este portfólio: Next.js 16, React 19, TypeScript, Tailwind 4, Vercel
+   * - EngenhariaDeRequisitos_2026_2 e Introducao-Computacao-Hardware: as
+   *   matérias em curso
+   *
+   * MySQL e Estruturas de Dados vêm da lista anterior, do README de
+   * perfil, e não aparecem nos repositórios.
    */
   skills: {
     pt: [
       {
         group: "Linguagens",
-        items: ["Java", "HTML", "CSS", "JavaScript", "SQL"],
+        items: ["TypeScript", "JavaScript", "Java", "PHP", "SQL", "HTML e CSS"],
       },
       {
-        group: "Banco de Dados",
-        items: ["MySQL", "Modelagem de Dados"],
+        group: "Front-end e animação",
+        items: [
+          "React",
+          "Next.js",
+          "Tailwind CSS",
+          "Three.js e WebGL",
+          "GSAP, ScrollTrigger e Lenis",
+          "Animação guiada por rolagem em CSS",
+        ],
       },
       {
-        group: "Ferramentas",
-        items: ["Git", "GitHub", "VS Code", "Windows"],
+        group: "Back-end e entrega",
+        items: [
+          "Next.js no servidor",
+          "PHP (CoffeeCode Router, Plates)",
+          "PostgreSQL e MySQL",
+          "Git e GitHub",
+          "Vercel",
+          "Acessibilidade e LGPD",
+        ],
       },
       {
         group: "Estudando",
         items: [
-          "Estruturas de Dados",
           "Engenharia de Requisitos",
-          "Desenvolvimento Web",
-          "Boas Práticas",
+          "Estruturas de Dados",
+          "Introdução à Computação",
         ],
       },
     ],
     en: [
       {
         group: "Languages",
-        items: ["Java", "HTML", "CSS", "JavaScript", "SQL"],
+        items: ["TypeScript", "JavaScript", "Java", "PHP", "SQL", "HTML and CSS"],
       },
       {
-        group: "Databases",
-        items: ["MySQL", "Data Modeling"],
+        group: "Front end and motion",
+        items: [
+          "React",
+          "Next.js",
+          "Tailwind CSS",
+          "Three.js and WebGL",
+          "GSAP, ScrollTrigger and Lenis",
+          "Scroll-driven animation in CSS",
+        ],
       },
       {
-        group: "Tools",
-        items: ["Git", "GitHub", "VS Code", "Windows"],
+        group: "Back end and delivery",
+        items: [
+          "Next.js on the server",
+          "PHP (CoffeeCode Router, Plates)",
+          "PostgreSQL and MySQL",
+          "Git and GitHub",
+          "Vercel",
+          "Accessibility and LGPD",
+        ],
       },
       {
         group: "Studying",
         items: [
-          "Data Structures",
           "Requirements Engineering",
-          "Web Development",
-          "Best Practices",
+          "Data Structures",
+          "Introduction to Computing",
         ],
       },
     ],
