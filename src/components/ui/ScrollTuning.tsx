@@ -13,9 +13,6 @@ const LERP = 0.11;
 /** Abaixo disto o resto do caminho não vale mais um quadro. */
 const SETTLE_PX = 0.5;
 
-/** Silêncio de rolagem que conta como "parou". */
-const IDLE_MS = 140;
-
 /** `deltaMode` 1 e 2 vêm em linhas e páginas, não em pixels. */
 const LINE_PX = 16;
 const PAGE_PX = 800;
@@ -27,7 +24,7 @@ function normalizeDelta(event: WheelEvent): number {
 }
 
 /**
- * Rolagem amortecida e sinalização de estado de rolagem.
+ * Rolagem amortecida da roda do mouse.
  *
  * ── Por que rolar de verdade, e não deslocar o conteúdo ──
  *
@@ -61,29 +58,12 @@ export function ScrollTuning() {
   useEffect(() => {
     const root = document.documentElement;
 
-    /* ── Estado de rolagem ─────────────────────────────────────
-       Marca o <html> enquanto a página se move. Serve ao CSS, que
-       suspende o desfoque mais caro durante o percurso. */
-    let idleTimer = 0;
-
-    const markScrolling = () => {
-      root.dataset.scrolling = "true";
-      window.clearTimeout(idleTimer);
-      idleTimer = window.setTimeout(() => {
-        delete root.dataset.scrolling;
-      }, IDLE_MS);
-    };
-
     /** O elemento que de fato rola, agora. */
     const scroller = (): HTMLElement => {
       const main = document.querySelector<HTMLElement>(".app-main");
       if (main && main.scrollHeight - main.clientHeight > 1) return main;
       return (document.scrollingElement as HTMLElement | null) ?? root;
     };
-
-    const main = document.querySelector<HTMLElement>(".app-main");
-    window.addEventListener("scroll", markScrolling, { passive: true });
-    main?.addEventListener("scroll", markScrolling, { passive: true });
 
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
     const fine = window.matchMedia("(hover: hover) and (pointer: fine)");
@@ -165,7 +145,6 @@ export function ScrollTuning() {
 
       event.preventDefault();
       desired = clamped;
-      markScrolling();
 
       if (!running) {
         running = true;
@@ -212,13 +191,9 @@ export function ScrollTuning() {
     return () => {
       window.removeEventListener("click", onClick, { capture: true });
       window.removeEventListener("wheel", onWheel);
-      window.removeEventListener("scroll", markScrolling);
-      main?.removeEventListener("scroll", markScrolling);
       reduced.removeEventListener("change", sync);
       fine.removeEventListener("change", sync);
       cancelAnimationFrame(frame);
-      window.clearTimeout(idleTimer);
-      delete root.dataset.scrolling;
     };
   }, []);
 

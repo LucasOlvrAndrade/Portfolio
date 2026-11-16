@@ -521,24 +521,9 @@
   inset: -110dvh 0;
 }
 
-/*
-  A cena da marca. É ela que torna o parallax VISÍVEL: um gradiente
-  difuso pode derivar a página inteira sem que se perceba, porque não
-  há traço nenhum cuja posição o olho possa acompanhar. Pontos têm
-  posição — e é o deslocamento deles contra o texto que se lê como
-  profundidade.
-
-  Aqui ficava uma malha quadriculada de pontos, que cumpria essa função
-  e não dizia respeito a nada. Grade derivando ao fundo é o clichê de
-  site gerado por IA. A logo em partículas faz o mesmo trabalho ótico e
-  é sobre quem assina a página. O desenho mora em `LogoField.tsx`.
-
-  Ela ocupa o alto à direita, que é a mancha mais vazia do Hero, e para
-  de existir para o ponteiro: o cursor é ouvido na janela, porque a
-  cena vive atrás do conteúdo e o clique tem que atravessar.
-*/
 /* ── A abertura ──────────────────────────────────────────────
-   O globo de pontos, sozinho, por três telas de rolagem.
+   A marca em estrelas, sozinha, por duas telas de rolagem. O desenho
+   mora em `LogoScene.tsx`.
 
    A seção é alta e o palco dentro dela é `sticky`: a cena fica parada
    na tela enquanto a rolagem corre, e o que avança é a animação. Esse é

@@ -61,19 +61,13 @@ export default async function Home() {
         <LegacyHashRedirect targets={legacyHashTargets()} />
 
         {/*
-          As camadas de trás, irmãs do palco e não ancestrais dele:
-          precisam ficar ATRÁS do conteúdo, e um pai não pode se
-          posicionar atrás do próprio filho. Decorativas e inertes para
-          a tecnologia assistiva.
+          A camada de trás, irmã do palco e não ancestral dele: precisa
+          ficar ATRÁS do conteúdo, e um pai não pode se posicionar atrás
+          do próprio filho. Decorativa e inerte para a tecnologia
+          assistiva.
 
-          São duas, e não uma, porque parallax entre dois planos apenas
-          — fundo e conteúdo — dá uma leitura de profundidade rasa. Com
-          a cena atrás do halo, e o halo atrás do texto, são três
-          distâncias distintas.
-
-          No lugar da malha de pontos que ficava aqui, a logo em
-          partículas: ela cumpre a mesma função ótica, dar ao olho um
-          traço cuja posição acompanhar, e diz respeito a alguma coisa.
+          Hoje é só o halo, que sobe mais devagar que o texto. A marca em
+          estrelas, que já morou aqui, passou para a abertura logo abaixo.
         */}
         <div className="cine-backdrop" aria-hidden="true">
           <div className="cine-glow" />
@@ -83,13 +77,13 @@ export default async function Home() {
           A abertura: a marca, com volume, e mais nada. Sem título, sem
           cargo, sem botão — a rolagem é que leva às informações.
 
-          A seção tem três telas de altura e o palco dentro dela fica
+          A seção tem duas telas de altura e o palco dentro dela fica
           fixo: rolar não sai da cena, avança a cena. É o que dá o
           percurso longo, em vez de uma animação que toca e acaba.
 
           Fora do palco de conteúdo de propósito: isto não é seção, é
           abertura. Nada aqui é lido por leitor de tela, e quem navega
-          por teclado ou por leitor cai direto no conteúdo, sem três
+          por teclado ou por leitor cai direto no conteúdo, sem duas
           telas vazias no caminho.
         */}
         <div className="intro" aria-hidden="true">

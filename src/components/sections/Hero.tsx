@@ -81,7 +81,7 @@ export async function Hero({ profile }: { profile: GitHubUser | null }) {
 
           {/*
             O nome sobe de dentro da máscara. É o primeiro texto depois
-            de três telas de abertura, e a chegada dele é o que marca que
+            de duas telas de abertura, e a chegada dele é o que marca que
             a viagem terminou e o conteúdo começou.
           */}
           <MaskLine

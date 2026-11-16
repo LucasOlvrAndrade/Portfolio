@@ -152,7 +152,7 @@ export default async function RootLayout({
         >
           {copy.a11y.skipToContent}
         </a>
-        {/* Amortece a roda e sinaliza rolagem ao CSS. Não renderiza nada. */}
+        {/* Amortece a roda do mouse. Não renderiza nada. */}
         <ScrollTuning />
         <Header />
         <main id="conteudo" className="app-main flex-1">
