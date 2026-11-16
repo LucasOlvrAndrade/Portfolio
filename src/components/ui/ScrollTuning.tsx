@@ -23,6 +23,34 @@ function normalizeDelta(event: WheelEvent): number {
   return event.deltaY;
 }
 
+/** Silêncio entre eventos de roda que separa um gesto do seguinte. */
+const GESTURE_GAP_MS = 180;
+
+/** Abaixo disto, um passo de roda é pequeno demais para ser um dente. */
+const NOTCH_MIN_PX = 40;
+
+/*
+  O evento parece vir de um touchpad?
+
+  O navegador não diz de onde veio a rolagem, então é inferência. A roda
+  de mouse anda em dentes: passos grandes, inteiros, só no eixo vertical
+  (ou em linhas, no Firefox). O touchpad manda uma enxurrada de passos
+  pequenos, quase sempre com algum resíduo horizontal, e às vezes
+  fracionários.
+
+  O erro possível é para o lado seguro. Um mouse com zoom do navegador
+  pode gerar passo fracionário e cair aqui: o resultado é a rolagem
+  nativa, sem amortecimento. Nunca o contrário, inércia sobre inércia.
+*/
+function looksLikeTouchpad(event: WheelEvent): boolean {
+  if (event.deltaMode !== 0) return false;
+  return (
+    event.deltaX !== 0 ||
+    !Number.isInteger(event.deltaY) ||
+    Math.abs(event.deltaY) < NOTCH_MIN_PX
+  );
+}
+
 /**
  * Rolagem amortecida da roda do mouse.
  *
@@ -48,6 +76,11 @@ function normalizeDelta(event: WheelEvent): number {
  * - Movimento reduzido: sem amortecimento nenhum.
  * - Ponteiro grosso (toque): o dedo já tem inércia nativa, feita pelo
  *   sistema e melhor que qualquer coisa reimplementada em JS.
+ * - Touchpad: pela mesma razão. O sistema já desliza depois que os
+ *   dedos saem, e amortecer por cima disso somava duas inércias — a
+ *   página chegava atrasada ao gesto. O ponteiro do touchpad é fino,
+ *   então a media query não o separa do mouse; quem separa é o formato
+ *   dos eventos (`looksLikeTouchpad`).
  * - Roda sobre outro elemento rolável: o gesto pertence a ele.
  * - Com Ctrl pressionado: é zoom do navegador, não rolagem.
  *
@@ -119,8 +152,31 @@ export function ScrollTuning() {
       return false;
     };
 
+    /*
+      A decisão vale para o gesto inteiro, não para cada evento. Os
+      primeiros passos de uma passada rápida no touchpad podem ser
+      grandes, e alternar entre amortecido e nativo no meio do mesmo
+      gesto daria trancos. Basta UM evento com cara de touchpad para o
+      gesto todo seguir nativo; um gesto novo começa sem suspeita.
+    */
+    let touchpadGesture = false;
+    let lastWheel = -Infinity;
+
     const onWheel = (event: WheelEvent) => {
       if (event.ctrlKey) return;
+
+      if (event.timeStamp - lastWheel > GESTURE_GAP_MS) touchpadGesture = false;
+      lastWheel = event.timeStamp;
+      if (looksLikeTouchpad(event)) touchpadGesture = true;
+
+      if (touchpadGesture) {
+        // Um resto de amortecimento brigaria com a rolagem nativa.
+        if (running) {
+          cancelAnimationFrame(frame);
+          running = false;
+        }
+        return;
+      }
 
       const element = scroller();
       if (insideOwnScroller(event.target, element)) return;
