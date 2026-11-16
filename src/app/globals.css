@@ -545,15 +545,49 @@
   height: 200svh;
 }
 
+/*
+  O palco tem a altura da área que de fato aparece, não a da tela.
+
+  Era `100svh` com um recuo de 4rem no topo, e isso cortava o pé dele:
+  o cabeçalho é `sticky` e ocupa o fluxo, então o palco começava abaixo
+  dele e os últimos 4rem ficavam fora da janela até a primeira rolagem.
+  Tudo o que mora no pé da cena (a assinatura, o traço de rolagem)
+  nascia cortado. Agora ele cola logo abaixo do cabeçalho e mede o resto
+  da tela; o centro da cena é o centro do que se vê.
+*/
 .intro-palco {
+  --cabecalho: calc(4rem + 1px);
   position: sticky;
-  top: 0;
+  top: var(--cabecalho);
   display: grid;
   place-items: center;
-  height: 100svh;
-  /* O cabeçalho é fixo e tem 4rem: sem este recuo o planeta nasceria
-     por baixo dele. */
-  padding-top: 4rem;
+  height: calc(100svh - var(--cabecalho));
+}
+
+/*
+  Em tela grande quem rola é o `.app-main`, e ele fica ENTRE o cabeçalho
+  e o rodapé, os dois fora dele. A conta acima descontaria só o
+  cabeçalho e o pé do palco sumiria atrás do rodapé. Aqui a referência é
+  o próprio `.app-main`, como contêiner: `cqh` é a altura dele, seja
+  qual for a do rodapé.
+
+  O `.app-main` pode ser contêiner de tamanho porque a altura dele vem
+  do flex do quadro, nunca do conteúdo. Fora desta media query não há
+  contêiner, e as regras de cima valem.
+*/
+@media (min-width: 769px) and (min-height: 901px) {
+  .app-main {
+    container-type: size;
+  }
+
+  .intro {
+    height: 200cqh;
+  }
+
+  .intro-palco {
+    top: 0;
+    height: 100cqh;
+  }
 }
 
 /* A cena da abertura ocupa o palco inteiro. */

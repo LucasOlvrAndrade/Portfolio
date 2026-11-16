@@ -566,9 +566,27 @@ export function LogoScene() {
     const aoRolar = () => {
       const secao = canvas.closest(".intro");
       if (!secao) return;
+      /*
+        O percurso é o quanto a seção rola enquanto o palco fica parado:
+        a altura dela menos a do palco, e a posição medida a partir de
+        onde o palco cola. Com a janela no lugar do palco, a conta errava
+        pela altura do cabeçalho (e do rodapé, em tela grande), e a cena
+        não chegava ao fim da sequência antes de o conteúdo subir.
+      */
+      const palco = canvas.parentElement;
+      if (!palco) return;
       const r = secao.getBoundingClientRect();
-      const curso = r.height - window.innerHeight;
-      avanco = curso > 0 ? Math.min(1, Math.max(0, -r.top / curso)) : 0;
+      const topoDoPalco = Number.parseFloat(getComputedStyle(palco).top) || 0;
+      // O `top` do sticky conta a partir de quem rola: o `.app-main` em
+      // tela grande, a janela no resto.
+      const main = secao.closest<HTMLElement>(".app-main");
+      const raizTopo =
+        main && main.scrollHeight - main.clientHeight > 1
+          ? main.getBoundingClientRect().top
+          : 0;
+      const curso = r.height - palco.clientHeight;
+      const andado = raizTopo + topoDoPalco - r.top;
+      avanco = curso > 0 ? Math.min(1, Math.max(0, andado / curso)) : 0;
     };
 
     const aoRedimensionar = () => {
