@@ -73,6 +73,7 @@ export async function Services() {
                     href={s.demo}
                     title={nome}
                     label={`${c.demo}: ${nome}`}
+                    poster={s.poster}
                     className="sm:self-center"
                   />
                 )}

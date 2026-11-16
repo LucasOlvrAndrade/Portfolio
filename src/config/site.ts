@@ -93,6 +93,8 @@ export const siteConfig = {
         ],
       },
       demo: "https://barbearia.lucas-andrade.dev",
+      /** Captura da demo, no lugar do iframe no celular e com movimento reduzido. */
+      poster: "/barbearia/landing.webp",
       /** Página própria do serviço (rota de `pageKeys`), para a busca. */
       page: "barbershop" as const,
     },
