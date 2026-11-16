@@ -73,6 +73,16 @@ type Estrela = {
   dy: number;
   vx: number;
   vy: number;
+  /*
+    Onde a estrela foi desenhada no último quadro, já com giro,
+    perspectiva, flutuação e aproximação. É contra este ponto que o
+    cursor mede a distância: a posição na placa só coincide com a da
+    tela enquanto a marca está de frente, e depois do primeiro giro o
+    mouse empurraria estrelas que não estão embaixo dele. NaN até o
+    primeiro desenho, e aí nenhuma comparação dá verdadeiro.
+  */
+  px: number;
+  py: number;
   /** Direção de onde vem na montagem. */
   s1: number;
   s2: number;
@@ -124,6 +134,10 @@ export function LogoScene() {
 
     let corTexto = "#fafaf9";
     let corAcento = "#fb923c";
+    /** O acento em canais, para o halo acompanhar o tema. */
+    let rgbAcento = paraRgb(corAcento);
+    /** A logo já virou estrelas: antes disso não há o que desenhar. */
+    let amostrada = false;
     /** Sprites de estrela, um por cor, redesenhados na troca de tema. */
     let brilhoClaro: HTMLCanvasElement | null = null;
     let brilhoAcento: HTMLCanvasElement | null = null;
@@ -160,6 +174,7 @@ export function LogoScene() {
       const estilo = getComputedStyle(document.documentElement);
       corTexto = estilo.getPropertyValue("--text").trim() || corTexto;
       corAcento = estilo.getPropertyValue("--accent").trim() || corAcento;
+      rgbAcento = paraRgb(corAcento);
       brilhoClaro = fazerBrilho(corTexto);
       brilhoAcento = fazerBrilho(corAcento);
     };
@@ -261,8 +276,11 @@ export function LogoScene() {
         cy,
         escala * 1.25,
       );
-      halo.addColorStop(0, `rgba(251, 146, 60, ${0.16 * opacidade})`);
-      halo.addColorStop(1, "rgba(251, 146, 60, 0)");
+      // Na cor do acento do tema: fixo no laranja do escuro, o halo
+      // destoava do terracota da página no tema claro.
+      const [hr, hg, hb] = rgbAcento;
+      halo.addColorStop(0, `rgba(${hr}, ${hg}, ${hb}, ${0.16 * opacidade})`);
+      halo.addColorStop(1, `rgba(${hr}, ${hg}, ${hb}, 0)`);
       ctx.globalAlpha = 1;
       ctx.fillStyle = halo;
       ctx.beginPath();
@@ -309,6 +327,9 @@ export function LogoScene() {
           e.dy +
           e.s2 * chegando * altura * 0.55 +
           dirY * solta * altura * 0.9;
+
+        e.px = x;
+        e.py = y;
 
         // Cintilar lento e fraco. Forte, a marca pisca; ausente, o céu
         // vira adesivo.
@@ -374,18 +395,14 @@ export function LogoScene() {
         O cursor empurra as estrelas que passam perto, e elas voltam por
         mola. O deslocamento é guardado à parte da posição na placa: a
         estrela continua onde está no desenho, o que muda é onde ela
-        aparece.
+        aparece. A distância é medida até onde ela foi desenhada no
+        quadro anterior, e não até a posição na placa.
       */
-      const cx = largura / 2;
-      const cy = altura / 2;
-      const escala = Math.min(largura, altura) * TAMANHO;
       const raio = 110;
 
       for (const e of estrelas) {
-        const px = cx + e.x * escala + e.dx;
-        const py = cy + e.y * escala + e.dy;
-        const dx = px - mx;
-        const dy = py - my;
+        const dx = e.px - mx;
+        const dy = e.py - my;
         const d2 = dx * dx + dy * dy;
 
         if (d2 < raio * raio) {
@@ -481,6 +498,8 @@ export function LogoScene() {
             dy: 0,
             vx: 0,
             vy: 0,
+            px: Number.NaN,
+            py: Number.NaN,
             s1: Math.random() * 2 - 1,
             s2: Math.random() * 2 - 1,
           });
@@ -514,6 +533,7 @@ export function LogoScene() {
         }
       }
 
+      amostrada = true;
       medir();
       if (calmo) {
         // Sem movimento: a marca aparece montada e fica.
@@ -522,6 +542,17 @@ export function LogoScene() {
         return;
       }
       ligar();
+    };
+
+    /*
+      Sem o laço de quadros (movimento reduzido), ninguém redesenha
+      sozinho. Redimensionar limpa o canvas, porque mudar `width` apaga
+      o conteúdo, e trocar o tema muda as cores: nos dois casos a cena
+      parada tem de ser desenhada de novo, ou fica em branco ou com as
+      cores do tema anterior. Com o laço vivo, o próximo quadro já faz isso.
+    */
+    const redesenharParada = () => {
+      if (calmo && amostrada) desenhar();
     };
     img.src = "/logo.webp";
 
@@ -540,7 +571,10 @@ export function LogoScene() {
       avanco = curso > 0 ? Math.min(1, Math.max(0, -r.top / curso)) : 0;
     };
 
-    const aoRedimensionar = () => medir();
+    const aoRedimensionar = () => {
+      medir();
+      redesenharParada();
+    };
 
     window.addEventListener("pointermove", aoMover, { passive: true });
     // `capture` porque em telas grandes quem rola é o `.app-main`, e
@@ -559,7 +593,10 @@ export function LogoScene() {
     );
     obs.observe(canvas);
 
-    const tema = new MutationObserver(lerTema);
+    const tema = new MutationObserver(() => {
+      lerTema();
+      redesenharParada();
+    });
     tema.observe(document.documentElement, {
       attributes: true,
       attributeFilter: ["class"],
