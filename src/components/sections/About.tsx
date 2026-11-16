@@ -1,4 +1,3 @@
-import { Reveal } from "@/components/ui/Reveal";
 import { Section } from "@/components/ui/Section";
 import { TranslationNotice } from "@/components/ui/TranslationNotice";
 import { siteConfig } from "@/config/site";
@@ -58,7 +57,7 @@ export async function About({ sections, bio, localized }: AboutProps) {
             lang={localized ? undefined : "pt-BR"}
             className="grid gap-12 lg:grid-cols-3"
           >
-            <Reveal className="space-y-8 lg:col-span-2">
+            <div className="space-y-8 lg:col-span-2">
               {prose.map((section, index) => (
                 <div key={section.heading}>
                   {/* O primeiro bloco é a introdução: o título dele é o
@@ -92,10 +91,10 @@ export async function About({ sections, bio, localized }: AboutProps) {
                   )}
                 </div>
               ))}
-            </Reveal>
+            </div>
 
             {lists.length > 0 && (
-              <Reveal as="aside" className="space-y-8" delay={120}>
+              <aside className="space-y-8">
                 {lists.map((section) => (
                   <div
                     key={section.heading}
@@ -120,7 +119,7 @@ export async function About({ sections, bio, localized }: AboutProps) {
                     </ul>
                   </div>
                 ))}
-              </Reveal>
+              </aside>
             )}
           </div>
         </>

@@ -1,4 +1,3 @@
-import { Reveal } from "@/components/ui/Reveal";
 import { Section } from "@/components/ui/Section";
 import { siteConfig } from "@/config/site";
 import { getI18n } from "@/i18n";
@@ -15,8 +14,8 @@ export async function Skills() {
       description={copy.sections.skills.description}
     >
       <div className="grid gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
-        {groups.map((group, index) => (
-          <Reveal key={group.group} delay={index * 80}>
+        {groups.map((group) => (
+          <div key={group.group}>
             <h3 className="font-mono text-xs uppercase tracking-[0.15em] text-accent">
               {group.group}
             </h3>
@@ -30,7 +29,7 @@ export async function Skills() {
                 </li>
               ))}
             </ul>
-          </Reveal>
+          </div>
         ))}
       </div>
     </Section>

@@ -1,4 +1,3 @@
-import { Reveal } from "@/components/ui/Reveal";
 import { Section } from "@/components/ui/Section";
 import { siteConfig } from "@/config/site";
 import { getI18n } from "@/i18n";
@@ -79,11 +78,11 @@ export async function Contact() {
       description={copy.sections.contact.description}
     >
       <ul className="grid gap-3 sm:grid-cols-2">
-        {links.map((link, index) => {
+        {links.map((link) => {
           const isExternal = !link.href.startsWith("mailto:");
 
           return (
-            <Reveal as="li" key={link.label} delay={index * 70}>
+            <li key={link.label}>
               <a
                 href={link.href}
                 {...(isExternal
@@ -103,7 +102,7 @@ export async function Contact() {
                   </span>
                 </span>
               </a>
-            </Reveal>
+            </li>
           );
         })}
       </ul>
@@ -111,7 +110,7 @@ export async function Contact() {
       {/* O sistema de barbearia: quem chega pelo portfólio e tem um negócio
           com hora marcada precisa achar o caminho. A proposta vai na
           conversa, não numa página. */}
-      <Reveal className="mt-8 rounded-xl border border-dashed border-border p-5" delay={300}>
+      <div className="mt-8 rounded-xl border border-dashed border-border p-5">
         <p className="text-sm leading-relaxed text-muted">{copy.sections.contact.proposal}</p>
         <a
           href={`https://wa.me/${siteConfig.contact.whatsapp}`}
@@ -121,7 +120,7 @@ export async function Contact() {
         >
           {copy.sections.contact.proposalLink} →
         </a>
-      </Reveal>
+      </div>
     </Section>
   );
 }
