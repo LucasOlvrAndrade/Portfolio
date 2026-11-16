@@ -8,6 +8,7 @@ import { Services } from "@/components/sections/Services";
 import { Skills } from "@/components/sections/Skills";
 import { LegacyHashRedirect } from "@/components/ui/LegacyHashRedirect";
 import { LogoScene } from "@/components/ui/LogoScene";
+import { siteConfig } from "@/config/site";
 import { getI18n } from "@/i18n";
 import { legacyHashTargets } from "@/i18n/routes";
 import { getProfile, getProfileReadme } from "@/lib/github";
@@ -89,6 +90,19 @@ export default async function Home() {
         <div className="intro" aria-hidden="true">
           <div className="intro-palco">
             <LogoScene />
+            {/*
+              A assinatura: nome e cargo, pequenos, no canto da primeira
+              tela. Sem ela, quem chegava por um link via só a marca e
+              precisava rolar duas telas para saber de quem era o site.
+              Discreta de propósito, para a cena continuar sendo a
+              abertura; some no primeiro palmo de rolagem, como o traço.
+              Fica sob o `aria-hidden` da abertura porque o leitor de tela
+              já recebe o nome no h1 do Hero.
+            */}
+            <p className="intro-assinatura">
+              <span className="text-text">{profile?.name ?? "Lucas Andrade"}</span>
+              <span>{siteConfig.role[locale]}</span>
+            </p>
             <div className="scroll-hint">
               <span />
             </div>

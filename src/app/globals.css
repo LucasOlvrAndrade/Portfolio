@@ -592,8 +592,37 @@
   background: var(--accent);
 }
 
+/* ── A assinatura ────────────────────────────────────────────
+   Nome e cargo no pé da primeira tela, alinhados à coluna do
+   conteúdo (`max-w-5xl` com `px-6`, a mesma do Hero), para o nome não
+   saltar de lugar quando o h1 chegar. Visível desde o primeiro quadro:
+   é o texto que o LCP mede nesta tela, e não espera animação nenhuma.
+   ─────────────────────────────────────────────────────────── */
+.intro-assinatura {
+  position: absolute;
+  bottom: 2.25rem;
+  left: max(1.5rem, calc((100% - 64rem) / 2 + 1.5rem));
+  /* O traço de rolagem fica no centro: a assinatura para antes dele. */
+  max-width: calc(50% - 2.5rem);
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 0.75rem;
+  line-height: 1.4;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
 @supports (animation-timeline: scroll()) {
   @media (prefers-reduced-motion: no-preference) {
+    .intro-assinatura {
+      animation: hint-out linear both;
+      animation-timeline: scroll();
+      animation-range: 0 25svh;
+    }
+
     .scroll-hint span {
       animation: hint-drop 2.2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
     }
