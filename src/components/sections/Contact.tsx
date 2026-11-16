@@ -20,6 +20,12 @@ const iconProps = {
   "aria-hidden": true,
 };
 
+/** "5561993186733" vira "+55 61 99318-6733". Outro formato passa como veio. */
+function whatsappLegivel(digitos: string): string {
+  const m = /^(\d{2})(\d{2})(\d{4,5})(\d{4})$/.exec(digitos);
+  return m ? `+${m[1]} ${m[2]} ${m[3]}-${m[4]}` : digitos;
+}
+
 export async function Contact() {
   const { copy } = await getI18n();
 
@@ -33,6 +39,19 @@ export async function Contact() {
         <svg {...iconProps}>
           <rect x="2" y="4" width="20" height="16" rx="2" />
           <path d="m2 7 10 6 10-6" />
+        </svg>
+      ),
+    },
+    {
+      // O canal em que os serviços terminam: tem de estar também aqui,
+      // e não só no botão de cada serviço.
+      label: "WhatsApp",
+      value: whatsappLegivel(siteConfig.contact.whatsapp),
+      href: `https://wa.me/${siteConfig.contact.whatsapp}`,
+      icon: (
+        <svg {...iconProps}>
+          <path d="M3.5 20.5l1.3-4A8.5 8.5 0 1 1 8 19.6Z" />
+          <path d="M9 9.5c0 2.8 2.2 5.5 5.5 5.5l1-1.5-2-1-1 .8a4 4 0 0 1-1.8-1.8l.8-1-1-2Z" />
         </svg>
       ),
     },
